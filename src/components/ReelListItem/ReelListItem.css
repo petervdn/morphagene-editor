@@ -1,0 +1,36 @@
+.reel-list-item {
+  margin-bottom: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.reel-list-item a {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.reel-list-item a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: translateX(3px);
+}
+
+.reel-list-item .reel-icon {
+  margin-right: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.reel-list-item .reel-name {
+  font-weight: 500;
+  flex-grow: 1;
+}
+
+.reel-list-item .reel-meta {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-left: auto;
+}
