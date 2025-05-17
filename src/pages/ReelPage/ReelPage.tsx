@@ -8,7 +8,7 @@ import { WavHeaderTable } from "../../components/WavHeaderTable/WavHeaderTable";
 import styles from "./ReelPage.module.css";
 import { getReelNumber } from "../../utils/getReelNumber";
 import { PiFilmReel } from "react-icons/pi";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { getSplices } from "../../utils/getSplices";
 import { SplicesList } from "../../components/SplicesList/SplicesList";
 import { playSplice } from "../../utils/audio/playSplice";
@@ -21,6 +21,7 @@ export function ReelPage() {
   const audioBuffer = useAudioBufferFromFile(reelName ?? "");
   const audioContext = useAudioContext();
   const headerData = useWavHeaderData(reelName ?? "");
+  const [highlightedSpliceIndex, setHighlightedSpliceIndex] = useState<number>(-1);
 
   const splices = useMemo(() => {
     return headerData ? getSplices(headerData.cuePoints) : null;
@@ -41,6 +42,14 @@ export function ReelPage() {
     [audioBuffer, audioContext, splices]
   );
 
+  const onSpliceMouseEnter = useCallback((index: number) => {
+    setHighlightedSpliceIndex(index);
+  }, []);
+
+  const onSpliceMouseLeave = useCallback(() => {
+    setHighlightedSpliceIndex(-1);
+  }, []);
+
   return (
     <>
       <Breadcrumbs />
@@ -51,11 +60,20 @@ export function ReelPage() {
             <PiFilmReel /> Reel #{getReelNumber(reelName)}{" "}
           </h2>
 
-          <WaveformView audioBuffer={audioBuffer} splices={splices} />
+          <WaveformView 
+            audioBuffer={audioBuffer} 
+            splices={splices} 
+            highlightSpliceIndex={highlightedSpliceIndex}
+          />
           <div className={styles.reelContentLayout}>
             <div className={styles.reelMainContent}>
               {splices && (
-                <SplicesList splices={splices} onSpliceClick={onSpliceClick} />
+                <SplicesList 
+                  splices={splices} 
+                  onSpliceClick={onSpliceClick}
+                  onSpliceMouseEnter={onSpliceMouseEnter}
+                  onSpliceMouseLeave={onSpliceMouseLeave}
+                />
               )}
             </div>
             <div className={styles.reelSidebar}>

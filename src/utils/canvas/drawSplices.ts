@@ -18,16 +18,21 @@ export function drawSplices({
   viewPort,
   splices,
   colors = DEFAULT_COLORS,
+  highlightIndex = -1,
 }: {
   context: CanvasRenderingContext2D;
   viewPort: ViewPort;
   splices: Array<Splice>;
   colors?: Array<string>;
+  highlightIndex?: number;
 }): void {
   if (!context || !viewPort || !splices.length) return;
 
   const { width, height } = context.canvas;
   const viewportDuration = viewPort.to - viewPort.from;
+
+  // Clear the canvas before drawing
+  context.clearRect(0, 0, width, height);
 
   // Draw each splice marker as a vertical line
   splices.forEach((splice, index) => {
@@ -35,25 +40,32 @@ export function drawSplices({
     if (splice.start < viewPort.from && splice.end < viewPort.from) return;
     if (splice.start > viewPort.to) return;
 
-    // Calculate x-position based on the splice start time
-    const xPos =
-      Math.round(((splice.start - viewPort.from) / viewportDuration) * width) +
-      0.5;
-
-    // Skip if position is outside the canvas
-    if (xPos < 0 || xPos > width) return;
-
     // Select color from the rotating set
     const colorIndex = index % colors.length;
     const color = colors[colorIndex];
+
+    // Calculate positions based on the splice start/end times
+    const startX = Math.round(((splice.start - viewPort.from) / viewportDuration) * width) + 0.5;
+    
+    // Skip if position is outside the canvas
+    if (startX < 0 || startX > width) return;
+
+    // If this is the highlighted splice, draw a semi-transparent background
+    if (index === highlightIndex && splice.end > splice.start) {
+      const endX = Math.round(((splice.end - viewPort.from) / viewportDuration) * width) + 0.5;
+      
+      // Draw a semi-transparent rectangle for the highlighted splice
+      context.fillStyle = color + '33'; // Add 33 hex for 20% opacity
+      context.fillRect(startX, 0, endX - startX, height);
+    }
 
     // Draw the vertical line for this splice
     context.beginPath();
     context.strokeStyle = color;
     context.lineWidth = 4;
     context.setLineDash([5, 3]); // Dashed line
-    context.moveTo(xPos, 0);
-    context.lineTo(xPos, height);
+    context.moveTo(startX, 0);
+    context.lineTo(startX, height);
     context.stroke();
 
     // Reset line style
@@ -62,6 +74,6 @@ export function drawSplices({
     // Add a small label with the splice index
     context.font = "22px sans-serif";
     context.fillStyle = color;
-    context.fillText(`${index + 1}`, xPos + 8, 22);
+    context.fillText(`${index + 1}`, startX + 8, 22);
   });
 }

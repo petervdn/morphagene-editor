@@ -16,9 +16,14 @@ import { SizedCanvas } from "../SizedCanvas/SizedCanvas";
 type Props = {
   audioBuffer: AudioBuffer;
   splices: Array<Splice>;
+  highlightSpliceIndex?: number;
 };
 
-export function WaveformView({ audioBuffer, splices }: Props): ReactElement {
+export function WaveformView({ 
+  audioBuffer, 
+  splices, 
+  highlightSpliceIndex = -1 
+}: Props): ReactElement {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const wrapperSize = useElementSize({ elementRef: wrapperRef });
   const [viewPort, setViewport] = useState<ViewPort | null>(null);
@@ -54,8 +59,9 @@ export function WaveformView({ audioBuffer, splices }: Props): ReactElement {
       context: splicesContextRef.current,
       splices,
       viewPort,
+      highlightIndex: highlightSpliceIndex,
     });
-  }, [splices, viewPort, wrapperSize]);
+  }, [splices, viewPort, wrapperSize, highlightSpliceIndex]);
 
   const onWaveformCanvasRef = useCallback(
     (canvasElement: HTMLCanvasElement | null) => {

@@ -7,9 +7,16 @@ import styles from "./SplicesList.module.css";
 type Props = {
   splices: Array<Splice>;
   onSpliceClick?: (spliceIndex: number) => void;
+  onSpliceMouseEnter?: (spliceIndex: number) => void;
+  onSpliceMouseLeave?: () => void;
 };
 
-export function SplicesList({ splices, onSpliceClick }: Props): ReactElement {
+export function SplicesList({ 
+  splices, 
+  onSpliceClick,
+  onSpliceMouseEnter,
+  onSpliceMouseLeave 
+}: Props): ReactElement {
   return (
     <div>
       <h3>splices ({splices.length})</h3>
@@ -23,6 +30,8 @@ export function SplicesList({ splices, onSpliceClick }: Props): ReactElement {
               key={index}
               splice={splice}
               onClick={onSpliceClick}
+              onMouseEnter={onSpliceMouseEnter}
+              onMouseLeave={onSpliceMouseLeave}
             />
           ))}
         </ul>
