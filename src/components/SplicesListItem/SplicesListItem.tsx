@@ -13,6 +13,7 @@ export function SplicesListItem({
   onClick: onClickFromProps,
 }: Props): ReactElement {
   const onClick = useCallback(() => {
+    console.log("click", splice.index);
     onClickFromProps?.(splice.index);
   }, [onClickFromProps, splice.index]);
 

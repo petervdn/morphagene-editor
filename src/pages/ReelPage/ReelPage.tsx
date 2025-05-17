@@ -13,6 +13,7 @@ import { getSplices } from "../../utils/getSplices";
 import { SplicesList } from "../../components/SplicesList/SplicesList";
 import { playSplice } from "../../utils/audio/playSplice";
 import { useAudioContext } from "../../utils/hooks/useAudioContext";
+import { WaveformView } from "../../components/WaveformView/WaveformView";
 
 export function ReelPage() {
   const { reelName } = useParams();
@@ -33,11 +34,11 @@ export function ReelPage() {
         if (!splice || !audioContext || !audioBuffer) {
           return;
         }
-        console.log("play 1", audioContext.state);
+        console.log("play", audioContext.state);
         if (audioContext.state === "suspended") {
           await audioContext.resume();
         }
-        console.log("play 2", audioContext.state);
+        console.log("play", audioContext.state);
         playSplice(audioBuffer, splice, audioContext);
       }
       play();
@@ -49,13 +50,14 @@ export function ReelPage() {
     <>
       <Breadcrumbs />
       {!headerData && <NoFolder />}
-      {headerData && reelName && (
+      {headerData && reelName && audioBuffer && (
         <>
           <h2 className={styles.reelTitle}>
             <PiFilmReel /> Reel #{getReelNumber(reelName)}{" "}
             <small>{reelName}</small>
           </h2>
 
+          <WaveformView audioBuffer={audioBuffer} />
           <div className={styles.reelContentLayout}>
             <div className={styles.reelMainContent}>
               {splices && (
