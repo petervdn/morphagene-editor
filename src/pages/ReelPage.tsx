@@ -4,16 +4,23 @@ import { Breadcrumbs } from "../components/Breadcrumbs/Breadcrumbs";
 import { NoFolder } from "../components/NoFolder";
 import { useAudioBufferFromFile } from "../utils/hooks/useAudioBufferFromFile";
 import { WavHeaderTable } from "../components/WavHeaderTable/WavHeaderTable";
-import { CuePointsList } from "../components/CuePointsList/CuePointsList";
+
 import "./ReelPage.css";
 import { getReelNumber } from "../utils/getReelNumber";
 import { PiFilmReel } from "react-icons/pi";
+import { useMemo } from "react";
+import { getSplices } from "../utils/getSplices";
+import { SplicesList } from "../components/SplicesList/SplicesList";
 
 export function ReelPage() {
   const { reelName } = useParams();
 
   const audioBuffer = useAudioBufferFromFile(reelName ?? "");
   const headerData = useWavHeaderData(reelName ?? "");
+
+  const splices = useMemo(() => {
+    return headerData ? getSplices(headerData.cuePoints) : null;
+  }, [headerData]);
 
   return (
     <>
@@ -28,7 +35,7 @@ export function ReelPage() {
 
           <div className="reel-content-layout">
             <div className="reel-main-content">
-              <CuePointsList cuePoints={headerData.cuePoints} />
+              {splices && <SplicesList splices={splices} />}
             </div>
             <div className="reel-sidebar">
               <WavHeaderTable headerData={headerData} filename={reelName} />
