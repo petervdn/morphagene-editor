@@ -1,10 +1,17 @@
-import { useState, useRef, useEffect, type ReactElement } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  type ReactElement,
+} from "react";
 import styles from "./WaveformView.module.css";
 import { drawWaveform } from "../../utils/canvas/drawWaveform";
 import type { ViewPort } from "../../types/types";
 import type { Splice } from "../../utils/getSplices";
 import { drawSplices } from "../../utils/canvas/drawSplices";
 import { useElementSize } from "../../utils/hooks/useElementSize";
+import { SizedCanvas } from "../SizedCanvas/SizedCanvas";
 
 type Props = {
   audioBuffer: AudioBuffer;
@@ -14,8 +21,8 @@ type Props = {
 export function WaveformView({ audioBuffer, splices }: Props): ReactElement {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const wrapperSize = useElementSize({ elementRef: wrapperRef });
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [viewPort, setViewport] = useState<ViewPort | null>(null);
+  const waveCanvasContextRef = useRef<CanvasRenderingContext2D | null>(null);
 
   useEffect(() => {
     setViewport({
@@ -25,35 +32,27 @@ export function WaveformView({ audioBuffer, splices }: Props): ReactElement {
   }, [audioBuffer]);
 
   useEffect(() => {
-    if (!canvasRef.current || !viewPort) {
+    if (!waveCanvasContextRef.current || !viewPort || !wrapperSize) {
       return;
     }
-    const context = canvasRef.current.getContext("2d")!;
+
     drawWaveform({
       audioBuffer,
-      context,
+      context: waveCanvasContextRef.current,
       viewPort,
       numberOfChannels: audioBuffer.numberOfChannels,
     });
 
-    drawSplices({ context, splices, viewPort });
-  }, [audioBuffer, splices, viewPort]);
+    drawSplices({ context: waveCanvasContextRef.current, splices, viewPort });
+  }, [audioBuffer, splices, viewPort, wrapperSize]);
 
-  useEffect(() => {}, []);
+  const onCanvasRef = useCallback((canvasElement: HTMLCanvasElement | null) => {
+    waveCanvasContextRef.current = canvasElement?.getContext("2d") ?? null;
+  }, []);
 
   return (
     <div className={styles.wrapper} ref={wrapperRef}>
-      {wrapperSize && (
-        <canvas
-          ref={canvasRef}
-          width={wrapperSize.width * window.devicePixelRatio}
-          height={wrapperSize.height * window.devicePixelRatio}
-          style={{
-            width: `${wrapperSize.width}px`,
-            height: `${wrapperSize.height}px`,
-          }}
-        />
-      )}
+      <SizedCanvas size={wrapperSize} onCanvasRef={onCanvasRef} />
     </div>
   );
 }

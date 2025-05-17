@@ -6,7 +6,7 @@ type Props = {
 };
 
 export function useElementSize({ elementRef }: Props) {
-  const [elementSize, setElementSize] = useState<Size | null>(null);
+  const [elementSize, setElementSize] = useState<Size>({ width: 0, height: 0 });
 
   useEffect(() => {
     if (!elementRef.current) return;
