@@ -8,25 +8,23 @@ export function Breadcrumbs(): ReactElement | null {
   const { reelName } = useParams();
   const directoryHandle = useDirectoryHandle();
 
-  const isFolder = location.pathname.startsWith("/folder") && !reelName;
+  const isFolder = location.pathname.startsWith("/folder");
   const isReel = location.pathname.includes("/reel/");
-
-  if (!directoryHandle && (isFolder || isReel)) {
-    return null;
-  }
 
   return (
     <nav className="breadcrumbs">
       <Link to="/">Home</Link>
 
-      {(isFolder || isReel) && directoryHandle && (
+      {isFolder && (
         <>
           <span className="separator">/</span>
-          <Link to="/folder">Folder: {directoryHandle.name}</Link>
+          <Link to="/folder">
+            Folder: {directoryHandle?.name ?? "NO-FOLDER"}
+          </Link>
         </>
       )}
 
-      {isReel && reelName && (
+      {isReel && (
         <>
           <span className="separator">/</span>
           <Link to={`/folder/reel/${reelName}`}>{reelName}</Link>

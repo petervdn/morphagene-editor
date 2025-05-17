@@ -13,13 +13,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Updated link styles for consistency */
 a {
   font-weight: 500;
-  color: #646cff;
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: inherit;
+  transition: color 0.2s ease;
 }
+
 a:hover {
-  color: #535bf2;
+  color: rgba(255, 255, 255, 1);
+}
+
+/* Override visited link color */
+a:visited {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 body {
@@ -39,9 +47,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
