@@ -50,14 +50,13 @@ export function ReelPage() {
     <>
       <Breadcrumbs />
       {!headerData && <NoFolder />}
-      {headerData && reelName && audioBuffer && (
+      {headerData && reelName && audioBuffer && splices && (
         <>
           <h2 className={styles.reelTitle}>
             <PiFilmReel /> Reel #{getReelNumber(reelName)}{" "}
-            <small>{reelName}</small>
           </h2>
 
-          <WaveformView audioBuffer={audioBuffer} />
+          <WaveformView audioBuffer={audioBuffer} splices={splices} />
           <div className={styles.reelContentLayout}>
             <div className={styles.reelMainContent}>
               {splices && (

@@ -2,12 +2,15 @@ import { useState, useRef, useEffect, type ReactElement } from "react";
 import styles from "./WaveformView.module.css";
 import { drawWaveform } from "../../utils/canvas/drawWaveform";
 import type { Size, ViewPort } from "../../types/types";
+import type { Splice } from "../../utils/getSplices";
+import { drawSplices } from "../../utils/canvas/drawSplices";
 
 type Props = {
   audioBuffer: AudioBuffer;
+  splices: Array<Splice>;
 };
 
-export function WaveformView({ audioBuffer }: Props): ReactElement {
+export function WaveformView({ audioBuffer, splices }: Props): ReactElement {
   const [canvasSize, setCanvasSize] = useState<Size | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -52,7 +55,11 @@ export function WaveformView({ audioBuffer }: Props): ReactElement {
       viewPort,
       numberOfChannels: audioBuffer.numberOfChannels,
     });
-  }, [audioBuffer, canvasSize, viewPort]);
+
+    drawSplices({ context, splices, viewPort });
+  }, [audioBuffer, canvasSize, splices, viewPort]);
+
+  useEffect(() => {}, []);
 
   return (
     <div className={styles.wrapper} ref={wrapperRef}>
