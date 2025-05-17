@@ -1,8 +1,8 @@
 import { type ReactElement } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useDirectoryHandle } from "../../stores/directoryHandleStore";
-import { ROUTE_PATHS } from "../../routes/routes";
 import "./Breadcrumbs.css";
+import { getReelPath, routes } from "../../routes/routes";
 
 export function Breadcrumbs(): ReactElement | null {
   const location = useLocation();
@@ -14,12 +14,12 @@ export function Breadcrumbs(): ReactElement | null {
 
   return (
     <nav className="breadcrumbs">
-      <Link to={ROUTE_PATHS.home()}>Home</Link>
+      <Link to={routes.home}>Home</Link>
 
       {isFolder && (
         <>
           <span className="separator">/</span>
-          <Link to={ROUTE_PATHS.folder()}>
+          <Link to={routes.folder}>
             Folder: {directoryHandle?.name ?? "NO-FOLDER"}
           </Link>
         </>
@@ -28,7 +28,7 @@ export function Breadcrumbs(): ReactElement | null {
       {isReel && reelName && (
         <>
           <span className="separator">/</span>
-          <Link to={ROUTE_PATHS.reel(reelName)}>{reelName}</Link>
+          <Link to={getReelPath(reelName)}>{reelName}</Link>
         </>
       )}
     </nav>
