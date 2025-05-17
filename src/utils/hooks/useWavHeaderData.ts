@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDirectoryHandle } from "../../stores/directoryHandleStore";
-import { parseWavFileHeader, type WavHeaderData } from "../parseWavFileHeader";
+import {
+  parseWavFileHeader,
+  type WavHeaderData,
+} from "../audio/parseWavFileHeader";
 import { getReelFile } from "../getReelFile";
 
 export function useWavHeaderData(fileName: string): WavHeaderData | null {

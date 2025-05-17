@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDirectoryHandle } from "../../stores/directoryHandleStore";
 import { useAudioContext } from "./useAudioContext";
 import { getReelFile } from "../getReelFile";
-import { decodeAudioFile } from "../decodeAudioFile";
+import { decodeAudioFile } from "../audio/decodeAudioFile";
 
 export function useAudioBufferFromFile(fileName: string) {
   const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);

@@ -1,5 +1,5 @@
 import { useEffect, useState, type PropsWithChildren } from "react";
-import { audioContextContext } from "../utils/audioContextContext";
+import { audioContextContext } from "../utils/audio/audioContextContext";
 
 export function AudioContextProvider({ children }: PropsWithChildren) {
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);

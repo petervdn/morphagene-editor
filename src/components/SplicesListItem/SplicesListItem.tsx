@@ -4,12 +4,16 @@ import { BsPlayCircleFill } from "react-icons/bs";
 
 type Props = {
   splice: Splice;
+  onClick?: (spliceIndex: number) => void;
 };
 
-export function SplicesListItem({ splice }: Props): ReactElement {
+export function SplicesListItem({
+  splice,
+  onClick: onClickFromProps,
+}: Props): ReactElement {
   const onClick = useCallback(() => {
-    console.log(splice);
-  }, [splice]);
+    onClickFromProps?.(splice.index);
+  }, [onClickFromProps, splice.index]);
 
   return (
     <li className="splice-list-item">

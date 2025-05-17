@@ -1,4 +1,4 @@
-import type { CuePoint } from "./parseWavFileHeader";
+import type { CuePoint } from "./audio/parseWavFileHeader";
 
 export type Splice = {
   start: number;

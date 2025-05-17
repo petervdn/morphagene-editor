@@ -6,9 +6,10 @@ import "./SplicesList.css";
 
 type Props = {
   splices: Array<Splice>;
+  onSpliceClick?: (spliceIndex: number) => void;
 };
 
-export function SplicesList({ splices }: Props): ReactElement {
+export function SplicesList({ splices, onSpliceClick }: Props): ReactElement {
   return (
     <div>
       <h3>splices ({splices.length})</h3>
@@ -18,7 +19,11 @@ export function SplicesList({ splices }: Props): ReactElement {
       ) : (
         <ul className="splices-list">
           {splices.map((splice, index) => (
-            <SplicesListItem key={index} splice={splice} />
+            <SplicesListItem
+              key={index}
+              splice={splice}
+              onClick={onSpliceClick}
+            />
           ))}
         </ul>
       )}

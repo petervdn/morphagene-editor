@@ -8,19 +8,42 @@ import { WavHeaderTable } from "../components/WavHeaderTable/WavHeaderTable";
 import "./ReelPage.css";
 import { getReelNumber } from "../utils/getReelNumber";
 import { PiFilmReel } from "react-icons/pi";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { getSplices } from "../utils/getSplices";
 import { SplicesList } from "../components/SplicesList/SplicesList";
+import { playSplice } from "../utils/audio/playSplice";
+import { useAudioContext } from "../utils/hooks/useAudioContext";
 
 export function ReelPage() {
   const { reelName } = useParams();
 
   const audioBuffer = useAudioBufferFromFile(reelName ?? "");
+  const audioContext = useAudioContext();
   const headerData = useWavHeaderData(reelName ?? "");
 
   const splices = useMemo(() => {
     return headerData ? getSplices(headerData.cuePoints) : null;
   }, [headerData]);
+
+  const onSpliceClick = useCallback(
+    (index: number) => {
+      async function play() {
+        console.log("play", index);
+        const splice = splices?.at(index);
+        if (!splice || !audioContext || !audioBuffer) {
+          return;
+        }
+        console.log("play 1", audioContext.state);
+        if (audioContext.state === "suspended") {
+          await audioContext.resume();
+        }
+        console.log("play 2", audioContext.state);
+        playSplice(audioBuffer, splice, audioContext);
+      }
+      play();
+    },
+    [audioBuffer, audioContext, splices]
+  );
 
   return (
     <>
@@ -35,7 +58,9 @@ export function ReelPage() {
 
           <div className="reel-content-layout">
             <div className="reel-main-content">
-              {splices && <SplicesList splices={splices} />}
+              {splices && (
+                <SplicesList splices={splices} onSpliceClick={onSpliceClick} />
+              )}
             </div>
             <div className="reel-sidebar">
               <WavHeaderTable headerData={headerData} filename={reelName} />
