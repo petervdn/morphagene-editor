@@ -11,7 +11,7 @@ type Props = {
 export function WavHeaderTable({ headerData, filename }: Props): ReactElement {
   return (
     <div className="reel-header-section">
-      <h3>Wav header data</h3>
+      <h3>wav header data</h3>
       <table className="reel-header-table">
         <tbody>
           {filename && (

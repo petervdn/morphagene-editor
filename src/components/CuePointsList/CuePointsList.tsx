@@ -7,15 +7,9 @@ type Props = {
 };
 
 export function CuePointsList({ cuePoints }: Props): ReactElement {
-  const formatTime = (seconds: number): string => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toFixed(2).padStart(5, "0")}`;
-  };
-
   return (
     <div className="cue-points-list">
-      <h3>Cue Points ({cuePoints.length})</h3>
+      <h3>cue points ({cuePoints.length})</h3>
 
       {cuePoints.length === 0 ? (
         <div className="no-cue-points">No cue points found in this reel</div>

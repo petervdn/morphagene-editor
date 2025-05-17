@@ -6,6 +6,8 @@ import { useAudioBufferFromFile } from "../utils/hooks/useAudioBufferFromFile";
 import { WavHeaderTable } from "../components/WavHeaderTable/WavHeaderTable";
 import { CuePointsList } from "../components/CuePointsList/CuePointsList";
 import "./ReelPage.css";
+import { getReelNumber } from "../utils/getReelNumber";
+import { PiFilmReel } from "react-icons/pi";
 
 export function ReelPage() {
   const { reelName } = useParams();
@@ -17,13 +19,13 @@ export function ReelPage() {
     <>
       <Breadcrumbs />
       {!headerData && <NoFolder />}
-      {headerData && (
+      {headerData && reelName && (
         <>
-          <h2>
-            Reel {reelName} ({headerData.duration.toFixed(1)} seconds,{" "}
-            {headerData.cuePoints.length} cue points)
+          <h2 className="reel-title">
+            <PiFilmReel /> Reel #{getReelNumber(reelName)}{" "}
+            <small>{reelName}</small>
           </h2>
-          
+
           <div className="reel-content-layout">
             <div className="reel-main-content">
               <CuePointsList cuePoints={headerData.cuePoints} />

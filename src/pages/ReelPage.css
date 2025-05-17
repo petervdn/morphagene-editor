@@ -12,12 +12,25 @@
   flex: 1;
 }
 
+.reel-title small {
+  opacity: 0.3;
+  font-weight: bold;
+  font-size: 0.7em;
+}
+
+.reel-title svg {
+  vertical-align: middle;
+  margin-right: 0.25rem;
+  position: relative;
+  top: -3px;
+}
+
 /* Responsive layout for smaller screens */
 @media (max-width: 768px) {
   .reel-content-layout {
     flex-direction: column;
   }
-  
+
   .reel-main-content,
   .reel-sidebar {
     flex: auto;
