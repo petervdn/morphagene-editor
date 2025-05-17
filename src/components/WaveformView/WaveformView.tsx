@@ -22,7 +22,8 @@ export function WaveformView({ audioBuffer, splices }: Props): ReactElement {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const wrapperSize = useElementSize({ elementRef: wrapperRef });
   const [viewPort, setViewport] = useState<ViewPort | null>(null);
-  const waveCanvasContextRef = useRef<CanvasRenderingContext2D | null>(null);
+  const waveformContextRef = useRef<CanvasRenderingContext2D | null>(null);
+  const splicesContextRef = useRef<CanvasRenderingContext2D | null>(null);
 
   useEffect(() => {
     setViewport({
@@ -32,27 +33,48 @@ export function WaveformView({ audioBuffer, splices }: Props): ReactElement {
   }, [audioBuffer]);
 
   useEffect(() => {
-    if (!waveCanvasContextRef.current || !viewPort || !wrapperSize) {
+    if (!waveformContextRef.current || !viewPort || !wrapperSize) {
       return;
     }
 
     drawWaveform({
       audioBuffer,
-      context: waveCanvasContextRef.current,
+      context: waveformContextRef.current,
       viewPort,
       numberOfChannels: audioBuffer.numberOfChannels,
     });
+  }, [audioBuffer, viewPort, wrapperSize]);
 
-    drawSplices({ context: waveCanvasContextRef.current, splices, viewPort });
-  }, [audioBuffer, splices, viewPort, wrapperSize]);
+  useEffect(() => {
+    if (!splicesContextRef.current || !viewPort || !wrapperSize) {
+      return;
+    }
 
-  const onCanvasRef = useCallback((canvasElement: HTMLCanvasElement | null) => {
-    waveCanvasContextRef.current = canvasElement?.getContext("2d") ?? null;
-  }, []);
+    drawSplices({
+      context: splicesContextRef.current,
+      splices,
+      viewPort,
+    });
+  }, [splices, viewPort, wrapperSize]);
+
+  const onWaveformCanvasRef = useCallback(
+    (canvasElement: HTMLCanvasElement | null) => {
+      waveformContextRef.current = canvasElement?.getContext("2d") ?? null;
+    },
+    []
+  );
+
+  const onSplicesCanvasRef = useCallback(
+    (canvasElement: HTMLCanvasElement | null) => {
+      splicesContextRef.current = canvasElement?.getContext("2d") ?? null;
+    },
+    []
+  );
 
   return (
     <div className={styles.wrapper} ref={wrapperRef}>
-      <SizedCanvas size={wrapperSize} onCanvasRef={onCanvasRef} />
+      <SizedCanvas size={wrapperSize} onCanvasRef={onWaveformCanvasRef} />
+      <SizedCanvas size={wrapperSize} onCanvasRef={onSplicesCanvasRef} />
     </div>
   );
 }

@@ -1,12 +1,15 @@
 .wrapper {
   width: 100%;
-  height: 200px;
+  height: 300px;
   background-color: #f8f9fa;
   border-radius: 6px;
   border: 1px solid #e9ecef;
+  position: relative;
   margin-bottom: 1.5rem;
   overflow: hidden;
 }
+
+/* Canvas layers are now positioned directly in the SizedCanvas component */
 
 .wrapper canvas {
   display: block;
