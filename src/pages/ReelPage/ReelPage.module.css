@@ -5,11 +5,11 @@
 }
 
 .reelMainContent {
-  flex: 2;
+  flex: 3;
 }
 
 .reelSidebar {
-  flex: 1;
+  flex: 2;
 }
 
 .reelTitle small {

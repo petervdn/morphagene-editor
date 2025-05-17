@@ -1,5 +1,6 @@
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 115%; /* Increased base font size by 15% */
   line-height: 1.5;
   font-weight: 400;
 

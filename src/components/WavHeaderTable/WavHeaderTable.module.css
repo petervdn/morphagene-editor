@@ -2,12 +2,12 @@
   margin-top: 1rem;
   border-collapse: collapse;
   width: 100%;
-  max-width: 600px;
+  max-width: none;
 }
 
 .reelHeaderTable th,
 .reelHeaderTable td {
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.1rem;
   text-align: left;
   border-bottom: 1px solid #e9ecef;
   font-size: 0.9rem;
@@ -16,7 +16,7 @@
 
 .reelHeaderTable th {
   font-weight: 500;
-  width: 40%;
+  width: 45%;
 }
 
 .reelHeaderTable td {
