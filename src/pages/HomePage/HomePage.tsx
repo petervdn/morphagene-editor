@@ -1,5 +1,5 @@
 import { type ReactElement } from "react";
-import { setDirectoryHandle } from "../stores/directoryHandleStore";
+import { setDirectoryHandle } from "../../stores/directoryHandleStore";
 import { useNavigate } from "react-router-dom";
 import styles from "./HomePage.module.css";
 

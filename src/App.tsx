@@ -1,8 +1,8 @@
 import styles from "./App.module.css";
 import { Route, Routes } from "react-router-dom";
-import { HomePage } from "./pages/HomePage";
-import { FolderPage } from "./pages/FolderPage";
-import { ReelPage } from "./pages/ReelPage";
+import { HomePage } from "./pages/HomePage/HomePage";
+import { FolderPage } from "./pages/FolderPage/FolderPage";
+import { ReelPage } from "./pages/ReelPage/ReelPage";
 import { routes } from "./routes/routes";
 import { AudioContextProvider } from "./context/AudioContextProvider";
 

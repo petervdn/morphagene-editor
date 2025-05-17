@@ -1,18 +1,18 @@
 import { useParams } from "react-router-dom";
-import { useWavHeaderData } from "../utils/hooks/useWavHeaderData";
-import { Breadcrumbs } from "../components/Breadcrumbs/Breadcrumbs";
-import { NoFolder } from "../components/NoFolder";
-import { useAudioBufferFromFile } from "../utils/hooks/useAudioBufferFromFile";
-import { WavHeaderTable } from "../components/WavHeaderTable/WavHeaderTable";
+import { useWavHeaderData } from "../../utils/hooks/useWavHeaderData";
+import { Breadcrumbs } from "../../components/Breadcrumbs/Breadcrumbs";
+import { NoFolder } from "../../components/NoFolder";
+import { useAudioBufferFromFile } from "../../utils/hooks/useAudioBufferFromFile";
+import { WavHeaderTable } from "../../components/WavHeaderTable/WavHeaderTable";
 
 import styles from "./ReelPage.module.css";
-import { getReelNumber } from "../utils/getReelNumber";
+import { getReelNumber } from "../../utils/getReelNumber";
 import { PiFilmReel } from "react-icons/pi";
 import { useCallback, useMemo } from "react";
-import { getSplices } from "../utils/getSplices";
-import { SplicesList } from "../components/SplicesList/SplicesList";
-import { playSplice } from "../utils/audio/playSplice";
-import { useAudioContext } from "../utils/hooks/useAudioContext";
+import { getSplices } from "../../utils/getSplices";
+import { SplicesList } from "../../components/SplicesList/SplicesList";
+import { playSplice } from "../../utils/audio/playSplice";
+import { useAudioContext } from "../../utils/hooks/useAudioContext";
 
 export function ReelPage() {
   const { reelName } = useParams();

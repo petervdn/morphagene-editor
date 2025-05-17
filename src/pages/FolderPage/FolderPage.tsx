@@ -1,9 +1,9 @@
 import type { ReactElement } from "react";
-import { useReelsFromDirectory } from "../utils/hooks/useReelsFromDirectory";
-import { ReelListItem } from "../components/ReelListItem/ReelListItem";
-import { Breadcrumbs } from "../components/Breadcrumbs/Breadcrumbs";
+import { useReelsFromDirectory } from "../../utils/hooks/useReelsFromDirectory";
+import { ReelListItem } from "../../components/ReelListItem/ReelListItem";
+import { Breadcrumbs } from "../../components/Breadcrumbs/Breadcrumbs";
 import styles from "./FolderPage.module.css";
-import { NoFolder } from "../components/NoFolder";
+import { NoFolder } from "../../components/NoFolder";
 
 export function FolderPage(): ReactElement {
   const { directoryHandle, reels } = useReelsFromDirectory();
