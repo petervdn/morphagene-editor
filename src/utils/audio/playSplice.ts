@@ -9,5 +9,5 @@ export function playSplice(
   bufferSource.connect(audioContext.destination);
   bufferSource.buffer = audioBuffer;
 
-  bufferSource.start(splice.start, splice.end);
+  bufferSource.start(0, splice.start, splice.end - splice.start);
 }

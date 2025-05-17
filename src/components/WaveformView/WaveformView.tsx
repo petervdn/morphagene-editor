@@ -66,8 +66,8 @@ export function WaveformView({ audioBuffer, splices }: Props): ReactElement {
       {canvasSize && (
         <canvas
           ref={canvasRef}
-          width={canvasSize.width}
-          height={canvasSize.height}
+          width={canvasSize.width * window.devicePixelRatio}
+          height={canvasSize.height * window.devicePixelRatio}
           style={{
             width: `${canvasSize.width}px`,
             height: `${canvasSize.height}px`,

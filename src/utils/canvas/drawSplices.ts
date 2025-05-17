@@ -50,7 +50,7 @@ export function drawSplices({
     // Draw the vertical line for this splice
     context.beginPath();
     context.strokeStyle = color;
-    context.lineWidth = 2;
+    context.lineWidth = 4;
     context.setLineDash([5, 3]); // Dashed line
     context.moveTo(xPos, 0);
     context.lineTo(xPos, height);
@@ -60,8 +60,8 @@ export function drawSplices({
     context.setLineDash([]);
 
     // Add a small label with the splice index
-    context.font = "10px sans-serif";
+    context.font = "22px sans-serif";
     context.fillStyle = color;
-    context.fillText(`${index + 1}`, xPos + 3, 12);
+    context.fillText(`${index + 1}`, xPos + 8, 22);
   });
 }
