@@ -1,19 +1,20 @@
 import { useParams } from "react-router-dom";
-import { useReadWavFile } from "../utils/hooks/useReadReelFile";
+import { useWavHeaderData } from "../utils/hooks/useWavHeaderData";
 
 export function ReelPage() {
   const { reelName } = useParams();
-  const parsed = useReadWavFile(reelName ?? "");
+  const headerData = useWavHeaderData(reelName ?? "");
 
-  if (!parsed) {
+  if (!headerData) {
     return null;
   }
 
-  console.log(parsed);
+  console.log(headerData);
 
   return (
     <h2>
-      Reel {reelName} ({parsed.audioBuffer.duration.toFixed(1)} seconds)
+      Reel {reelName} ({headerData.duration.toFixed(1)} seconds,{" "}
+      {headerData.cuePoints.length} cue points)
     </h2>
   );
 }
