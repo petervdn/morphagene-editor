@@ -1,0 +1,57 @@
+.cue-points-list {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.cue-points-header {
+  font-size: 1rem;
+  color: #6c757d;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.cue-points-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cue-points-table th,
+.cue-points-table td {
+  padding: 0.5rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.cue-points-table th {
+  font-weight: 500;
+}
+
+.cue-points-table tr:last-child th,
+.cue-points-table tr:last-child td {
+  border-bottom: none;
+}
+
+.cue-point-id {
+  width: 15%;
+}
+
+.cue-point-position {
+  width: 25%;
+}
+
+.cue-point-time {
+  width: 60%;
+  font-family: monospace;
+}
+
+.no-cue-points {
+  padding: 1rem;
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #e9ecef;
+}

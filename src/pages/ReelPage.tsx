@@ -4,6 +4,8 @@ import { Breadcrumbs } from "../components/Breadcrumbs/Breadcrumbs";
 import { NoFolder } from "../components/NoFolder";
 import { useAudioBufferFromFile } from "../utils/hooks/useAudioBufferFromFile";
 import { WavHeaderTable } from "../components/WavHeaderTable/WavHeaderTable";
+import { CuePointsList } from "../components/CuePointsList/CuePointsList";
+import "./ReelPage.css";
 
 export function ReelPage() {
   const { reelName } = useParams();
@@ -22,7 +24,14 @@ export function ReelPage() {
             {headerData.cuePoints.length} cue points)
           </h2>
           
-          <WavHeaderTable headerData={headerData} filename={reelName} />
+          <div className="reel-content-layout">
+            <div className="reel-main-content">
+              <CuePointsList cuePoints={headerData.cuePoints} />
+            </div>
+            <div className="reel-sidebar">
+              <WavHeaderTable headerData={headerData} filename={reelName} />
+            </div>
+          </div>
         </>
       )}
     </>
