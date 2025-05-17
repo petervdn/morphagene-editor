@@ -1,7 +1,7 @@
 import { type ReactElement } from "react";
 import type { WavHeaderData } from "../../utils/audio/parseWavFileHeader";
 import { audioFormatTypes } from "../../utils/audio/audioFormatTypes";
-import "./WavHeaderTable.css";
+import styles from "./WavHeaderTable.module.css";
 
 type Props = {
   headerData: WavHeaderData;
@@ -10,9 +10,9 @@ type Props = {
 
 export function WavHeaderTable({ headerData, filename }: Props): ReactElement {
   return (
-    <div className="reel-header-section">
+    <div className={styles.reelHeaderSection}>
       <h3>wav header data</h3>
-      <table className="reel-header-table">
+      <table className={styles.reelHeaderTable}>
         <tbody>
           {filename && (
             <tr>

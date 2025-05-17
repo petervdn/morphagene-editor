@@ -1,16 +1,16 @@
-.folder-page h2 {
+.folderPage h2 {
   margin-bottom: 1.5rem;
   color: rgba(0, 0, 0, 0.87);
 }
 
-.reels-list {
+.reelsList {
   list-style-type: none;
   padding: 0;
   margin: 0;
   width: 100%;
 }
 
-.empty-state {
+.emptyState {
   padding: 2rem;
   text-align: center;
   background-color: #f8f9fa;

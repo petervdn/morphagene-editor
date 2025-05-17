@@ -1,24 +1,24 @@
-.reel-content-layout {
+.reelContentLayout {
   display: flex;
   gap: 2rem;
   margin-top: 2rem;
 }
 
-.reel-main-content {
+.reelMainContent {
   flex: 2;
 }
 
-.reel-sidebar {
+.reelSidebar {
   flex: 1;
 }
 
-.reel-title small {
+.reelTitle small {
   opacity: 0.3;
   font-weight: bold;
   font-size: 0.7em;
 }
 
-.reel-title svg {
+.reelTitle svg {
   vertical-align: middle;
   margin-right: 0.25rem;
   position: relative;
@@ -27,12 +27,12 @@
 
 /* Responsive layout for smaller screens */
 @media (max-width: 768px) {
-  .reel-content-layout {
+  .reelContentLayout {
     flex-direction: column;
   }
 
-  .reel-main-content,
-  .reel-sidebar {
+  .reelMainContent,
+  .reelSidebar {
     flex: auto;
     width: 100%;
   }

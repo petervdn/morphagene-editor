@@ -5,7 +5,7 @@ import { NoFolder } from "../components/NoFolder";
 import { useAudioBufferFromFile } from "../utils/hooks/useAudioBufferFromFile";
 import { WavHeaderTable } from "../components/WavHeaderTable/WavHeaderTable";
 
-import "./ReelPage.css";
+import styles from "./ReelPage.module.css";
 import { getReelNumber } from "../utils/getReelNumber";
 import { PiFilmReel } from "react-icons/pi";
 import { useCallback, useMemo } from "react";
@@ -51,18 +51,18 @@ export function ReelPage() {
       {!headerData && <NoFolder />}
       {headerData && reelName && (
         <>
-          <h2 className="reel-title">
+          <h2 className={styles.reelTitle}>
             <PiFilmReel /> Reel #{getReelNumber(reelName)}{" "}
             <small>{reelName}</small>
           </h2>
 
-          <div className="reel-content-layout">
-            <div className="reel-main-content">
+          <div className={styles.reelContentLayout}>
+            <div className={styles.reelMainContent}>
               {splices && (
                 <SplicesList splices={splices} onSpliceClick={onSpliceClick} />
               )}
             </div>
-            <div className="reel-sidebar">
+            <div className={styles.reelSidebar}>
               <WavHeaderTable headerData={headerData} filename={reelName} />
             </div>
           </div>

@@ -1,9 +1,9 @@
-.reel-list-item {
+.reelListItem {
   margin-bottom: 0.75rem;
   transition: transform 0.2s ease;
 }
 
-.reel-list-item a {
+.link {
   display: flex;
   align-items: center;
   padding: 0.75rem 1rem;
@@ -15,17 +15,18 @@
   border: 1px solid #e9ecef;
 }
 
-.reel-list-item a:hover {
+.link:hover {
   background-color: #e9ecef;
+  transform: translateX(3px);
   border-color: #dee2e6;
 }
 
-.reel-list-item .reel-icon {
+.reelIcon {
   margin-right: 0.75rem;
   color: #6c757d;
 }
 
-.reel-list-item .reel-name {
+.reelName {
   font-weight: 500;
   font-size: 1.2rem;
   flex-grow: 1;
@@ -33,7 +34,7 @@
   align-items: center;
 }
 
-.reel-list-item .reel-name svg {
+.reelNameSvg {
   margin-right: 0.5rem;
   vertical-align: middle;
   position: relative;
@@ -41,7 +42,7 @@
   opacity: 0.5;
 }
 
-.reel-list-item .reel-meta {
+.reelMeta {
   font-size: 0.85rem;
   color: #6c757d;
   margin-left: auto;

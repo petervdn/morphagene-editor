@@ -1,12 +1,12 @@
-.reel-header-table {
+.reelHeaderTable {
   margin-top: 1rem;
   border-collapse: collapse;
   width: 100%;
   max-width: 600px;
 }
 
-.reel-header-table th,
-.reel-header-table td {
+.reelHeaderTable th,
+.reelHeaderTable td {
   padding: 0.5rem 1rem;
   text-align: left;
   border-bottom: 1px solid #e9ecef;
@@ -14,26 +14,26 @@
   color: #6c757d;
 }
 
-.reel-header-table th {
+.reelHeaderTable th {
   font-weight: 500;
   width: 40%;
 }
 
-.reel-header-table td {
+.reelHeaderTable td {
   font-family: monospace;
 }
 
-.reel-header-table tr:last-child th,
-.reel-header-table tr:last-child td {
+.reelHeaderTable tr:last-child th,
+.reelHeaderTable tr:last-child td {
   border-bottom: none;
 }
 
-.reel-header-section {
+.reelHeaderSection {
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
 
-/* .reel-header-section h3 {
+/* .reelHeaderSection h3 {
   font-size: 1rem;
   color: #6c757d;
   font-weight: 500;

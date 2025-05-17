@@ -1,20 +1,24 @@
-.home-page-content {
+.homePage {
+  /* Add any styles for the home page container */
+}
+
+.homePageContent {
   display: flex;
   align-items: flex-start;
   gap: 2rem;
   margin-bottom: 2rem;
 }
 
-.home-page-text {
+.homePageText {
   flex: 1;
 }
 
-.home-page-image {
+.homePageImage {
   width: 220px;
   border-radius: 8px;
 }
 
-.select-folder-btn {
+.selectFolderBtn {
   background-color: #2c3e50;
   color: white;
   border: none;
@@ -25,16 +29,16 @@
   transition: background-color 0.2s;
 }
 
-.select-folder-btn:hover {
+.selectFolderBtn:hover {
   background-color: #1a2530;
 }
 
 @media (max-width: 768px) {
-  .home-page-content {
+  .homePageContent {
     flex-direction: column;
   }
 
-  .home-page-image {
+  .homePageImage {
     width: 100%;
     margin-bottom: 1rem;
     order: -1;

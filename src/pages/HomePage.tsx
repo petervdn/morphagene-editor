@@ -1,7 +1,7 @@
 import { type ReactElement } from "react";
 import { setDirectoryHandle } from "../stores/directoryHandleStore";
 import { useNavigate } from "react-router-dom";
-import "./HomePage.css";
+import styles from "./HomePage.module.css";
 
 export function HomePage(): ReactElement {
   const navigate = useNavigate();
@@ -13,9 +13,9 @@ export function HomePage(): ReactElement {
   };
 
   return (
-    <div className="home-page">
-      <div className="home-page-content">
-        <div className="home-page-text">
+    <div className={styles.homePage}>
+      <div className={styles.homePageContent}>
+        <div className={styles.homePageText}>
           <p>
             Welcome to the Morphagene Sound Editor! This is a web tool for editing
             sound files that are used in the Eurorack Morphagene module. It is
@@ -27,10 +27,10 @@ export function HomePage(): ReactElement {
         <img 
           src="/morphagene.jpg" 
           alt="Make Noise Morphagene Eurorack Module" 
-          className="home-page-image"
+          className={styles.homePageImage}
         />
       </div>
-      <button onClick={onFolderSelectClick} className="select-folder-btn">
+      <button onClick={onFolderSelectClick} className={styles.selectFolderBtn}>
         Select Reels Folder
       </button>
     </div>
