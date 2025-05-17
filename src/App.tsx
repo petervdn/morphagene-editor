@@ -5,6 +5,7 @@ import { FolderPage } from "./pages/FolderPage/FolderPage";
 import { ReelPage } from "./pages/ReelPage/ReelPage";
 import { routes } from "./routes/routes";
 import { AudioContextProvider } from "./context/AudioContextProvider";
+import { Footer } from "./components/Footer/Footer";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             </Routes>
           </div>
         </div>
+        <Footer />
       </div>
     </AudioContextProvider>
   );
