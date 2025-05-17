@@ -30,6 +30,16 @@
   font-weight: 500;
   font-size: 1.2rem;
   flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+
+.reel-list-item .reel-name svg {
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  opacity: 0.5;
 }
 
 .reel-list-item .reel-meta {
