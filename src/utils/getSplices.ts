@@ -3,6 +3,7 @@ import type { CuePoint } from "./parseWavFileHeader";
 export type Splice = {
   start: number;
   end: number;
+  index: number; // doesn't really belong here
 };
 
 export function getSplices(cuePoints: Array<CuePoint>): Array<Splice> {
@@ -15,6 +16,7 @@ export function getSplices(cuePoints: Array<CuePoint>): Array<Splice> {
       accumulator.push({
         start: 0,
         end: current.timeInSeconds,
+        index,
       });
     } else {
       const prevItem = cuePoints.at(index - 1);
@@ -24,6 +26,7 @@ export function getSplices(cuePoints: Array<CuePoint>): Array<Splice> {
       accumulator.push({
         start: prevItem.timeInSeconds,
         end: current.timeInSeconds,
+        index,
       });
     }
     return accumulator;

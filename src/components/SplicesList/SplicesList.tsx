@@ -1,6 +1,6 @@
 import { type ReactElement } from "react";
 import type { Splice } from "../../utils/getSplices";
-import { BsPlayCircleFill } from "react-icons/bs";
+import { SplicesListItem } from "../SplicesListItem/SplicesListItem";
 
 import "./SplicesList.css";
 
@@ -9,10 +9,6 @@ type Props = {
 };
 
 export function SplicesList({ splices }: Props): ReactElement {
-  const formatTime = (seconds: number): string => {
-    return `${seconds.toFixed(2)}s`;
-  };
-
   return (
     <div>
       <h3>splices ({splices.length})</h3>
@@ -22,17 +18,7 @@ export function SplicesList({ splices }: Props): ReactElement {
       ) : (
         <ul className="splices-list">
           {splices.map((splice, index) => (
-            <li key={index} className="splice-list-item">
-              <div className="splice-content">
-                <span className="splice-name">
-                  <BsPlayCircleFill />
-                  Splice {index + 1}
-                </span>
-                <span className="splice-meta">
-                  {formatTime(splice.start)} - {formatTime(splice.end)}
-                </span>
-              </div>
-            </li>
+            <SplicesListItem key={index} splice={splice} />
           ))}
         </ul>
       )}
