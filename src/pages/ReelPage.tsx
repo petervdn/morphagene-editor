@@ -2,13 +2,15 @@ import { useParams } from "react-router-dom";
 import { useWavHeaderData } from "../utils/hooks/useWavHeaderData";
 import { Breadcrumbs } from "../components/Breadcrumbs/Breadcrumbs";
 import { NoFolder } from "../components/NoFolder";
-import { useAudioContext } from "../utils/hooks/useAudioContext";
+import { useAudioBufferFromFile } from "../utils/hooks/useAudioBufferFromFile";
 
 export function ReelPage() {
   const { reelName } = useParams();
-  const audioContext = useAudioContext();
-  console.log({ audioContext });
+
+  const audioBuffer = useAudioBufferFromFile(reelName ?? "");
   const headerData = useWavHeaderData(reelName ?? "");
+
+  console.log(audioBuffer?.duration);
 
   return (
     <>

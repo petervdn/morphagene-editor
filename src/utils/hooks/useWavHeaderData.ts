@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDirectoryHandle } from "../../stores/directoryHandleStore";
 import { parseWavFileHeader, type WavHeaderData } from "../parseWavFileHeader";
+import { getReelFile } from "../getReelFile";
 
 export function useWavHeaderData(fileName: string): WavHeaderData | null {
   const directoryHandle = useDirectoryHandle();
@@ -13,8 +14,8 @@ export function useWavHeaderData(fileName: string): WavHeaderData | null {
       if (!directoryHandle) {
         return;
       }
-      const fileHandle = await directoryHandle.getFileHandle(fileName);
-      const file = await fileHandle.getFile();
+
+      const file = await getReelFile(fileName, directoryHandle);
       const result = await parseWavFileHeader(file);
       setWavHeaderData(result);
     }

@@ -1,19 +1,23 @@
-export const decodeAudioFile = async (file: File): Promise<AudioBuffer> => {
-  return new Promise((resolve, reject) => {
+export async function decodeAudioFile(
+  file: File,
+  audioContext: AudioContext
+): Promise<AudioBuffer> {
+  return new Promise<AudioBuffer>((resolve, reject) => {
     const reader = new FileReader();
 
     reader.onload = async (event) => {
       try {
-        const arrayBuffer = event.target?.result as ArrayBuffer;
-        if (!arrayBuffer) {
+        if (
+          !event.target ||
+          !event.target.result ||
+          !(event.target.result instanceof ArrayBuffer)
+        ) {
           throw new Error("Failed to read file");
         }
 
-        const audioContext = new (window.AudioContext ||
-          window.webkitAudioContext)();
-
-        // Decode the audio data
-        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        const audioBuffer = await audioContext.decodeAudioData(
+          event.target.result
+        );
         resolve(audioBuffer);
       } catch (error) {
         reject(error);
@@ -26,4 +30,4 @@ export const decodeAudioFile = async (file: File): Promise<AudioBuffer> => {
 
     reader.readAsArrayBuffer(file);
   });
-};
+}
