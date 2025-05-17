@@ -6,16 +6,16 @@
 }
 
 .breadcrumbs a {
-  color: rgba(255, 255, 255, 0.8);
+  color: #2c3e50;
   text-decoration: none;
 }
 
 .breadcrumbs a:hover {
-  color: white;
+  color: #1a2530;
   text-decoration: underline;
 }
 
 .breadcrumbs .separator {
   margin: 0 0.5rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: #6c757d;
 }

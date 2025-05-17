@@ -1,19 +1,20 @@
 .folder-page h2 {
   margin-bottom: 1.5rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(0, 0, 0, 0.87);
 }
 
 .reels-list {
   list-style-type: none;
   padding: 0;
   margin: 0;
-  max-width: 800px;
+  width: 100%;
 }
 
 .empty-state {
   padding: 2rem;
   text-align: center;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: #f8f9fa;
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #6c757d;
+  border: 1px solid #e9ecef;
 }
