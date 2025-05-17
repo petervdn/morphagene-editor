@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useWavHeaderData } from "../utils/hooks/useWavHeaderData";
+import { Breadcrumbs } from "../components/Breadcrumbs/Breadcrumbs";
 
 export function ReelPage() {
   const { reelName } = useParams();
@@ -9,12 +10,13 @@ export function ReelPage() {
     return null;
   }
 
-  console.log(headerData);
-
   return (
-    <h2>
-      Reel {reelName} ({headerData.duration.toFixed(1)} seconds,{" "}
-      {headerData.cuePoints.length} cue points)
-    </h2>
+    <>
+      <Breadcrumbs />
+      <h2>
+        Reel {reelName} ({headerData.duration.toFixed(1)} seconds,{" "}
+        {headerData.cuePoints.length} cue points)
+      </h2>
+    </>
   );
 }

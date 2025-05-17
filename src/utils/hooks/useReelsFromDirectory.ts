@@ -33,7 +33,12 @@ export function useReelsFromDirectory(): Result {
         }
       }
 
-      setReels(tempReels);
+      setReels(
+        tempReels.toSorted(
+          (a, b) =>
+            reelFileNames.indexOf(a.name) - reelFileNames.indexOf(b.name)
+        )
+      );
     }
 
     readDirectory();

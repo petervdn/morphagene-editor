@@ -1,6 +1,7 @@
 import type { ReactElement } from "react";
 import { useReelsFromDirectory } from "../utils/hooks/useReelsFromDirectory";
-import { Link } from "react-router-dom";
+import { ReelListItem } from "../components/ReelListItem/ReelListItem";
+import { Breadcrumbs } from "../components/Breadcrumbs/Breadcrumbs";
 
 export function FolderPage(): ReactElement {
   const { directoryHandle, reels } = useReelsFromDirectory();
@@ -11,12 +12,11 @@ export function FolderPage(): ReactElement {
 
   return (
     <>
+      <Breadcrumbs />
       <h2>Listing folder: {directoryHandle.name}</h2>
       <ul>
         {reels?.map((reel) => (
-          <li key={reel.name}>
-            <Link to={`/folder/reel/${reel.name}`}>{reel.name}</Link>
-          </li>
+          <ReelListItem reel={reel} key={reel.name} />
         ))}
       </ul>
     </>
