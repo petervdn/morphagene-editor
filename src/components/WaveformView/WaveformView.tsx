@@ -15,29 +15,24 @@ export function WaveformView({ audioBuffer }: Props): ReactElement {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Use ResizeObserver to track the wrapper's size
   useEffect(() => {
     if (!wrapperRef.current) return;
 
-    const updateSize = () => {
-      if (wrapperRef.current) {
-        const { width, height } = wrapperRef.current.getBoundingClientRect();
-        setCanvasSize({ width, height });
-        console.log(`Canvas size updated: ${width}x${height}`);
-      }
-    };
+    const currentWrapper = wrapperRef.current;
 
-    // Call once to initialize
+    function updateSize() {
+      const { width, height } = currentWrapper.getBoundingClientRect();
+      setCanvasSize({ width, height });
+    }
+
     updateSize();
 
-    // Set up ResizeObserver to track size changes
+    // track size changes
     const resizeObserver = new ResizeObserver(updateSize);
-    resizeObserver.observe(wrapperRef.current);
+    resizeObserver.observe(currentWrapper);
 
     return () => {
-      if (wrapperRef.current) {
-        resizeObserver.unobserve(wrapperRef.current);
-      }
+      resizeObserver.unobserve(currentWrapper);
       resizeObserver.disconnect();
     };
   }, []);
