@@ -29,16 +29,11 @@ export function ReelPage() {
   const onSpliceClick = useCallback(
     (index: number) => {
       async function play() {
-        console.log("play", index);
         const splice = splices?.at(index);
         if (!splice || !audioContext || !audioBuffer) {
           return;
         }
-        console.log("play", audioContext.state);
-        if (audioContext.state === "suspended") {
-          await audioContext.resume();
-        }
-        console.log("play", audioContext.state);
+
         playSplice(audioBuffer, splice, audioContext);
       }
       play();

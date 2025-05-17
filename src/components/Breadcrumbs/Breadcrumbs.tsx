@@ -3,6 +3,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { useDirectoryHandle } from "../../stores/directoryHandleStore";
 import styles from "./Breadcrumbs.module.css";
 import { getReelPath, routes } from "../../routes/routes";
+import { getReelNumber } from "../../utils/getReelNumber";
 
 export function Breadcrumbs(): ReactElement | null {
   const location = useLocation();
@@ -28,7 +29,9 @@ export function Breadcrumbs(): ReactElement | null {
       {isReel && reelName && (
         <>
           <span className={styles.separator}>/</span>
-          <Link to={getReelPath(reelName)}>{reelName}</Link>
+          <Link to={getReelPath(reelName)}>
+            Reel #{getReelNumber(reelName)}
+          </Link>
         </>
       )}
     </nav>
