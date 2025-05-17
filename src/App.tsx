@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
 import { FolderPage } from "./pages/FolderPage";
 import { ReelPage } from "./pages/ReelPage";
+import { ROUTES } from "./routes/routes";
 
 function App() {
   return (
@@ -10,9 +11,9 @@ function App() {
       <h1>Morphagene editor</h1>
       <div className="content-wrapper">
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/folder" element={<FolderPage />} />
-          <Route path="/folder/reel/:reelName" element={<ReelPage />} />
+          <Route path={ROUTES.HOME} element={<HomePage />} />
+          <Route path={ROUTES.FOLDER} element={<FolderPage />} />
+          <Route path={ROUTES.REEL} element={<ReelPage />} />
         </Routes>
       </div>
     </div>

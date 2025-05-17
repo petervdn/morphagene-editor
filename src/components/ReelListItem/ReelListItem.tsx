@@ -2,6 +2,7 @@ import { type ReactElement } from "react";
 import type { ReelFile } from "../../types/types";
 import { Link } from "react-router-dom";
 import { useWavHeaderData } from "../../utils/hooks/useWavHeaderData";
+import { ROUTE_PATHS } from "../../routes/routes";
 import "./ReelListItem.css";
 import { getReelNumber } from "../../utils/getReelNumber";
 
@@ -14,7 +15,7 @@ export function ReelListItem({ reel }: Props): ReactElement {
 
   return (
     <li className="reel-list-item">
-      <Link to={`/folder/reel/${reel.name}`}>
+      <Link to={ROUTE_PATHS.reel(reel.name)}>
         <span className="reel-icon">🔊</span>
         <span className="reel-name">Reel #{getReelNumber(reel.name)}</span>
         <span className="reel-meta">
