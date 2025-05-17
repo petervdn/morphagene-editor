@@ -1,0 +1,41 @@
+.reel-header-table {
+  margin-top: 1rem;
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 600px;
+}
+
+.reel-header-table th,
+.reel-header-table td {
+  padding: 0.5rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.reel-header-table th {
+  font-weight: 500;
+  width: 40%;
+}
+
+.reel-header-table td {
+  font-family: monospace;
+}
+
+.reel-header-table tr:last-child th,
+.reel-header-table tr:last-child td {
+  border-bottom: none;
+}
+
+.reel-header-section {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.reel-header-section h3 {
+  font-size: 1rem;
+  color: #6c757d;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}

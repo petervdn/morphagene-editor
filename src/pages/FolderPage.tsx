@@ -14,7 +14,7 @@ export function FolderPage(): ReactElement {
       {!directoryHandle && <NoFolder />}
       {directoryHandle && (
         <>
-          <h2>Listing folder: {directoryHandle.name}</h2>
+          <h2>Showing reels in folder "{directoryHandle.name}"</h2>
 
           {reels && reels.length > 0 ? (
             <ul className="reels-list">
