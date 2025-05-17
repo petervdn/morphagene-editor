@@ -28,7 +28,6 @@
 
 .spliceContent:hover {
   background-color: #e9ecef;
-  transform: translateX(3px);
   border-color: #dee2e6;
 }
 
