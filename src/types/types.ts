@@ -2,6 +2,7 @@ export type Reel = {
   id: string;
   name: string;
   file: File;
+  fileHandle: FileSystemFileHandle;
   wavHeaderData: WavHeaderData;
 };
 

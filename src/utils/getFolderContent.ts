@@ -19,6 +19,7 @@ export async function getFolderContent(
       reels.push({
         id,
         file,
+        fileHandle: entry,
         name: `Reel #${id}`,
         wavHeaderData,
       });

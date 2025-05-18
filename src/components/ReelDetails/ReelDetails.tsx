@@ -1,4 +1,4 @@
-import { type ReactElement } from "react";
+import { useCallback, type ReactElement } from "react";
 import { PiFilmReel } from "react-icons/pi";
 import { FiSave } from "react-icons/fi";
 import { BiSolidErrorCircle } from "react-icons/bi";
@@ -8,8 +8,9 @@ import { WaveformView } from "../WaveformView/WaveformView";
 import { PlayControls } from "../PlayControls/PlayControls";
 import { SplicesList } from "../SplicesList/SplicesList";
 import { WavHeaderTable } from "../WavHeaderTable/WavHeaderTable";
-import type { Reel } from "../../types/types";
+import type { CuePoint, Reel } from "../../types/types";
 import { useSplices } from "../../utils/hooks/useSplices";
+import { useFolderContentStore } from "../../stores/folderContentStore";
 
 type Props = {
   reel: Reel;
@@ -17,6 +18,11 @@ type Props = {
 };
 
 export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
+  const updateReelCuePoints = useFolderContentStore(state => state.updateReelCuePoints);
+  
+  const handleReelUpdated = useCallback((reelId: string, cuePoints: Array<CuePoint>) => {
+    updateReelCuePoints(reelId, cuePoints);
+  }, [updateReelCuePoints]);
   const {
     splices,
     highlightedSpliceIndex,
@@ -28,8 +34,9 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
     saveChanges,
     resetChanges,
   } = useSplices({
-    cuePoints: reel.wavHeaderData.cuePoints,
+    reel,
     audioBuffer,
+    onReelUpdated: handleReelUpdated,
   });
 
   return (

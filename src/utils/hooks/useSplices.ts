@@ -1,11 +1,14 @@
 import { useCallback, useMemo, useState } from "react";
-import type { CuePoint, Marker, Splice } from "../../types/types";
+import type { CuePoint, Marker, Reel, Splice } from "../../types/types";
 import { createSplicesFromMarkers } from "../createSplicesFromMarkers";
 import { useAudioPlayer } from "./useAudioPlayer";
+import { saveWavToFileSystem } from "../audio/saveWavWithCuePoints";
+import { parseWavFileHeader } from "../audio/parseWavFileHeader";
 
 type UseSplicesProps = {
-  cuePoints: Array<CuePoint>;
+  reel: Reel;
   audioBuffer: AudioBuffer;
+  onReelUpdated?: (reelId: string, cuePoints: Array<CuePoint>) => void;
 };
 
 type UseSplicesResult = {
@@ -22,11 +25,13 @@ type UseSplicesResult = {
 };
 
 export function useSplices({
-  cuePoints,
+  reel,
   audioBuffer,
+  onReelUpdated,
 }: UseSplicesProps): UseSplicesResult {
+  const cuePoints = reel.wavHeaderData.cuePoints;
   // Store the original cue points for comparison
-  const [originalCuePoints] = useState<Array<CuePoint>>(cuePoints);
+  const [originalCuePoints, setOriginalCuePoints] = useState<Array<CuePoint>>(cuePoints);
   const [markers, setMarkers] = useState<Array<Marker>>(() =>
     cuePoints.map(({ timeInSeconds }) => ({
       time: timeInSeconds,
@@ -102,12 +107,59 @@ export function useSplices({
     });
   }, [markers, originalCuePoints]);
   
-  // Function to save changes (placeholder for now)
-  const saveChanges = useCallback(() => {
-    // This would be implemented to actually save the changes
-    console.log('Saving changes:', markers);
-    // In a real implementation, this would update the original cue points
-  }, [markers]);
+  // Function to save changes to the file
+  const saveChanges = useCallback(async () => {
+    try {
+      // Check if the File System Access API is available
+      if (!('showSaveFilePicker' in window)) {
+        console.error('File System Access API not supported');
+        return;
+      }
+
+      // Get permission to write to the file
+      // We need to get a writable file handle
+      let fileHandle: FileSystemFileHandle;
+      
+      try {
+        // Try to get the existing file handle if we have it
+        fileHandle = reel.fileHandle;
+      } catch (error) {
+        console.error('Error accessing file handle:', error);
+        return;
+      }
+
+      // Save the file with updated cue points
+      await saveWavToFileSystem(
+        fileHandle,
+        audioBuffer,
+        markers,
+        reel.wavHeaderData
+      );
+
+      console.log('File saved successfully');
+      
+      // Reload the file to ensure we're working with the actual saved data
+      const file = await fileHandle.getFile();
+      const updatedWavHeaderData = await parseWavFileHeader(file);
+      
+      // Update the reel with the freshly loaded data
+      reel.file = file;
+      reel.wavHeaderData = updatedWavHeaderData;
+      
+      // Update our local state with the reloaded data
+      setOriginalCuePoints(updatedWavHeaderData.cuePoints);
+      setMarkers(updatedWavHeaderData.cuePoints.map(({ timeInSeconds }) => ({
+        time: timeInSeconds,
+      })));
+      
+      // Notify any listeners that the reel has been updated
+      if (onReelUpdated) {
+        onReelUpdated(reel.id, updatedWavHeaderData.cuePoints);
+      }
+    } catch (error) {
+      console.error('Error saving file:', error);
+    }
+  }, [markers, audioBuffer, reel, onReelUpdated]);
   
   // Function to reset changes back to original cue points
   const resetChanges = useCallback(() => {
