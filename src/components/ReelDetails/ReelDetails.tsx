@@ -1,5 +1,8 @@
 import { type ReactElement } from "react";
 import { PiFilmReel } from "react-icons/pi";
+import { FiSave } from "react-icons/fi";
+import { BiSolidErrorCircle } from "react-icons/bi";
+import { MdRestartAlt } from "react-icons/md";
 import styles from "./ReelDetails.module.css";
 import { WaveformView } from "../WaveformView/WaveformView";
 import { PlayControls } from "../PlayControls/PlayControls";
@@ -17,10 +20,13 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
   const {
     splices,
     highlightedSpliceIndex,
+    hasUnsavedChanges,
     onSpliceClick,
     onSpliceMouseEnter,
     onSpliceMouseLeave,
     onSpliceDelete,
+    saveChanges,
+    resetChanges,
   } = useSplices({
     cuePoints: reel.wavHeaderData.cuePoints,
     audioBuffer,
@@ -28,9 +34,35 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
 
   return (
     <>
-      <h2 className={styles.reelTitle}>
-        <PiFilmReel /> {reel.name}
-      </h2>
+      <div className={styles.reelHeader}>
+        <h2 className={styles.reelTitle}>
+          <PiFilmReel /> {reel.name}
+        </h2>
+        {hasUnsavedChanges && (
+          <div className={styles.saveContainer}>
+            <div className={styles.unsavedIndicator}>
+              <BiSolidErrorCircle className={styles.warningIcon} />
+              <span>Unsaved changes</span>
+            </div>
+            <div className={styles.buttonGroup}>
+              <button 
+                className={styles.resetButton} 
+                onClick={resetChanges}
+                title="Reset to original state"
+              >
+                <MdRestartAlt /> Reset
+              </button>
+              <button 
+                className={styles.saveButton} 
+                onClick={saveChanges}
+                title="Save changes"
+              >
+                <FiSave /> Save
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
       <WaveformView
         audioBuffer={audioBuffer}
         splices={splices}

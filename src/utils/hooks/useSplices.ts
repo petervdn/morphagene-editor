@@ -12,16 +12,21 @@ type UseSplicesResult = {
   markers: Array<Marker>;
   splices: Array<Splice>;
   highlightedSpliceIndex: number;
+  hasUnsavedChanges: boolean;
   onSpliceClick: (index: number) => void;
   onSpliceMouseEnter: (index: number) => void;
   onSpliceMouseLeave: () => void;
   onSpliceDelete: (index: number) => void;
+  saveChanges: () => void;
+  resetChanges: () => void;
 };
 
 export function useSplices({
   cuePoints,
   audioBuffer,
 }: UseSplicesProps): UseSplicesResult {
+  // Store the original cue points for comparison
+  const [originalCuePoints] = useState<Array<CuePoint>>(cuePoints);
   const [markers, setMarkers] = useState<Array<Marker>>(() =>
     cuePoints.map(({ timeInSeconds }) => ({
       time: timeInSeconds,
@@ -84,13 +89,49 @@ export function useSplices({
     [markers, highlightedSpliceIndex, setMarkers]
   );
 
+  // Check if current markers are different from original cue points
+  const hasUnsavedChanges = useMemo(() => {
+    if (markers.length !== originalCuePoints.length) {
+      return true;
+    }
+    
+    // Compare each marker with original cue point
+    return markers.some((marker, index) => {
+      const originalTime = originalCuePoints[index]?.timeInSeconds;
+      return marker.time !== originalTime;
+    });
+  }, [markers, originalCuePoints]);
+  
+  // Function to save changes (placeholder for now)
+  const saveChanges = useCallback(() => {
+    // This would be implemented to actually save the changes
+    console.log('Saving changes:', markers);
+    // In a real implementation, this would update the original cue points
+  }, [markers]);
+  
+  // Function to reset changes back to original cue points
+  const resetChanges = useCallback(() => {
+    // Reset markers to their original state
+    setMarkers(originalCuePoints.map(({ timeInSeconds }) => ({
+      time: timeInSeconds,
+    })));
+    
+    // Reset highlighted splice index
+    setHighlightedSpliceIndex(-1);
+    
+    console.log('Changes reset to original state');
+  }, [originalCuePoints]);
+
   return {
     markers,
     splices,
     highlightedSpliceIndex,
+    hasUnsavedChanges,
     onSpliceClick,
     onSpliceMouseEnter,
     onSpliceMouseLeave,
     onSpliceDelete,
+    saveChanges,
+    resetChanges,
   };
 }

@@ -8,8 +8,20 @@
   flex: 3;
 }
 
-.reelSidebar {
-  flex: 2;
+.reelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.reelTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  color: #333;
+  margin: 0;
 }
 
 .reelTitle small {
@@ -23,6 +35,67 @@
   margin-right: 0.25rem;
   position: relative;
   top: -3px;
+}
+
+.reelSidebar {
+  flex: 2;
+}
+
+.saveContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.unsavedIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #dc3545;
+  font-size: 0.9rem;
+}
+
+.warningIcon {
+  font-size: 1.1rem;
+}
+
+.saveButton, .resetButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  outline: none;
+}
+
+.saveButton {
+  background-color: #28a745;
+}
+
+.resetButton {
+  background-color: #adb5bd;
+}
+
+.saveButton:hover {
+  background-color: #218838;
+}
+
+.resetButton:hover {
+  background-color: #98a0a8;
+}
+
+.saveButton:focus, .resetButton:focus {
+  outline: none;
 }
 
 /* Responsive layout for smaller screens */
