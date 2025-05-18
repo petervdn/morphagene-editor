@@ -22,7 +22,7 @@ export function AudioPlayerProvider({ children }: PropsWithChildren) {
           return;
         }
         if (playingSound) {
-          playingSound.stop();
+          playingSound.stop(true);
         }
 
         const newPlayingSound = await playSplice({

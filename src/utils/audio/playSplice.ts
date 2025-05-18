@@ -5,7 +5,7 @@ export type PlayingSound = {
   splice: Splice;
   contextStartTime: number;
   bufferSourceNode: AudioBufferSourceNode;
-  stop: () => void;
+  stop: (preventEndedEvent?: boolean) => void;
 };
 
 export async function playSplice({
@@ -33,7 +33,10 @@ export async function playSplice({
     bufferSourceNode.onended = onEnded;
   }
 
-  function stop() {
+  function stop(preventEndedEvent?: boolean) {
+    if (preventEndedEvent) {
+      bufferSourceNode.onended = null;
+    }
     bufferSourceNode.stop(0);
   }
 

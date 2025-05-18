@@ -65,12 +65,12 @@ export function ReelPage() {
           <h2 className={styles.reelTitle}>
             <PiFilmReel /> Reel #{getReelNumber(reelName)}
           </h2>
-          <PlayControls />
           <WaveformView
             audioBuffer={audioBuffer}
             splices={splices}
             highlightSpliceIndex={highlightedSpliceIndex}
           />
+          <PlayControls />
           <div className={styles.reelContentLayout}>
             <div className={styles.reelMainContent}>
               {splices && (
