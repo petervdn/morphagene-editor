@@ -1,15 +1,10 @@
-import {
-  useState,
-  useRef,
-  useEffect,
-  type ReactElement,
-} from "react";
+import { useState, useRef, useEffect, type ReactElement } from "react";
 import styles from "./WaveformView.module.css";
 import type { ViewPort } from "../../types/types";
 import type { Splice } from "../../utils/getSplices";
 import { useElementSize } from "../../utils/hooks/useElementSize";
-import { WaveformCanvas } from "./WaveformCanvas";
-import { SplicesCanvas } from "./SplicesCanvas";
+import { WaveformCanvas } from "./layers/WaveformCanvas";
+import { SplicesCanvas } from "./layers/SplicesCanvas";
 
 type Props = {
   audioBuffer: AudioBuffer;
@@ -17,10 +12,10 @@ type Props = {
   highlightSpliceIndex?: number;
 };
 
-export function WaveformView({ 
-  audioBuffer, 
-  splices, 
-  highlightSpliceIndex = -1 
+export function WaveformView({
+  audioBuffer,
+  splices,
+  highlightSpliceIndex = -1,
 }: Props): ReactElement {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const wrapperSize = useElementSize({ elementRef: wrapperRef });
@@ -37,16 +32,16 @@ export function WaveformView({
     <div className={styles.wrapper} ref={wrapperRef}>
       {viewPort && wrapperSize && (
         <>
-          <WaveformCanvas 
-            audioBuffer={audioBuffer} 
-            viewPort={viewPort} 
-            size={wrapperSize} 
+          <WaveformCanvas
+            audioBuffer={audioBuffer}
+            viewPort={viewPort}
+            size={wrapperSize}
           />
-          <SplicesCanvas 
-            splices={splices} 
-            viewPort={viewPort} 
-            size={wrapperSize} 
-            highlightIndex={highlightSpliceIndex} 
+          <SplicesCanvas
+            splices={splices}
+            viewPort={viewPort}
+            size={wrapperSize}
+            highlightIndex={highlightSpliceIndex}
           />
         </>
       )}
