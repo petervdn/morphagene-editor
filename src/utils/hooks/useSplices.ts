@@ -22,7 +22,6 @@ export function useSplices({
   cuePoints,
   audioBuffer,
 }: UseSplicesProps): UseSplicesResult {
-  // Convert initial markers to the internal format and manage state
   const [markers, setMarkers] = useState<Array<Marker>>(() =>
     cuePoints.map(({ timeInSeconds }) => ({
       time: timeInSeconds,
@@ -32,12 +31,10 @@ export function useSplices({
   const [highlightedSpliceIndex, setHighlightedSpliceIndex] =
     useState<number>(-1);
 
-  // Create splices from markers
   const splices = useMemo(() => {
     return createSplicesFromMarkers(markers);
   }, [markers]);
 
-  // Handle splice playback
   const onSpliceClick = useCallback(
     (index: number) => {
       async function play() {
@@ -56,7 +53,6 @@ export function useSplices({
     [audioBuffer, audioPlayer, splices]
   );
 
-  // Handle splice highlighting on hover
   const onSpliceMouseEnter = useCallback((index: number) => {
     setHighlightedSpliceIndex(index);
   }, []);
@@ -65,19 +61,17 @@ export function useSplices({
     setHighlightedSpliceIndex(-1);
   }, []);
 
-  // Handle splice deletion
   const onSpliceDelete = useCallback(
     (index: number) => {
-      // Don't allow deleting the first splice
+      // first splice cannot be deleted
       if (index === 0) {
         return;
       }
 
-      // When deleting splice at index N, we need to remove marker at index N-1
-      // This is because each splice is defined by the current marker and the previous marker
+      // when deleting splice at index N, we need to remove marker at index N-1,
+      // because each splice is defined by the current marker and the previous marker
       const markerIndexToRemove = index - 1;
 
-      // Create a new array without the deleted marker
       const newMarkers = [...markers];
       newMarkers.splice(markerIndexToRemove, 1);
       setMarkers(newMarkers);
