@@ -5,6 +5,7 @@ import type { Splice } from "../../utils/getSplices";
 import { useElementSize } from "../../utils/hooks/useElementSize";
 import { WaveformCanvas } from "./layers/WaveformCanvas";
 import { SplicesCanvas } from "./layers/SplicesCanvas";
+import { PlayheadCanvas } from "./layers/PlayheadCanvas";
 
 type Props = {
   audioBuffer: AudioBuffer;
@@ -43,6 +44,7 @@ export function WaveformView({
             size={wrapperSize}
             highlightIndex={highlightSpliceIndex}
           />
+          <PlayheadCanvas viewPort={viewPort} size={wrapperSize} />
         </>
       )}
     </div>
