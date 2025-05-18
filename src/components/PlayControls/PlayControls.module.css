@@ -1,0 +1,22 @@
+.playControls {
+  margin: 1rem 0;
+}
+
+.controlButton {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  outline: none;
+}
+
+.controlButton:focus {
+  outline: none;
+}
+
+.controlButton:hover {
+  background-color: #e9ecef;
+}

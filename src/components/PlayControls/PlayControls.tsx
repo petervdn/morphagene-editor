@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
 import { useAudioPlayer } from "../../utils/hooks/useAudioPlayer";
+import styles from "./PlayControls.module.css";
 
 export function PlayControls(): ReactElement | null {
   const audioPlayerProps = useAudioPlayer();
@@ -15,11 +16,11 @@ export function PlayControls(): ReactElement | null {
   }
 
   return (
-    <div>
+    <div className={styles.playControls}>
       {audioPlayerProps.playingSound ? (
-        <button onClick={onStopClick}>stop</button>
+        <button className={styles.controlButton} onClick={onStopClick}>Stop</button>
       ) : (
-        <button onClick={onStartClick}>start</button>
+        <button className={styles.controlButton} onClick={onStartClick}>Start</button>
       )}
     </div>
   );

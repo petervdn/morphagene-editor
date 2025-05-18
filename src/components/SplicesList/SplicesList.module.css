@@ -5,59 +5,94 @@
 }
 
 .spliceListItem {
-  margin-bottom: 0.75rem;
-  transition: transform 0.2s ease;
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s ease;
+}
+
+.spliceListItem:last-child {
+  border-bottom: none;
+}
+
+.spliceListItem:hover {
+  background-color: #f8f9fa;
 }
 
 .spliceContent {
   display: flex;
   align-items: center;
-  padding: 0.85rem 1.15rem;
-  background-color: #f8f9fa;
-  border-radius: 6px;
+  justify-content: space-between;
+  padding: 1rem 1rem 1rem 1rem;
   color: rgba(0, 0, 0, 0.87);
-  text-decoration: none;
-  transition: all 0.2s ease;
-  border: 1px solid #e9ecef;
   width: 100%;
-  text-align: left;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: inherit;
+  box-sizing: border-box;
 }
 
-.spliceContent:hover {
-  background-color: #e9ecef;
-  border-color: #dee2e6;
+.spliceInfo {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.spliceActions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.actionButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6c757d;
+  opacity: 0.7;
+  font-size: 1.1rem;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+  outline: none;
+}
+
+.actionButton:focus {
+  outline: none;
+}
+
+.actionButton:hover {
+  opacity: 1;
 }
 
 .spliceName {
   font-weight: 500;
-  font-size: 1.1rem;
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-}
-
-.spliceNameSvg {
-  margin-right: 0.5rem;
-  vertical-align: middle;
-  position: relative;
-  top: -1px;
-  opacity: 0.5;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
 }
 
 .spliceMeta {
   font-size: 0.85rem;
   color: #6c757d;
-  margin-left: auto;
+}
+
+.secondaryTime {
+  font-size: 0.75rem;
+  color: #adb5bd;
+  font-weight: normal;
 }
 
 .splicesHeader {
   margin-bottom: 1rem;
-  font-size: 1rem;
-  color: #6c757d;
-  font-weight: 500;
+  font-size: 1.1rem;
+  color: #495057;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.headerIcon {
+  margin-right: 0.5rem;
+  position: relative;
+  top: -1px;
 }
 
 .noSplices {

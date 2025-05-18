@@ -18,7 +18,7 @@ type Props = {
 export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
   const audioPlayer = useAudioPlayer();
 
-  const [markers] = useState<Array<Marker>>(() =>
+  const [markers, setMarkers] = useState<Array<Marker>>(() =>
     reel.wavHeaderData.cuePoints.map(({ timeInSeconds }) => ({
       time: timeInSeconds,
     }))
@@ -56,6 +56,21 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
     setHighlightedSpliceIndex(-1);
   }, []);
 
+  const onSpliceDelete = useCallback((index: number) => {
+    // Don't allow deleting the first splice
+    if (index === 0) return;
+    
+    // Create a new array without the deleted marker
+    const newMarkers = [...markers];
+    newMarkers.splice(index, 1);
+    setMarkers(newMarkers);
+    
+    // Reset highlighted splice if it was the deleted one
+    if (highlightedSpliceIndex === index) {
+      setHighlightedSpliceIndex(-1);
+    }
+  }, [markers, highlightedSpliceIndex]);
+
   return (
     <>
       <h2 className={styles.reelTitle}>
@@ -75,6 +90,7 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
               onSpliceClick={onSpliceClick}
               onSpliceMouseEnter={onSpliceMouseEnter}
               onSpliceMouseLeave={onSpliceMouseLeave}
+              onSpliceDelete={onSpliceDelete}
             />
           )}
         </div>
