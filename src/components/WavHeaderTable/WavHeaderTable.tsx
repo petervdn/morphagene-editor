@@ -4,11 +4,22 @@ import { audioFormatTypes } from "../../utils/audio/audioFormatTypes";
 import styles from "./WavHeaderTable.module.css";
 
 type Props = {
-  headerData: WavHeaderData;
+  wavHeaderData: WavHeaderData;
   filename?: string;
 };
 
-export function WavHeaderTable({ headerData, filename }: Props): ReactElement {
+export function WavHeaderTable({
+  wavHeaderData: {
+    audioFormat,
+    numChannels,
+    sampleRate,
+    bitsPerSample,
+    fileSize,
+    duration,
+    byteRate,
+  },
+  filename,
+}: Props): ReactElement {
   return (
     <div className={styles.reelHeaderSection}>
       <table className={styles.reelHeaderTable}>
@@ -22,36 +33,34 @@ export function WavHeaderTable({ headerData, filename }: Props): ReactElement {
           <tr>
             <th>Format</th>
             <td>
-              {audioFormatTypes[headerData.audioFormat] ||
-                `Unknown (${headerData.audioFormat})`}
+              {audioFormatTypes[audioFormat] || `Unknown (${audioFormat})`}
             </td>
           </tr>
           <tr>
             <th>Channels</th>
             <td>
-              {headerData.numChannels}{" "}
-              {headerData.numChannels === 1 ? "(mono)" : "(stereo)"}
+              {numChannels} {numChannels === 1 ? "(mono)" : "(stereo)"}
             </td>
           </tr>
           <tr>
             <th>Sample Rate</th>
-            <td>{headerData.sampleRate} Hz</td>
+            <td>{sampleRate} Hz</td>
           </tr>
           <tr>
             <th>Bit Depth</th>
-            <td>{headerData.bitsPerSample} bit</td>
+            <td>{bitsPerSample} bit</td>
           </tr>
           <tr>
             <th>File Size</th>
-            <td>{(headerData.fileSize / 1024 / 1024).toFixed(2)} MB</td>
+            <td>{(fileSize / 1024 / 1024).toFixed(2)} MB</td>
           </tr>
           <tr>
             <th>Duration</th>
-            <td>{headerData.duration.toFixed(2)} seconds</td>
+            <td>{duration.toFixed(2)} seconds</td>
           </tr>
           <tr>
             <th>Byte Rate</th>
-            <td>{(headerData.byteRate / 1024).toFixed(2)} KB/s</td>
+            <td>{(byteRate / 1024).toFixed(2)} KB/s</td>
           </tr>
         </tbody>
       </table>

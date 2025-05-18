@@ -1,6 +1,10 @@
-export type ReelFile = {
+import type { WavHeaderData } from "../utils/audio/parseWavFileHeader";
+
+export type Reel = {
+  id: string;
   name: string;
-  handle?: FileSystemFileHandle;
+  file: File;
+  wavHeaderData: WavHeaderData;
 };
 
 export type Size = {

@@ -1,17 +1,20 @@
 import { type ReactElement } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { useDirectoryHandle } from "../../stores/directoryHandleStore";
 import styles from "./Breadcrumbs.module.css";
 import { getReelPath, routes } from "../../routes/routes";
-import { getReelNumber } from "../../utils/getReelNumber";
+import { useFolderContent } from "../../stores/folderContentStore";
+import { useGetReelById } from "../../utils/hooks/useGetReelById";
 
 export function Breadcrumbs(): ReactElement | null {
   const location = useLocation();
-  const { reelName } = useParams();
-  const directoryHandle = useDirectoryHandle();
+  const { reelId } = useParams();
+  const folderContent = useFolderContent();
 
+  // todo match with constants in routes.ts
   const isFolder = location.pathname.startsWith("/folder");
   const isReel = location.pathname.includes("/reel/");
+
+  const reel = useGetReelById(reelId ?? "");
 
   return (
     <nav className={styles.breadcrumbs}>
@@ -21,17 +24,15 @@ export function Breadcrumbs(): ReactElement | null {
         <>
           <span className={styles.separator}>/</span>
           <Link to={routes.folder}>
-            Folder: {directoryHandle?.name ?? "NO-FOLDER"}
+            Folder: {folderContent?.directoryHandle?.name ?? "NO-FOLDER"}
           </Link>
         </>
       )}
 
-      {isReel && reelName && (
+      {isReel && reel && (
         <>
           <span className={styles.separator}>/</span>
-          <Link to={getReelPath(reelName)}>
-            Reel #{getReelNumber(reelName)}
-          </Link>
+          <Link to={getReelPath(reel.id)}>{reel.name}</Link>
         </>
       )}
     </nav>

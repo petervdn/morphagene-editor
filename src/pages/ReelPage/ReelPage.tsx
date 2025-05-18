@@ -1,92 +1,43 @@
 import { useParams } from "react-router-dom";
-import { useWavHeaderData } from "../../utils/hooks/useWavHeaderData";
 import { Breadcrumbs } from "../../components/Breadcrumbs/Breadcrumbs";
-import { NoFolder } from "../../components/NoFolder";
-import { useAudioBufferFromFile } from "../../utils/hooks/useAudioBufferFromFile";
-import { WavHeaderTable } from "../../components/WavHeaderTable/WavHeaderTable";
-
-import styles from "./ReelPage.module.css";
-import { getReelNumber } from "../../utils/getReelNumber";
-import { PiFilmReel } from "react-icons/pi";
-import { useCallback, useMemo, useState } from "react";
-import { getSplices } from "../../utils/getSplices";
-import { SplicesList } from "../../components/SplicesList/SplicesList";
+import { useEffect, useState } from "react";
+import { ReelDetails } from "../../components/ReelDetails/ReelDetails";
+import { useGetReelById } from "../../utils/hooks/useGetReelById";
+import { decodeAudioFile } from "../../utils/audio/decodeAudioFile";
 import { useAudioContext } from "../../utils/hooks/useAudioContext";
-import { WaveformView } from "../../components/WaveformView/WaveformView";
-import { PlayControls } from "../../components/PlayControls/PlayControls";
-import { useAudioPlayer } from "../../utils/hooks/useAudioPlayer";
 
 export function ReelPage() {
-  const { reelName } = useParams();
+  const { reelId } = useParams();
 
-  const audioBuffer = useAudioBufferFromFile(reelName ?? "");
+  const reel = useGetReelById(reelId ?? "");
   const audioContext = useAudioContext();
-  const headerData = useWavHeaderData(reelName ?? "");
-  const [highlightedSpliceIndex, setHighlightedSpliceIndex] =
-    useState<number>(-1);
-  const audioPlayer = useAudioPlayer();
 
-  const splices = useMemo(() => {
-    return headerData ? getSplices(headerData.cuePoints) : null;
-  }, [headerData]);
+  const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
 
-  const onSpliceClick = useCallback(
-    (index: number) => {
-      async function play() {
-        if (!audioPlayer) {
-          return;
-        }
+  // const splices = useMemo(() => {
+  //   return headerData ? getSplices(headerData.cuePoints) : null;
+  // }, [headerData]);
 
-        const splice = splices?.at(index);
-        if (!splice || !audioContext || !audioBuffer) {
-          return;
-        }
-        audioPlayer.playSound({ audioBuffer, splice });
+  useEffect(() => {
+    async function getData() {
+      if (!reel || !audioContext) {
+        return;
       }
-      play();
-    },
-    [audioBuffer, audioContext, audioPlayer, splices]
-  );
+      const audioBufferFromFile = await decodeAudioFile(
+        reel.file,
+        audioContext
+      );
 
-  const onSpliceMouseEnter = useCallback((index: number) => {
-    setHighlightedSpliceIndex(index);
-  }, []);
-
-  const onSpliceMouseLeave = useCallback(() => {
-    setHighlightedSpliceIndex(-1);
-  }, []);
+      setAudioBuffer(audioBufferFromFile);
+    }
+    getData();
+  }, [audioContext, reel]);
 
   return (
     <>
       <Breadcrumbs />
-      {!headerData && <NoFolder />}
-      {headerData && reelName && audioBuffer && splices && (
-        <>
-          <h2 className={styles.reelTitle}>
-            <PiFilmReel /> Reel #{getReelNumber(reelName)}
-          </h2>
-          <WaveformView
-            audioBuffer={audioBuffer}
-            splices={splices}
-            highlightSpliceIndex={highlightedSpliceIndex}
-          />
-          <PlayControls />
-          <div className={styles.reelContentLayout}>
-            <div className={styles.reelMainContent}>
-              {splices && (
-                <SplicesList
-                  splices={splices}
-                  onSpliceClick={onSpliceClick}
-                  onSpliceMouseEnter={onSpliceMouseEnter}
-                  onSpliceMouseLeave={onSpliceMouseLeave}
-                />
-              )}
-            </div>
-            <div className={styles.reelSidebar}>
-              <WavHeaderTable headerData={headerData} filename={reelName} />
-            </div>
-          </div>
-        </>
+      {audioBuffer && reel && (
+        <ReelDetails reel={reel} audioBuffer={audioBuffer} splices={[]} />
       )}
     </>
   );

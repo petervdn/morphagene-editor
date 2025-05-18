@@ -1,0 +1,15 @@
+.reelsList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.emptyState {
+  padding: 2rem;
+  text-align: center;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  color: #6c757d;
+  border: 1px solid #e9ecef;
+}

@@ -1,9 +1,9 @@
 export const routes = {
   home: "/",
   folder: "/folder",
-  reel: "/folder/reel/:reelName",
+  reel: "/folder/reel/:reelId",
 } as const;
 
-export function getReelPath(reelName: string): string {
-  return routes.reel.replace(":reelName", reelName);
+export function getReelPath(reelId: string): string {
+  return routes.reel.replace(":reelId", reelId);
 }
