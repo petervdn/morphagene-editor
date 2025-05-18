@@ -56,20 +56,30 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
     setHighlightedSpliceIndex(-1);
   }, []);
 
-  const onSpliceDelete = useCallback((index: number) => {
-    // Don't allow deleting the first splice
-    if (index === 0) return;
-    
-    // Create a new array without the deleted marker
-    const newMarkers = [...markers];
-    newMarkers.splice(index, 1);
-    setMarkers(newMarkers);
-    
-    // Reset highlighted splice if it was the deleted one
-    if (highlightedSpliceIndex === index) {
-      setHighlightedSpliceIndex(-1);
-    }
-  }, [markers, highlightedSpliceIndex]);
+  const onSpliceDelete = useCallback(
+    (index: number) => {
+      console.log("splice index to delete:", index);
+
+      // Don't allow deleting the first splice
+      if (index === 0) return;
+
+      // When deleting splice at index N, we need to remove marker at index N-1
+      // This is because each splice is defined by the current marker and the previous marker
+      const markerIndexToRemove = index - 1;
+      console.log("removing marker at index:", markerIndexToRemove);
+      
+      // Create a new array without the deleted marker
+      const newMarkers = [...markers];
+      newMarkers.splice(markerIndexToRemove, 1);
+      setMarkers(newMarkers);
+
+      // Reset highlighted splice if it was the deleted one
+      if (highlightedSpliceIndex === index) {
+        setHighlightedSpliceIndex(-1);
+      }
+    },
+    [markers, highlightedSpliceIndex]
+  );
 
   return (
     <>
@@ -82,6 +92,11 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
         highlightSpliceIndex={highlightedSpliceIndex}
       />
       <PlayControls />
+      <ul>
+        {markers.map((marker) => (
+          <li>{marker.time}</li>
+        ))}
+      </ul>
       <div className={styles.reelContentLayout}>
         <div className={styles.reelMainContent}>
           {splices && (

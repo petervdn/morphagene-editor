@@ -39,21 +39,25 @@ export function SplicesListItem({
     onMouseLeaveProp?.();
   }, [onMouseLeaveProp]);
 
+  // todo: maybe give splices ids so we can compare those (instead of compare objects)
   const isItemPlaying = audioPlayerProps?.playingSound?.splice === splice;
 
   return (
-    <li 
-      className={`${styles.spliceListItem} ${isItemPlaying ? styles.playingItem : ''}`}
+    <li
+      className={`${styles.spliceListItem} ${
+        isItemPlaying ? styles.playingItem : ""
+      }`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
       <div className={styles.spliceContent}>
         <div className={styles.spliceInfo}>
-          <span className={styles.spliceName}>
-            Splice {index + 1}
-          </span>
+          <span className={styles.spliceName}>Splice {index + 1}</span>
           <span className={styles.spliceMeta}>
-            {(splice.end - splice.start).toFixed(2)}s <span className={styles.secondaryTime}>({splice.start.toFixed(2)}s - {splice.end.toFixed(2)}s)</span>
+            {(splice.end - splice.start).toFixed(2)}s{" "}
+            <span className={styles.secondaryTime}>
+              ({splice.start.toFixed(2)}s - {splice.end.toFixed(2)}s)
+            </span>
           </span>
         </div>
         <div className={styles.spliceActions}>
