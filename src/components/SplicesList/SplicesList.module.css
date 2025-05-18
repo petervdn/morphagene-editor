@@ -14,8 +14,10 @@
 }
 
 .spliceListItem:hover {
-  background-color: #f8f9fa;
+  background-color: rgba(0, 0, 0, 0.03);
 }
+
+/* Removed background styling for playing items */
 
 .spliceContent {
   display: flex;
@@ -61,6 +63,10 @@
 
 .actionButton:hover {
   opacity: 1;
+}
+
+.playButton {
+  font-size: 1.25rem;
 }
 
 .spliceName {

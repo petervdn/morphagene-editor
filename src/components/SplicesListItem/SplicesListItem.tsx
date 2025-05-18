@@ -1,5 +1,7 @@
 import { useCallback, type ReactElement } from "react";
-import { BsPlayCircleFill, BsTrash } from "react-icons/bs";
+import { BsTrash } from "react-icons/bs";
+import { FaRegCirclePlay, FaRegCircleStop } from "react-icons/fa6";
+import { useAudioPlayer } from "../../utils/hooks/useAudioPlayer";
 import styles from "../SplicesList/SplicesList.module.css";
 import type { Splice } from "../../types/types";
 
@@ -20,6 +22,7 @@ export function SplicesListItem({
   onDelete: onDeleteFromProps,
   index,
 }: Props): ReactElement {
+  const audioPlayerProps = useAudioPlayer();
   const onPlay = useCallback(() => {
     onClickFromProps?.(index);
   }, [onClickFromProps, index]);
@@ -36,9 +39,11 @@ export function SplicesListItem({
     onMouseLeaveProp?.();
   }, [onMouseLeaveProp]);
 
+  const isItemPlaying = audioPlayerProps?.playingSound?.splice === splice;
+
   return (
     <li 
-      className={styles.spliceListItem}
+      className={`${styles.spliceListItem} ${isItemPlaying ? styles.playingItem : ''}`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
@@ -62,14 +67,25 @@ export function SplicesListItem({
               <BsTrash />
             </button>
           )}
-          <button
-            className={styles.actionButton}
-            onClick={onPlay}
-            type="button"
-            title="Play splice"
-          >
-            <BsPlayCircleFill />
-          </button>
+          {isItemPlaying ? (
+            <button
+              className={`${styles.actionButton} ${styles.playButton}`}
+              onClick={() => audioPlayerProps.playingSound?.stop()}
+              type="button"
+              title="Stop playback"
+            >
+              <FaRegCircleStop />
+            </button>
+          ) : (
+            <button
+              className={`${styles.actionButton} ${styles.playButton}`}
+              onClick={onPlay}
+              type="button"
+              title="Play splice"
+            >
+              <FaRegCirclePlay />
+            </button>
+          )}
         </div>
       </div>
     </li>
