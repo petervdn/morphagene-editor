@@ -4,7 +4,6 @@ import { parseWavFileHeader } from "./audio/parseWavFileHeader";
 import { reelFileNames } from "./reelFileNames";
 
 // todo: prevent gaps?
-// todo: order
 export async function getFolderContent(
   directoryHandle: FileSystemDirectoryHandle
 ): Promise<FolderContent> {
@@ -25,6 +24,8 @@ export async function getFolderContent(
       });
     }
   }
+
+  reels.sort((a, b) => Number(a.id) - Number(b.id));
 
   return {
     directoryHandle,
