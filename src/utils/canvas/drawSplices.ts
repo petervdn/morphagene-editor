@@ -1,5 +1,4 @@
-import type { ViewPort } from "../../types/types";
-import type { Splice } from "../getSplices";
+import type { Splice, ViewPort } from "../../types/types";
 
 // Define a set of visually distinct colors for the splice markers
 const DEFAULT_COLORS = [
@@ -45,17 +44,21 @@ export function drawSplices({
     const color = colors[colorIndex];
 
     // Calculate positions based on the splice start/end times
-    const startX = Math.round(((splice.start - viewPort.from) / viewportDuration) * width) + 0.5;
-    
+    const startX =
+      Math.round(((splice.start - viewPort.from) / viewportDuration) * width) +
+      0.5;
+
     // Skip if position is outside the canvas
     if (startX < 0 || startX > width) return;
 
     // If this is the highlighted splice, draw a semi-transparent background
     if (index === highlightIndex && splice.end > splice.start) {
-      const endX = Math.round(((splice.end - viewPort.from) / viewportDuration) * width) + 0.5;
-      
+      const endX =
+        Math.round(((splice.end - viewPort.from) / viewportDuration) * width) +
+        0.5;
+
       // Draw a semi-transparent rectangle for the highlighted splice
-      context.fillStyle = color + '33'; // Add 33 hex for 20% opacity
+      context.fillStyle = color + "33"; // Add 33 hex for 20% opacity
       context.fillRect(startX, 0, endX - startX, height);
     }
 

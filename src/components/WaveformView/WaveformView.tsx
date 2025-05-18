@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, type ReactElement } from "react";
 import styles from "./WaveformView.module.css";
-import type { ViewPort } from "../../types/types";
-import type { Splice } from "../../utils/getSplices";
+import type { Splice, ViewPort } from "../../types/types";
 import { useElementSize } from "../../utils/hooks/useElementSize";
 import { WaveformCanvas } from "./layers/WaveformCanvas";
 import { SplicesCanvas } from "./layers/SplicesCanvas";

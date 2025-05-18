@@ -14,10 +14,6 @@ export function ReelPage() {
 
   const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
 
-  // const splices = useMemo(() => {
-  //   return headerData ? getSplices(headerData.cuePoints) : null;
-  // }, [headerData]);
-
   useEffect(() => {
     async function getData() {
       if (!reel || !audioContext) {
@@ -37,7 +33,7 @@ export function ReelPage() {
     <>
       <Breadcrumbs />
       {audioBuffer && reel && (
-        <ReelDetails reel={reel} audioBuffer={audioBuffer} splices={[]} />
+        <ReelDetails reel={reel} audioBuffer={audioBuffer} />
       )}
     </>
   );

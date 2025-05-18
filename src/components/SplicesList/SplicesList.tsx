@@ -1,8 +1,8 @@
 import { type ReactElement } from "react";
-import type { Splice } from "../../utils/getSplices";
 import { SplicesListItem } from "../SplicesListItem/SplicesListItem";
 
 import styles from "./SplicesList.module.css";
+import type { Splice } from "../../types/types";
 
 type Props = {
   splices: Array<Splice>;
@@ -11,11 +11,11 @@ type Props = {
   onSpliceMouseLeave?: () => void;
 };
 
-export function SplicesList({ 
-  splices, 
+export function SplicesList({
+  splices,
   onSpliceClick,
   onSpliceMouseEnter,
-  onSpliceMouseLeave 
+  onSpliceMouseLeave,
 }: Props): ReactElement {
   return (
     <div>
@@ -28,6 +28,7 @@ export function SplicesList({
           {splices.map((splice, index) => (
             <SplicesListItem
               key={index}
+              index={index}
               splice={splice}
               onClick={onSpliceClick}
               onMouseEnter={onSpliceMouseEnter}

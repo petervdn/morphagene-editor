@@ -1,26 +1,32 @@
-import { useCallback, useState, type ReactElement } from "react";
+import { useCallback, useMemo, useState, type ReactElement } from "react";
 import styles from "./ReelDetails.module.css";
 import { PiFilmReel } from "react-icons/pi";
 import { WaveformView } from "../WaveformView/WaveformView";
 import { PlayControls } from "../PlayControls/PlayControls";
-import type { Splice } from "../../utils/getSplices";
+
 import { SplicesList } from "../SplicesList/SplicesList";
 import { useAudioPlayer } from "../../utils/hooks/useAudioPlayer";
 import { WavHeaderTable } from "../WavHeaderTable/WavHeaderTable";
-import type { Reel } from "../../types/types";
+import type { Marker, Reel } from "../../types/types";
+import { createSplicesFromMarkers } from "../../utils/createSplicesFromMarkers";
 
 type Props = {
   reel: Reel;
   audioBuffer: AudioBuffer;
-  splices: Array<Splice>; // rename initial splices
 };
 
-export function ReelDetails({
-  reel,
-  audioBuffer,
-  splices,
-}: Props): ReactElement {
+export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
   const audioPlayer = useAudioPlayer();
+
+  const [markers] = useState<Array<Marker>>(() =>
+    reel.wavHeaderData.cuePoints.map(({ timeInSeconds }) => ({
+      time: timeInSeconds,
+    }))
+  );
+
+  const splices = useMemo(() => {
+    return createSplicesFromMarkers(markers);
+  }, [markers]);
 
   const onSpliceClick = useCallback(
     (index: number) => {

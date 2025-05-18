@@ -1,4 +1,4 @@
-import type { Splice } from "../getSplices";
+import type { Splice } from "../../types/types";
 
 export type PlayingSound = {
   audioBuffer: AudioBuffer;

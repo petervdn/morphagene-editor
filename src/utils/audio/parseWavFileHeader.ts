@@ -1,31 +1,4 @@
-export type CuePoint = {
-  id: number;
-  position: number;
-  dataChunkId: string;
-  chunkStart: number;
-  blockStart: number;
-  sampleOffset: number;
-  timeInSeconds: number;
-};
-
-export type WavHeaderData = {
-  chunkId: string;
-  chunkSize: number;
-  format: string;
-  subchunk1Id: string;
-  subchunk1Size: number;
-  audioFormat: number;
-  numChannels: number;
-  sampleRate: number;
-  byteRate: number;
-  blockAlign: number;
-  bitsPerSample: number;
-  subchunk2Id: string;
-  subchunk2Size: number;
-  duration: number;
-  fileSize: number;
-  cuePoints: Array<CuePoint>;
-};
+import type { CuePoint, WavHeaderData } from "../../types/types";
 
 /**
  * Reads and parses a WAV file header including cue points
@@ -159,7 +132,7 @@ export const parseWavFileHeader = async (
                   cueChunkOffset + 8,
                   true
                 );
-                const cuePoints: CuePoint[] = [];
+                const cuePoints: Array<CuePoint> = [];
 
                 // Each cue point is 24 bytes
                 let cueOffset = cueChunkOffset + 12; // Start after chunk ID, size, and count

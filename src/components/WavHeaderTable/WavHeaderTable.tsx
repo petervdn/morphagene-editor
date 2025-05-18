@@ -1,7 +1,7 @@
 import { type ReactElement } from "react";
-import type { WavHeaderData } from "../../utils/audio/parseWavFileHeader";
 import { audioFormatTypes } from "../../utils/audio/audioFormatTypes";
 import styles from "./WavHeaderTable.module.css";
+import type { WavHeaderData } from "../../types/types";
 
 type Props = {
   wavHeaderData: WavHeaderData;

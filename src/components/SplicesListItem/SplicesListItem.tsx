@@ -1,10 +1,11 @@
 import { useCallback, type ReactElement } from "react";
-import type { Splice } from "../../utils/getSplices";
 import { BsPlayCircleFill } from "react-icons/bs";
 import styles from "../SplicesList/SplicesList.module.css";
+import type { Splice } from "../../types/types";
 
 type Props = {
   splice: Splice;
+  index: number; // todo: see if we can get rid of this
   onClick?: (spliceIndex: number) => void;
   onMouseEnter?: (spliceIndex: number) => void;
   onMouseLeave?: () => void;
@@ -15,14 +16,15 @@ export function SplicesListItem({
   onClick: onClickFromProps,
   onMouseEnter: onMouseEnterProp,
   onMouseLeave: onMouseLeaveProp,
+  index,
 }: Props): ReactElement {
   const onClick = useCallback(() => {
-    onClickFromProps?.(splice.index);
-  }, [onClickFromProps, splice.index]);
+    onClickFromProps?.(index);
+  }, [onClickFromProps, index]);
 
   const onMouseEnter = useCallback(() => {
-    onMouseEnterProp?.(splice.index);
-  }, [onMouseEnterProp, splice.index]);
+    onMouseEnterProp?.(index);
+  }, [onMouseEnterProp, index]);
 
   const onMouseLeave = useCallback(() => {
     onMouseLeaveProp?.();
@@ -30,16 +32,16 @@ export function SplicesListItem({
 
   return (
     <li className={styles.spliceListItem}>
-      <button 
-        className={styles.spliceContent} 
-        onClick={onClick} 
+      <button
+        className={styles.spliceContent}
+        onClick={onClick}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         type="button"
       >
         <span className={styles.spliceName}>
           <BsPlayCircleFill className={styles.spliceNameSvg} />
-          Splice {splice.index + 1}
+          Splice {index + 1}
         </span>
         <span className={styles.spliceMeta}>
           {splice.start.toFixed(2)} - {splice.end.toFixed(2)}
