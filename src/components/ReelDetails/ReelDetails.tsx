@@ -1,4 +1,4 @@
-import { useCallback, type ReactElement } from "react";
+import { useCallback, useRef, type ReactElement } from "react";
 import { PiFilmReel } from "react-icons/pi";
 import { FiSave } from "react-icons/fi";
 import { BiSolidErrorCircle } from "react-icons/bi";
@@ -17,6 +17,21 @@ type Props = {
 };
 
 export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
+  // Create a ref to hold the zoomToRange function from WaveformView
+  const zoomToRangeRef = useRef<((start: number, end: number, options?: {
+    duration?: number;
+    easing?: string;
+  }) => void) | null>(null);
+  
+  // Function to zoom to a specific splice range
+  const handleZoomToSplice = useCallback((start: number, end: number) => {
+    if (zoomToRangeRef.current) {
+      zoomToRangeRef.current(start, end, {
+        duration: 700, // 700ms animation
+        easing: 'easeOutCubic' // only ease-out, no ease-in
+      });
+    }
+  }, []);
   const updateReelCuePoints = useFolderContentStore(
     (state) => state.updateReelCuePoints
   );
@@ -80,16 +95,18 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
         splices={splices}
         highlightSpliceIndex={highlightedSpliceIndex}
         onAddMarker={addMarker}
+        zoomToRangeRef={zoomToRangeRef}
       />
       <div className={styles.reelContentLayout}>
         <div className={styles.reelMainContent}>
           {splices && (
             <SplicesList
               splices={splices}
-              onSpliceClick={onSpliceClick}
+              onDeleteSplice={onSpliceDelete}
               onSpliceMouseEnter={onSpliceMouseEnter}
               onSpliceMouseLeave={onSpliceMouseLeave}
-              onSpliceDelete={onSpliceDelete}
+              onZoomToSplice={handleZoomToSplice}
+              onSpliceClick={onSpliceClick}
             />
           )}
         </div>

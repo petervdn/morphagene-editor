@@ -9,11 +9,15 @@ import { PlayheadCanvas } from "./layers/PlayheadCanvas";
 import { InteractionLayer } from "./layers/InteractionLayer";
 import { ZoomSlider } from "./ZoomSlider";
 
-type Props = {
-  audioBuffer: AudioBuffer;
-  splices: Array<Splice>;
+interface WaveformViewProps {
+  audioBuffer: AudioBuffer | null;
+  splices: Splice[];
   highlightSpliceIndex?: number;
-  onAddMarker?: (timeInSeconds: number) => void;
+  onAddMarker?: (time: number) => void;
+  zoomToRangeRef?: React.MutableRefObject<((start: number, end: number, options?: {
+    duration?: number;
+    easing?: string;
+  }) => void) | null>;
   maxZoom?: number;
 };
 
@@ -22,22 +26,29 @@ export function WaveformView({
   splices,
   highlightSpliceIndex = -1,
   onAddMarker,
+  zoomToRangeRef,
   maxZoom = 50,
-}: Props): ReactElement {
+}: WaveformViewProps): ReactElement {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const wrapperSize = useElementSize({ elementRef: wrapperRef });
-  
-  // Use the waveform zoom hook to manage zoom and pan
-  const {
-    viewPort,
-    zoomLevel,
-    handleWheel,
-    handleDrag,
-    setZoomLevel
-  } = useWaveformZoom({
-    audioDuration: audioBuffer.duration,
+
+  const { viewPort, zoomLevel, handleWheel, handleDrag, setZoomLevel, zoomToRange } = useWaveformZoom({
+    audioDuration: audioBuffer?.duration || 0,
     maxZoom,
   });
+  
+  // Expose the zoomToRange function via ref if provided
+  useEffect(() => {
+    if (zoomToRangeRef) {
+      zoomToRangeRef.current = zoomToRange;
+    }
+    
+    return () => {
+      if (zoomToRangeRef) {
+        zoomToRangeRef.current = null;
+      }
+    };
+  }, [zoomToRange, zoomToRangeRef]);
   
   // Add a non-passive wheel event listener to the wrapper to prevent page scrolling
   // while still allowing our zoom functionality to work

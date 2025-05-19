@@ -5,20 +5,22 @@ import { RiScissorsCutLine } from "react-icons/ri";
 import styles from "./SplicesList.module.css";
 import type { Splice } from "../../types/types";
 
-type Props = {
+interface Props {
   splices: Array<Splice>;
-  onSpliceClick?: (index: number) => void;
+  onDeleteSplice?: (index: number) => void;
   onSpliceMouseEnter?: (index: number) => void;
   onSpliceMouseLeave?: () => void;
-  onSpliceDelete?: (index: number) => void;
+  onZoomToSplice?: (start: number, end: number) => void;
+  onSpliceClick?: (index: number) => void;
 };
 
 export function SplicesList({
   splices,
-  onSpliceClick,
+  onDeleteSplice,
   onSpliceMouseEnter,
   onSpliceMouseLeave,
-  onSpliceDelete,
+  onZoomToSplice,
+  onSpliceClick,
 }: Props): ReactElement {
   return (
     <div>
@@ -36,7 +38,8 @@ export function SplicesList({
               onClick={onSpliceClick}
               onMouseEnter={onSpliceMouseEnter}
               onMouseLeave={onSpliceMouseLeave}
-              onDelete={onSpliceDelete}
+              onDelete={onDeleteSplice}
+              onZoomToSplice={onZoomToSplice}
             />
           ))}
         </ul>

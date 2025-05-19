@@ -1,6 +1,7 @@
 import { useCallback, type ReactElement } from "react";
 import { BsTrash } from "react-icons/bs";
-import { FaRegCirclePlay, FaRegCircleStop } from "react-icons/fa6";
+import { BsPlayCircle, BsStopCircle } from "react-icons/bs";
+import { BsZoomIn } from 'react-icons/bs';
 import { useAudioPlayer } from "../../utils/hooks/useAudioPlayer";
 import styles from "../SplicesList/SplicesList.module.css";
 import type { Splice } from "../../types/types";
@@ -12,6 +13,7 @@ type Props = {
   onMouseEnter?: (spliceIndex: number) => void;
   onMouseLeave?: () => void;
   onDelete?: (spliceIndex: number) => void;
+  onZoomToSplice?: (start: number, end: number) => void;
 };
 
 export function SplicesListItem({
@@ -21,9 +23,12 @@ export function SplicesListItem({
   onMouseLeave: onMouseLeaveProp,
   onDelete: onDeleteFromProps,
   index,
+  onZoomToSplice,
 }: Props): ReactElement {
   const audioPlayerProps = useAudioPlayer();
+  // Use the onClick prop to play the splice
   const onPlay = useCallback(() => {
+    // This will call the onSpliceClick function from useSplices
     onClickFromProps?.(index);
   }, [onClickFromProps, index]);
 
@@ -51,6 +56,27 @@ export function SplicesListItem({
       onMouseLeave={onMouseLeave}
     >
       <div className={styles.spliceContent}>
+        <div className={styles.playButtonContainer}>
+          {isItemPlaying ? (
+            <button
+              className={`${styles.actionButton} ${styles.playButton}`}
+              onClick={() => audioPlayerProps.playingSound?.stop()}
+              type="button"
+              title="Stop playback"
+            >
+              <BsStopCircle />
+            </button>
+          ) : (
+            <button
+              className={`${styles.actionButton} ${styles.playButton}`}
+              onClick={onPlay}
+              type="button"
+              title="Play splice"
+            >
+              <BsPlayCircle />
+            </button>
+          )}
+        </div>
         <div className={styles.spliceInfo}>
           <div className={styles.spliceMainInfo}>
             <span className={styles.spliceName}>Splice {index + 1}</span>
@@ -70,25 +96,13 @@ export function SplicesListItem({
               <BsTrash />
             </button>
           )}
-          {isItemPlaying ? (
-            <button
-              className={`${styles.actionButton} ${styles.playButton}`}
-              onClick={() => audioPlayerProps.playingSound?.stop()}
-              type="button"
-              title="Stop playback"
-            >
-              <FaRegCircleStop />
-            </button>
-          ) : (
-            <button
-              className={`${styles.actionButton} ${styles.playButton}`}
-              onClick={onPlay}
-              type="button"
-              title="Play splice"
-            >
-              <FaRegCirclePlay />
-            </button>
-          )}
+          <button
+            className={styles.actionButton}
+            onClick={() => onZoomToSplice?.(splice.start, splice.end)}
+            title="Zoom to splice"
+          >
+            <BsZoomIn />
+          </button>
         </div>
       </div>
     </li>

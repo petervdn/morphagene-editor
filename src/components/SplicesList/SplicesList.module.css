@@ -6,7 +6,7 @@
 
 .spliceListItem {
   border-bottom: 1px solid #e9ecef;
-  transition: background-color 0.2s ease;
+  /* Remove transition for instantaneous effect */
 }
 
 .spliceListItem:last-child {
@@ -14,7 +14,7 @@
 }
 
 .spliceListItem:hover {
-  background-color: rgba(0, 0, 0, 0.03);
+  background-color: rgba(0, 0, 0, 0.08);
 }
 
 /* Removed background styling for playing items */
@@ -47,27 +47,32 @@
   flex-shrink: 0;
 }
 
+.playButtonContainer {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.playButton {
+  font-size: 1.25rem;
+  color: var(--color-primary);
+}
+
 .actionButton {
   background: none;
   border: none;
   cursor: pointer;
-  color: #6c757d;
-  opacity: 0.7;
-  font-size: 1.1rem;
-  padding: 0.25rem;
+  padding: 4px;
+  color: #aaa; /* Lighter color when not hovered */
+  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.2s ease;
-  outline: none;
-}
-
-.actionButton:focus {
-  outline: none;
 }
 
 .actionButton:hover {
-  opacity: 1;
+  color: #000; /* Darker color on hover */
+  background: none; /* No background on hover */
 }
 
 .playButton {
