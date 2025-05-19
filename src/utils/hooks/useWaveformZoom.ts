@@ -67,9 +67,8 @@ export function useWaveformZoom({
       const validStart = Math.max(0, Math.min(start, audioDuration));
       const validEnd = Math.max(validStart, Math.min(end, audioDuration));
       
-      // Calculate the new zoom level based on the range
+      // Calculate the range duration
       const rangeDuration = validEnd - validStart;
-      const newZoomLevel = Math.min(maxZoom, audioDuration / rangeDuration);
       
       // Start the animation
       currentAnimation.current = animateViewport({

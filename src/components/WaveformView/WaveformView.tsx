@@ -16,7 +16,7 @@ interface WaveformViewProps {
   onAddMarker?: (time: number) => void;
   zoomToRangeRef?: React.MutableRefObject<((start: number, end: number, options?: {
     duration?: number;
-    easing?: string;
+    easing?: "linear" | "easeInQuad" | "easeOutQuad" | "easeInOutQuad" | "easeInCubic" | "easeOutCubic" | "easeInOutCubic" | "easeOutElastic";
   }) => void) | null>;
   maxZoom?: number;
 };
@@ -84,11 +84,13 @@ export function WaveformView({
       <div className={styles.wrapper} ref={wrapperRef}>
         {wrapperSize && (
           <>
-            <WaveformCanvas
-              audioBuffer={audioBuffer}
-              viewPort={viewPort}
-              size={wrapperSize}
-            />
+            {audioBuffer && (
+              <WaveformCanvas
+                audioBuffer={audioBuffer}
+                viewPort={viewPort}
+                size={wrapperSize}
+              />
+            )}
             <SplicesCanvas
               splices={splices}
               viewPort={viewPort}
