@@ -63,6 +63,7 @@ export function SplicesListItem({
               onClick={() => audioPlayerProps.playingSound?.stop()}
               type="button"
               title="Stop playback"
+              tabIndex={-1}
             >
               <BsStopCircle />
             </button>
@@ -72,6 +73,7 @@ export function SplicesListItem({
               onClick={onPlay}
               type="button"
               title="Play splice"
+              tabIndex={-1}
             >
               <BsPlayCircle />
             </button>
@@ -92,6 +94,7 @@ export function SplicesListItem({
               onClick={onDelete}
               type="button"
               title="Delete splice"
+              tabIndex={-1}
             >
               <BsTrash />
             </button>
@@ -99,7 +102,9 @@ export function SplicesListItem({
           <button
             className={styles.actionButton}
             onClick={() => onZoomToSplice?.(splice.start, splice.end)}
+            type="button"
             title="Zoom to splice"
+            tabIndex={-1}
           >
             <BsZoomIn />
           </button>
