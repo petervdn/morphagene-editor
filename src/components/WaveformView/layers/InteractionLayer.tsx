@@ -85,8 +85,14 @@ export function InteractionLayer({
 
   const handleMouseDown = useCallback(
     (e: MouseEvent<HTMLDivElement>) => {
-      // Only start dragging if not shift-clicking and if onDrag is provided
-      if (e.shiftKey || !onDrag) return;
+      // If shift is pressed, prevent selection behavior
+      if (e.shiftKey) {
+        e.preventDefault();
+        return;
+      }
+      
+      // Only start dragging if onDrag is provided
+      if (!onDrag) return;
       
       setIsDragging(true);
       setLastX(e.clientX);
@@ -98,6 +104,12 @@ export function InteractionLayer({
     (e: MouseEvent<HTMLDivElement>) => {
       // Only handle shift+click and prevent during dragging
       if (!e.shiftKey || isDragging) return;
+      
+      // Prevent the default selection behavior when shift+clicking
+      e.preventDefault();
+      
+      // Stop propagation to prevent any parent handlers from being triggered
+      e.stopPropagation();
 
       // Calculate the time based on the click position
       const rect = e.currentTarget.getBoundingClientRect();
