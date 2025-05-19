@@ -23,7 +23,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1rem 1rem 1rem;
+  padding: 0.5rem 1rem;
   color: rgba(0, 0, 0, 0.87);
   width: 100%;
   box-sizing: border-box;
@@ -31,8 +31,13 @@
 
 .spliceInfo {
   display: flex;
-  flex-direction: column;
   flex-grow: 1;
+}
+
+.spliceMainInfo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
 }
 
 .spliceActions {
@@ -71,19 +76,21 @@
 
 .spliceName {
   font-weight: 500;
-  font-size: 1rem;
-  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
 }
 
 .spliceMeta {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: #6c757d;
+  margin-left: 0.25rem;
 }
 
 .secondaryTime {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: #adb5bd;
   font-weight: normal;
+  margin-left: 0.25rem;
 }
 
 .splicesHeader {

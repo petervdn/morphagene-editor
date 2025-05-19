@@ -52,13 +52,12 @@ export function SplicesListItem({
     >
       <div className={styles.spliceContent}>
         <div className={styles.spliceInfo}>
-          <span className={styles.spliceName}>Splice {index + 1}</span>
-          <span className={styles.spliceMeta}>
-            {(splice.end - splice.start).toFixed(2)}s{" "}
+          <div className={styles.spliceMainInfo}>
+            <span className={styles.spliceName}>Splice {index + 1}</span>
             <span className={styles.secondaryTime}>
-              ({splice.start.toFixed(2)}s - {splice.end.toFixed(2)}s)
+              {(splice.end - splice.start).toFixed(2)}s
             </span>
-          </span>
+          </div>
         </div>
         <div className={styles.spliceActions}>
           {index > 0 && (

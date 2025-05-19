@@ -70,14 +70,6 @@ export function WaveformView({
 
   return (
     <div className={styles.waveformContainer}>
-      <div className={styles.waveformHeader}>
-        <div className={styles.spacer} />
-        <ZoomSlider 
-          zoomLevel={zoomLevel} 
-          maxZoom={maxZoom} 
-          onChange={setZoomLevel} 
-        />
-      </div>
       <div className={styles.wrapper} ref={wrapperRef}>
         {wrapperSize && (
           <>
@@ -102,8 +94,17 @@ export function WaveformView({
           </>
         )}
       </div>
-      <div className={styles.helpText}>
-        Shift+Click to add marker • Scroll to zoom • Drag to pan
+      <div className={styles.controlsArea}>
+        <div className={styles.zoomControls}>
+          <ZoomSlider 
+            zoomLevel={zoomLevel} 
+            maxZoom={maxZoom} 
+            onChange={setZoomLevel} 
+          />
+        </div>
+        <div className={styles.helpText}>
+          Shift+Click to add marker • Scroll to zoom • Drag to pan
+        </div>
       </div>
     </div>
   );
