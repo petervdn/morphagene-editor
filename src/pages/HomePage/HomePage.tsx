@@ -26,7 +26,7 @@ export function HomePage(): ReactElement {
           </p>
         </div>
         <img
-          src="/morphagene.jpg"
+          src={`${import.meta.env.BASE_URL}morphagene.jpg`}
           alt="Make Noise Morphagene Eurorack Module"
           className={styles.homePageImage}
         />
