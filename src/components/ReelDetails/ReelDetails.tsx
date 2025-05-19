@@ -31,6 +31,7 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
     onSpliceMouseEnter,
     onSpliceMouseLeave,
     onSpliceDelete,
+    addMarker,
     saveChanges,
     resetChanges,
   } = useSplices({
@@ -74,6 +75,7 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
         audioBuffer={audioBuffer}
         splices={splices}
         highlightSpliceIndex={highlightedSpliceIndex}
+        onAddMarker={addMarker}
       />
       <PlayControls />
       <div className={styles.reelContentLayout}>

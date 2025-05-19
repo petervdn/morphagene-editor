@@ -174,6 +174,20 @@ export function useSplices({
     console.log('Changes reset to original state');
   }, [originalCuePoints]);
 
+  // Function to add a marker at a specific time
+  const addMarker = useCallback((timeInSeconds: number) => {
+    // Create a new marker
+    const newMarker: Marker = {
+      time: timeInSeconds,
+    };
+    
+    // Add the marker to the list and sort by time
+    const newMarkers = [...markers, newMarker].sort((a, b) => a.time - b.time);
+    setMarkers(newMarkers);
+    
+    console.log(`Added marker at ${timeInSeconds} seconds`);
+  }, [markers]);
+
   return {
     markers,
     splices,
@@ -183,6 +197,7 @@ export function useSplices({
     onSpliceMouseEnter,
     onSpliceMouseLeave,
     onSpliceDelete,
+    addMarker,
     saveChanges,
     resetChanges,
   };
