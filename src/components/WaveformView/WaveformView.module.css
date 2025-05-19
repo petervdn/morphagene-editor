@@ -4,6 +4,17 @@
   margin-bottom: 1.5rem;
 }
 
+.waveformHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.spacer {
+  flex: 1;
+}
+
 .wrapper {
   width: 100%;
   height: 300px;

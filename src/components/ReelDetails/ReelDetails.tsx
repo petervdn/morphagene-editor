@@ -5,7 +5,6 @@ import { BiSolidErrorCircle } from "react-icons/bi";
 import { MdRestartAlt } from "react-icons/md";
 import styles from "./ReelDetails.module.css";
 import { WaveformView } from "../WaveformView/WaveformView";
-import { PlayControls } from "../PlayControls/PlayControls";
 import { SplicesList } from "../SplicesList/SplicesList";
 import { WavHeaderTable } from "../WavHeaderTable/WavHeaderTable";
 import type { CuePoint, Reel } from "../../types/types";
@@ -18,11 +17,16 @@ type Props = {
 };
 
 export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
-  const updateReelCuePoints = useFolderContentStore(state => state.updateReelCuePoints);
-  
-  const handleReelUpdated = useCallback((reelId: string, cuePoints: Array<CuePoint>) => {
-    updateReelCuePoints(reelId, cuePoints);
-  }, [updateReelCuePoints]);
+  const updateReelCuePoints = useFolderContentStore(
+    (state) => state.updateReelCuePoints
+  );
+
+  const handleReelUpdated = useCallback(
+    (reelId: string, cuePoints: Array<CuePoint>) => {
+      updateReelCuePoints(reelId, cuePoints);
+    },
+    [updateReelCuePoints]
+  );
   const {
     splices,
     highlightedSpliceIndex,
@@ -53,15 +57,15 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
               <span>Unsaved changes</span>
             </div>
             <div className={styles.buttonGroup}>
-              <button 
-                className={styles.resetButton} 
+              <button
+                className={styles.resetButton}
                 onClick={resetChanges}
                 title="Reset to original state"
               >
                 <MdRestartAlt /> Reset
               </button>
-              <button 
-                className={styles.saveButton} 
+              <button
+                className={styles.saveButton}
                 onClick={saveChanges}
                 title="Save changes"
               >
@@ -77,7 +81,6 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
         highlightSpliceIndex={highlightedSpliceIndex}
         onAddMarker={addMarker}
       />
-      <PlayControls />
       <div className={styles.reelContentLayout}>
         <div className={styles.reelMainContent}>
           {splices && (
