@@ -112,6 +112,7 @@ export function WaveformView({
                 audioBuffer={audioBuffer}
                 viewPort={viewPort}
                 size={wrapperSize}
+                splices={splices}
               />
             )}
             <SplicesCanvas

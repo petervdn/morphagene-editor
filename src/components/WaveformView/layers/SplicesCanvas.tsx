@@ -3,12 +3,12 @@ import { drawSplices } from "../../../utils/canvas/drawSplices";
 import type { Splice, ViewPort } from "../../../types/types";
 import type { Size } from "../../../types/types";
 import { SizedCanvas } from "../../SizedCanvas/SizedCanvas";
+import { useSplice } from "../../../utils/hooks/useSpliceFromUrl";
 
 type Props = {
   splices: Array<Splice>;
   viewPort: ViewPort;
   size: Size;
-  highlightIndex?: number;
 };
 
 // todo extract + move shared code from all canvases
@@ -16,9 +16,11 @@ export function SplicesCanvas({
   splices,
   viewPort,
   size,
-  highlightIndex = -1,
 }: Props): ReactElement {
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
+
+  // Get the selected splice index from the URL
+  const { spliceIndex } = useSplice(splices);
 
   useEffect(() => {
     if (!contextRef.current || !viewPort || !size) {
@@ -29,9 +31,9 @@ export function SplicesCanvas({
       context: contextRef.current,
       splices,
       viewPort,
-      highlightIndex,
+      selectedSpliceIndex: spliceIndex,
     });
-  }, [splices, viewPort, size, highlightIndex]);
+  }, [splices, viewPort, size, spliceIndex]);
 
   const onCanvasRef = useCallback((canvasElement: HTMLCanvasElement | null) => {
     contextRef.current = canvasElement?.getContext("2d") ?? null;

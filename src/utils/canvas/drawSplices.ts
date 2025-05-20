@@ -1,29 +1,20 @@
 import type { Splice, ViewPort } from "../../types/types";
 
-// Define a set of visually distinct colors for the splice markers
-const DEFAULT_COLORS = [
-  "#FF5252", // Red
-  "#4CAF50", // Green
-  "#2196F3", // Blue
-  "#FF9800", // Orange
-  "#9C27B0", // Purple
-  "#00BCD4", // Cyan
-  "#FFEB3B", // Yellow
-  "#795548", // Brown
-];
+// Define a classy deep red color for the selected splice
+const SELECTED_RED = "#B71C1C";
+// Define a light gray color for all other splices
+const LIGHT_GRAY = "#CCCCCC";
 
 export function drawSplices({
   context,
   viewPort,
   splices,
-  colors = DEFAULT_COLORS,
-  highlightIndex = -1,
+  selectedSpliceIndex,
 }: {
   context: CanvasRenderingContext2D;
   viewPort: ViewPort;
   splices: Array<Splice>;
-  colors?: Array<string>;
-  highlightIndex?: number;
+  selectedSpliceIndex?: number;
 }): void {
   if (!context || !viewPort || !splices.length) return;
 
@@ -39,9 +30,11 @@ export function drawSplices({
     if (splice.start < viewPort.from && splice.end < viewPort.from) return;
     if (splice.start > viewPort.to) return;
 
-    // Select color from the rotating set
-    const colorIndex = index % colors.length;
-    const color = colors[colorIndex];
+    // Determine if this is the selected splice
+    const isSelected = index === selectedSpliceIndex;
+    
+    // Use deep red for selected splice, light gray for others
+    const color = isSelected ? SELECTED_RED : LIGHT_GRAY;
 
     // Calculate positions based on the splice start/end times
     const startX =
@@ -50,17 +43,6 @@ export function drawSplices({
 
     // Skip if position is outside the canvas
     if (startX < 0 || startX > width) return;
-
-    // If this is the highlighted splice, draw a semi-transparent background
-    if (index === highlightIndex && splice.end > splice.start) {
-      const endX =
-        Math.round(((splice.end - viewPort.from) / viewportDuration) * width) +
-        0.5;
-
-      // Draw a semi-transparent rectangle for the highlighted splice
-      context.fillStyle = color + "33"; // Add 33 hex for 20% opacity
-      context.fillRect(startX, 0, endX - startX, height);
-    }
 
     // Draw the vertical line for this splice
     context.beginPath();
@@ -74,9 +56,46 @@ export function drawSplices({
     // Reset line style
     context.setLineDash([]);
 
-    // Add a small label with the splice index
-    context.font = "22px sans-serif";
-    context.fillStyle = color;
-    context.fillText(`${index + 1}`, startX + 8, 22);
+    // Add a label with the splice ID
+    const spliceId = String(index + 1);
+    const fontSize = 22;
+    const padding = 8;
+    
+    // Set font style
+    context.font = isSelected ? "bold 22px sans-serif" : "22px sans-serif";
+    
+    // For the selected splice, add a red background behind the label that spans the full splice width
+    if (isSelected) {
+      context.save();
+      const bgHeight = fontSize + padding;
+      
+      // Calculate the end position of the splice
+      let endX;
+      if (index < splices.length - 1) {
+        // If not the last splice, go up to the next splice
+        const nextSplice = splices[index + 1];
+        endX = Math.round(((nextSplice.start - viewPort.from) / viewportDuration) * width) + 0.5;
+      } else {
+        // If it's the last splice, use its end time
+        endX = Math.round(((splice.end - viewPort.from) / viewportDuration) * width) + 0.5;
+      }
+      
+      // Draw background rectangle that spans the full width of the splice
+      context.fillStyle = color;
+      context.fillRect(startX, 0, endX - startX, bgHeight);
+      
+      // Draw the label in white for better contrast
+      context.fillStyle = "#FFFFFF";
+    } else {
+      // For non-selected splices, use the regular color
+      context.fillStyle = color;
+    }
+    
+    // Draw the text
+    context.fillText(spliceId, startX + padding, fontSize);
+    
+    if (isSelected) {
+      context.restore();
+    }
   });
 }
