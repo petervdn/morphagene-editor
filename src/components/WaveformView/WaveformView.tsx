@@ -12,19 +12,33 @@ import { ZoomSlider } from "./ZoomSlider";
 interface WaveformViewProps {
   audioBuffer: AudioBuffer | null;
   splices: Splice[];
-  highlightSpliceIndex?: number;
+
   onAddMarker?: (time: number) => void;
-  zoomToRangeRef?: React.MutableRefObject<((start: number, end: number, options?: {
-    duration?: number;
-    easing?: "linear" | "easeInQuad" | "easeOutQuad" | "easeInOutQuad" | "easeInCubic" | "easeOutCubic" | "easeInOutCubic" | "easeOutElastic";
-  }) => void) | null>;
+  zoomToRangeRef?: React.MutableRefObject<
+    | ((
+        start: number,
+        end: number,
+        options?: {
+          duration?: number;
+          easing?:
+            | "linear"
+            | "easeInQuad"
+            | "easeOutQuad"
+            | "easeInOutQuad"
+            | "easeInCubic"
+            | "easeOutCubic"
+            | "easeInOutCubic"
+            | "easeOutElastic";
+        }
+      ) => void)
+    | null
+  >;
   maxZoom?: number;
-};
+}
 
 export function WaveformView({
   audioBuffer,
   splices,
-  highlightSpliceIndex = -1,
   onAddMarker,
   zoomToRangeRef,
   maxZoom = 50,
@@ -32,50 +46,59 @@ export function WaveformView({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const wrapperSize = useElementSize({ elementRef: wrapperRef });
 
-  const { viewPort, zoomLevel, handleWheel, handleDrag, setZoomLevel, zoomToRange } = useWaveformZoom({
+  const {
+    viewPort,
+    zoomLevel,
+    handleWheel,
+    handleDrag,
+    setZoomLevel,
+    zoomToRange,
+  } = useWaveformZoom({
     audioDuration: audioBuffer?.duration || 0,
     maxZoom,
   });
-  
+
   // Expose the zoomToRange function via ref if provided
   useEffect(() => {
     if (zoomToRangeRef) {
       zoomToRangeRef.current = zoomToRange;
     }
-    
+
     return () => {
       if (zoomToRangeRef) {
         zoomToRangeRef.current = null;
       }
     };
   }, [zoomToRange, zoomToRangeRef]);
-  
+
   // Add a non-passive wheel event listener to the wrapper to prevent page scrolling
   // while still allowing our zoom functionality to work
   useEffect(() => {
     const wrapperElement = wrapperRef.current;
     if (!wrapperElement) return;
-    
+
     const handleWheelEvent = (e: WheelEvent) => {
       // Prevent the default scroll behavior
       e.preventDefault();
       e.stopPropagation();
-      
+
       // Calculate the mouse X position relative to the container
       const rect = wrapperElement.getBoundingClientRect();
       const mouseX = (e.clientX - rect.left) / rect.width;
-      
+
       // Call our zoom handler
       handleWheel(e as any, mouseX);
-      
+
       return false;
     };
-    
+
     // Add the event listener with { passive: false } to allow preventDefault
-    wrapperElement.addEventListener('wheel', handleWheelEvent, { passive: false });
-    
+    wrapperElement.addEventListener("wheel", handleWheelEvent, {
+      passive: false,
+    });
+
     return () => {
-      wrapperElement.removeEventListener('wheel', handleWheelEvent);
+      wrapperElement.removeEventListener("wheel", handleWheelEvent);
     };
   }, [handleWheel]);
 
@@ -95,7 +118,6 @@ export function WaveformView({
               splices={splices}
               viewPort={viewPort}
               size={wrapperSize}
-              highlightIndex={highlightSpliceIndex}
             />
             <PlayheadCanvas viewPort={viewPort} size={wrapperSize} />
             <InteractionLayer
@@ -109,10 +131,10 @@ export function WaveformView({
       </div>
       <div className={styles.controlsArea}>
         <div className={styles.zoomControls}>
-          <ZoomSlider 
-            zoomLevel={zoomLevel} 
-            maxZoom={maxZoom} 
-            onChange={setZoomLevel} 
+          <ZoomSlider
+            zoomLevel={zoomLevel}
+            maxZoom={maxZoom}
+            onChange={setZoomLevel}
           />
         </div>
         <div className={styles.helpText}>

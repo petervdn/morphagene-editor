@@ -1,19 +1,18 @@
 export const routes = {
   home: "/",
   folder: "/folder",
-  // reel: "/folder/reel/:reelId",
-  splice: "/folder/reel/:reelId/splice/:spliceIndex",
+  splice: "/folder/reel/:reelId/splice/:spliceId",
   options: "/folder/options",
 } as const;
 
 export function getReelPath(reelId: string): string {
-  return getPath(routes.splice, { reelId, spliceIndex: "1" });
+  return getPath(routes.splice, { reelId, spliceId: "1" });
 }
 
-export function getSplicePath(reelId: string, spliceIndex: number): string {
+export function getSplicePath(reelId: string, spliceId: string): string {
   return getPath(routes.splice, {
     reelId,
-    spliceIndex: spliceIndex.toString(),
+    spliceId,
   });
 }
 

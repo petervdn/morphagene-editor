@@ -1,5 +1,5 @@
 import { useCallback, type ReactElement } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { BsTrash, BsPlayCircle, BsStopCircle, BsZoomIn } from "react-icons/bs";
 import { MdSkipPrevious, MdSkipNext } from "react-icons/md";
 import { RiScissorsCutLine } from "react-icons/ri";
@@ -7,6 +7,7 @@ import { useAudioPlayer } from "../../utils/hooks/useAudioPlayer";
 import styles from "./SpliceDetail.module.css";
 import type { Splice } from "../../types/types";
 import { getSplicePath } from "../../routes/routes";
+import { useSplice } from "../../utils/hooks/useSplice";
 
 type Props = {
   splices: Array<Splice>;
@@ -23,22 +24,17 @@ export function SpliceDetail({
   onDeleteSplice,
   onZoomToSplice,
 }: Props): ReactElement {
-  const { spliceIndex: spliceIndexParam } = useParams();
+  // const { spliceIndex: spliceIndexParam } = useParams();
   const navigate = useNavigate();
   const audioPlayerProps = useAudioPlayer();
-
-  // Parse the splice index from the URL parameter
-  const spliceIndex = parseInt(spliceIndexParam || "0", 10) - 1;
-
-  // Get the current splice
-  const splice = splices[spliceIndex];
-
-  // Check if this is the first or last splice
-  const isFirstSplice = spliceIndex === 0;
-  const isLastSplice = spliceIndex === splices.length - 1;
-
-  // Calculate splice duration
-  const spliceDuration = splice ? (splice.end - splice.start).toFixed(2) : "0";
+  const {
+    isFirstSplice,
+    isLastSplice,
+    splice,
+    spliceDuration,
+    spliceIndex,
+    spliceId,
+  } = useSplice(splices);
 
   // Check if the splice is currently playing
   const isPlaying = audioPlayerProps?.playingSound?.splice === splice;
@@ -57,24 +53,22 @@ export function SpliceDetail({
 
   // Handle delete
   const handleDelete = useCallback(() => {
+    if (spliceIndex === undefined || spliceId === undefined) {
+      return;
+    }
+
     if (onDeleteSplice && !isFirstSplice) {
       onDeleteSplice(spliceIndex);
 
       // Navigate to the previous splice if available, otherwise to the next one
-      if (spliceIndex > 0) {
-        navigate(getSplicePath(reelId, spliceIndex - 1), { replace: true });
-      } else if (splices.length > 1) {
-        navigate(getSplicePath(reelId, 0), { replace: true });
-      }
+      // if (spliceIndex > 0) {
+      //   navigate(getSplicePath(reelId, spliceId), { replace: true });
+      // } else if (splices.length > 1) {
+      //   navigate(getSplicePath(reelId, 0), { replace: true });
+      // }
+      navigate(getSplicePath(reelId, "1"), { replace: true });
     }
-  }, [
-    onDeleteSplice,
-    isFirstSplice,
-    spliceIndex,
-    navigate,
-    reelId,
-    splices.length,
-  ]);
+  }, [spliceIndex, spliceId, onDeleteSplice, isFirstSplice, navigate, reelId]);
 
   // Handle zoom
   const handleZoom = useCallback(() => {
@@ -85,7 +79,7 @@ export function SpliceDetail({
 
   // Navigation is now handled directly by Link components
 
-  if (!splice) {
+  if (!splice || typeof spliceIndex !== "number") {
     return <div>Splice not found</div>;
   }
 
@@ -93,7 +87,7 @@ export function SpliceDetail({
     <div className={styles.spliceDetail}>
       <div className={styles.spliceHeader}>
         <h3 className={styles.spliceTitle}>
-          <RiScissorsCutLine /> Splice {spliceIndex + 1}
+          <RiScissorsCutLine /> Splice {spliceId}
         </h3>
       </div>
 
@@ -154,7 +148,9 @@ export function SpliceDetail({
 
       <div className={styles.navigationButtons}>
         <Link
-          to={spliceIndex > 0 ? getSplicePath(reelId, spliceIndex) : "#"}
+          to={
+            spliceIndex > 0 ? getSplicePath(reelId, String(spliceIndex)) : "#"
+          }
           className={`${styles.navButton} ${
             isFirstSplice ? styles.disabledLink : ""
           }`}
@@ -167,7 +163,7 @@ export function SpliceDetail({
         <Link
           to={
             spliceIndex < splices.length - 1
-              ? getSplicePath(reelId, spliceIndex + 2)
+              ? getSplicePath(reelId, String(spliceIndex + 2))
               : "#"
           }
           className={`${styles.navButton} ${

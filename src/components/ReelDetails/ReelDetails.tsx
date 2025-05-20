@@ -55,7 +55,6 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
   );
   const {
     splices,
-    highlightedSpliceIndex,
     hasUnsavedChanges,
     onSpliceDelete,
     addMarker,
@@ -118,7 +117,6 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
       <WaveformView
         audioBuffer={audioBuffer}
         splices={splices}
-        highlightSpliceIndex={highlightedSpliceIndex}
         onAddMarker={addMarker}
         zoomToRangeRef={zoomToRangeRef}
       />

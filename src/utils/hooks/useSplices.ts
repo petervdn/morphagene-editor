@@ -14,11 +14,8 @@ type UseSplicesProps = {
 type UseSplicesResult = {
   markers: Array<Marker>;
   splices: Array<Splice>;
-  highlightedSpliceIndex: number;
   hasUnsavedChanges: boolean;
   onSpliceClick: (index: number) => void;
-  onSpliceMouseEnter: (index: number) => void;
-  onSpliceMouseLeave: () => void;
   onSpliceDelete: (index: number) => void;
   saveChanges: () => void;
   resetChanges: () => void;
@@ -40,8 +37,6 @@ export function useSplices({
     }))
   );
   const audioPlayer = useAudioPlayer();
-  const [highlightedSpliceIndex, setHighlightedSpliceIndex] =
-    useState<number>(-1);
 
   const splices = useMemo(() => {
     return createSplicesFromMarkers(markers);
@@ -65,14 +60,6 @@ export function useSplices({
     [audioBuffer, audioPlayer, splices]
   );
 
-  const onSpliceMouseEnter = useCallback((index: number) => {
-    setHighlightedSpliceIndex(index);
-  }, []);
-
-  const onSpliceMouseLeave = useCallback(() => {
-    setHighlightedSpliceIndex(-1);
-  }, []);
-
   const onSpliceDelete = useCallback(
     (index: number) => {
       // first splice cannot be deleted
@@ -87,13 +74,8 @@ export function useSplices({
       const newMarkers = [...markers];
       newMarkers.splice(markerIndexToRemove, 1);
       setMarkers(newMarkers);
-
-      // Reset highlighted splice if it was the deleted one
-      if (highlightedSpliceIndex === index) {
-        setHighlightedSpliceIndex(-1);
-      }
     },
-    [markers, highlightedSpliceIndex, setMarkers]
+    [markers, setMarkers]
   );
 
   // Check if current markers are different from original cue points
@@ -173,11 +155,6 @@ export function useSplices({
         time: timeInSeconds,
       }))
     );
-
-    // Reset highlighted splice index
-    setHighlightedSpliceIndex(-1);
-
-    console.log("Changes reset to original state");
   }, [originalCuePoints]);
 
   // Function to add a marker at a specific time
@@ -202,11 +179,8 @@ export function useSplices({
   return {
     markers,
     splices,
-    highlightedSpliceIndex,
     hasUnsavedChanges,
     onSpliceClick,
-    onSpliceMouseEnter,
-    onSpliceMouseLeave,
     onSpliceDelete,
     addMarker,
     saveChanges,
