@@ -8,7 +8,3 @@ export const routes = {
 export function getReelPath(reelId: string): string {
   return routes.reel.replace(":reelId", reelId);
 }
-
-export function getOptionsPath(): string {
-  return routes.options;
-}

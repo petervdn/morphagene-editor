@@ -1,17 +1,142 @@
 .optionsPage {
-  padding: 1rem;
+  padding: 0;
 }
 
-.optionsContent {
-  margin-top: 1.5rem;
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.75rem;
+}
+
+.pageTitle {
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+}
+
+.autoSaveInfo {
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.optionsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.saveStatus {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.savingIndicator, 
+.successIndicator, 
+.errorIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.savingIndicator {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.successIndicator {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.errorIndicator {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.savingIcon {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.optionsEditorContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.firstLineContainer {
   background-color: #f8f9fa;
-  padding: 1.5rem;
+  padding: 1rem;
   border-radius: 8px;
-  white-space: pre-wrap;
-  font-family: monospace;
-  max-height: 70vh;
-  overflow-y: auto;
   border: 1px solid #e9ecef;
+}
+
+.firstLineLabel {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #495057;
+}
+
+.firstLineValue {
+  font-family: monospace;
+  padding: 0.5rem;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  color: #495057;
+}
+
+.editorContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.editorLabel {
+  font-weight: 600;
+  color: #495057;
+}
+
+.optionsEditor {
+  width: 100%;
+  min-height: 300px;
+  padding: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  resize: vertical;
+  background-color: #fff;
+  color: #212529;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.optionsEditor:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.editorInfo {
+  color: #6c757d;
+  font-size: 0.85rem;
+  font-style: italic;
 }
 
 .noOptions {

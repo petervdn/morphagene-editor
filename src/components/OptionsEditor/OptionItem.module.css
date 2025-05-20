@@ -1,0 +1,105 @@
+.optionItem {
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #e9ecef;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.optionItem:hover {
+  border-color: #ced4da;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.optionHeader {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.optionCode {
+  font-weight: 700;
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: #495057;
+  background-color: #e9ecef;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  min-width: 50px;
+  text-align: center;
+}
+
+.optionDescription {
+  color: #495057;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
+
+.optionControl {
+  width: 250px;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.selectControl {
+  width: 100%;
+  max-width: 250px;
+  padding: 0.3rem 0.5rem;
+  padding-right: 1.5rem; /* Extra space for the chevron */
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 0.85rem;
+  color: #212529;
+  cursor: pointer;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  /* Custom dropdown arrow with consistent spacing */
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23495057' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 16px 12px;
+}
+
+.selectControl:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+.numberInputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.numberInput {
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  width: 120px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: #212529;
+}
+
+.numberInput:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+.rangeContainer {
+  flex: 1;
+}
+
+.rangeInput {
+  width: 100%;
+  cursor: pointer;
+}

@@ -16,6 +16,7 @@ export type FolderContent = {
 type FolderContentStore = {
   folderContent: FolderContent | null;
   updateReelCuePoints: (reelId: string, cuePoints: Array<CuePoint>) => void;
+  updateOptionsContent: (content: string) => Promise<boolean>;
 };
 
 export const useFolderContentStore = create<FolderContentStore>((set, get) => ({
@@ -46,6 +47,36 @@ export const useFolderContentStore = create<FolderContentStore>((set, get) => ({
         reels: updatedReels
       }
     });
+  },
+  updateOptionsContent: async (content: string) => {
+    const { folderContent } = get();
+    if (!folderContent || !folderContent.options) return false;
+    
+    try {
+      // Get a writable file handle
+      const fileHandle = folderContent.options.fileHandle;
+      const writable = await fileHandle.createWritable();
+      
+      // Write the updated content to the file
+      await writable.write(content);
+      await writable.close();
+      
+      // Update the store with the new options content
+      set({
+        folderContent: {
+          ...folderContent,
+          options: {
+            ...folderContent.options,
+            content
+          }
+        }
+      });
+      
+      return true;
+    } catch (error) {
+      console.error("Error updating options file:", error);
+      return false;
+    }
   }
 }));
 
