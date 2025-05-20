@@ -116,6 +116,12 @@
   outline: none;
 }
 
+/* Container for the splice detail to ensure consistent width */
+.spliceDetailContainer {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 /* Responsive layout for smaller screens */
 @media (max-width: 768px) {
   .reelContentLayout {

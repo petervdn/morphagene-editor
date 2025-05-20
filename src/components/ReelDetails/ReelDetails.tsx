@@ -1,15 +1,16 @@
-import { useCallback, useRef, type ReactElement } from "react";
+import { useCallback, useRef, useEffect, type ReactElement } from "react";
+import { Outlet, useNavigate, useParams, useLocation } from "react-router-dom";
 import { PiFilmReel } from "react-icons/pi";
 import { FiSave } from "react-icons/fi";
 import { BiSolidErrorCircle } from "react-icons/bi";
 import { MdRestartAlt } from "react-icons/md";
 import styles from "./ReelDetails.module.css";
 import { WaveformView } from "../WaveformView/WaveformView";
-import { SplicesList } from "../SplicesList/SplicesList";
-import { PlaceholderPanel } from "../PlaceholderPanel/PlaceholderPanel";
+import { SpliceDetail } from "../SpliceDetail/SpliceDetail";
 import type { CuePoint, Reel } from "../../types/types";
 import { useSplices } from "../../utils/hooks/useSplices";
 import { useFolderContentStore } from "../../stores/folderContentStore";
+import { getSplicePath } from "../../routes/routes";
 
 type Props = {
   reel: Reel;
@@ -17,6 +18,9 @@ type Props = {
 };
 
 export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
+  const { reelId } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   // Create a ref to hold the zoomToRange function from WaveformView
   const zoomToRangeRef = useRef<((start: number, end: number, options?: {
     duration?: number;
@@ -58,6 +62,14 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
     audioBuffer,
     onReelUpdated: handleReelUpdated,
   });
+
+  // Redirect to the first splice if we're at the reel page without a splice selected
+  useEffect(() => {
+    if (splices.length > 0 && location.pathname === `/folder/reel/${reelId}`) {
+      // Navigate to the first splice
+      navigate(getSplicePath(reelId!, 0), { replace: true });
+    }
+  }, [splices, reelId, navigate, location.pathname]);
 
   return (
     <>
@@ -104,22 +116,19 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
         onAddMarker={addMarker}
         zoomToRangeRef={zoomToRangeRef}
       />
-      <div className={styles.reelContentLayout}>
-        <div className={styles.reelMainContent}>
-          {splices && (
-            <SplicesList
-              splices={splices}
-              onDeleteSplice={onSpliceDelete}
-              onSpliceMouseEnter={onSpliceMouseEnter}
-              onSpliceMouseLeave={onSpliceMouseLeave}
-              onZoomToSplice={handleZoomToSplice}
-              onSpliceClick={onSpliceClick}
-            />
-          )}
-        </div>
-        <div className={styles.reelSidebar}>
-          <PlaceholderPanel />
-        </div>
+      
+      {/* Container for the SpliceDetail to ensure consistent width */}
+      <div className={styles.spliceDetailContainer}>
+        {/* Render the SpliceDetail component directly if we're on a splice route */}
+        {location.pathname.includes('/splice/') && (
+          <SpliceDetail
+            splices={splices}
+            audioBuffer={audioBuffer}
+            reelId={reelId!}
+            onDeleteSplice={onSpliceDelete}
+            onZoomToSplice={handleZoomToSplice}
+          />
+        )}
       </div>
     </>
   );
