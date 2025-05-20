@@ -1,0 +1,8 @@
+.placeholderPanel {
+  /* Maintain the same dimensions as the original WavHeaderTable */
+  height: 100%;
+  width: 100%;
+  /* Add a subtle background to make the placeholder visible */
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+}

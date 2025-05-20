@@ -15,6 +15,11 @@
   margin-bottom: 1rem;
 }
 
+.reelTitleContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .reelTitle {
   display: flex;
   align-items: center;
@@ -22,6 +27,19 @@
   font-size: 1.5rem;
   color: #333;
   margin: 0;
+}
+
+.reelMetadata {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: rgba(0, 0, 0, 0.5);
+  margin-top: 0.25rem;
+  margin-left: 0.25rem;
+}
+
+.reelMetadata span {
+  display: inline-block;
 }
 
 .reelTitle small {

@@ -6,7 +6,7 @@ import { MdRestartAlt } from "react-icons/md";
 import styles from "./ReelDetails.module.css";
 import { WaveformView } from "../WaveformView/WaveformView";
 import { SplicesList } from "../SplicesList/SplicesList";
-import { WavHeaderTable } from "../WavHeaderTable/WavHeaderTable";
+import { PlaceholderPanel } from "../PlaceholderPanel/PlaceholderPanel";
 import type { CuePoint, Reel } from "../../types/types";
 import { useSplices } from "../../utils/hooks/useSplices";
 import { useFolderContentStore } from "../../stores/folderContentStore";
@@ -62,9 +62,16 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
   return (
     <>
       <div className={styles.reelHeader}>
-        <h2 className={styles.reelTitle}>
-          <PiFilmReel /> {reel.name}
-        </h2>
+        <div className={styles.reelTitleContainer}>
+          <h2 className={styles.reelTitle}>
+            <PiFilmReel /> {reel.name}
+          </h2>
+          <div className={styles.reelMetadata}>
+            <span>{reel.file.name}</span>
+            <span>{(reel.wavHeaderData.fileSize / 1024 / 1024).toFixed(2)} MB</span>
+            <span>{reel.wavHeaderData.duration.toFixed(2)} seconds</span>
+          </div>
+        </div>
         {hasUnsavedChanges && (
           <div className={styles.saveContainer}>
             <div className={styles.unsavedIndicator}>
@@ -111,10 +118,7 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
           )}
         </div>
         <div className={styles.reelSidebar}>
-          <WavHeaderTable
-            wavHeaderData={reel.wavHeaderData}
-            filename={reel.file.name}
-          />
+          <PlaceholderPanel />
         </div>
       </div>
     </>
