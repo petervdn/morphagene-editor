@@ -26,8 +26,9 @@ export function useSplices({
   reel,
   audioBuffer,
   onReelUpdated,
-}: UseSplicesProps): UseSplicesResult {
-  const cuePoints = reel.wavHeaderData.cuePoints;
+}: Partial<UseSplicesProps>): UseSplicesResult {
+  // Handle the case when reel is undefined
+  const cuePoints = reel?.wavHeaderData?.cuePoints || [];
   // Store the original cue points for comparison
   const [originalCuePoints, setOriginalCuePoints] =
     useState<Array<CuePoint>>(cuePoints);
@@ -93,6 +94,12 @@ export function useSplices({
 
   // Function to save changes to the file
   const saveChanges = useCallback(async () => {
+    // Early return if reel or audioBuffer is undefined
+    if (!reel || !audioBuffer) {
+      console.error("Cannot save changes: reel or audioBuffer is undefined");
+      return;
+    }
+
     try {
       // Check if the File System Access API is available
       if (!("showSaveFilePicker" in window)) {
@@ -175,6 +182,20 @@ export function useSplices({
     },
     [markers]
   );
+
+  // Return empty or default values when reel or audioBuffer is undefined
+  if (!reel || !audioBuffer) {
+    return {
+      markers: [],
+      splices: [],
+      hasUnsavedChanges: false,
+      onSpliceClick: () => {},
+      onSpliceDelete: () => {},
+      addMarker: () => {},
+      saveChanges: () => {},
+      resetChanges: () => {},
+    };
+  }
 
   return {
     markers,

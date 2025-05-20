@@ -48,20 +48,23 @@
   color: white !important; /* White text for all non-selected labels */
   text-decoration: none; /* Remove underline from links */
   display: block;
-  transition: background-color 0.2s ease; /* Smooth transition for hover effect */
+  transition: none !important; /* No transitions at all */
 }
 
 /* Style for selected label */
 .selectedLabel {
   color: #1E90FF !important; /* Blue text for selected label */
+  transition: none !important; /* No transitions at all */
 }
 
-/* Hover effect for non-selected splice labels */
+/* Hover effect for non-selected splice labels - instant change */
 a.spliceLabel:not(.selectedLabel):hover {
   background-color: #999999 !important; /* Darker gray on hover */
+  transition: none; /* Ensure no transition */
 }
 
 /* No hover effect for selected splice labels */
 a.selectedLabel:hover {
   background-color: #FFFFFF !important; /* Keep the same white color on hover */
+  transition: none; /* Ensure no transition */
 }

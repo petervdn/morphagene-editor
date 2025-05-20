@@ -14,14 +14,19 @@ import { useFolderContentStore } from "../../stores/folderContentStore";
 type Props = {
   reel: Reel;
   audioBuffer: AudioBuffer;
+  zoomToRangeRef?: React.MutableRefObject<
+    | ((start: number, end: number, options?: any) => void)
+    | null
+  >;
+  setZoomLevelRef?: React.MutableRefObject<((level: number) => void) | null>;
 };
 
-export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
+export function ReelDetails({ reel, audioBuffer, zoomToRangeRef, setZoomLevelRef }: Props): ReactElement {
   const { reelId } = useParams();
 
   const location = useLocation();
   // Create a ref to hold the zoomToRange function from WaveformView
-  const zoomToRangeRef = useRef<
+  const internalZoomToRangeRef = useRef<
     | ((
         start: number,
         end: number,
@@ -35,8 +40,8 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
 
   // Function to zoom to a specific splice range
   const handleZoomToSplice = useCallback((start: number, end: number) => {
-    if (zoomToRangeRef.current) {
-      zoomToRangeRef.current(start, end, {
+    if (internalZoomToRangeRef.current) {
+      internalZoomToRangeRef.current(start, end, {
         duration: 700, // 700ms animation
         easing: "easeOutCubic", // only ease-out, no ease-in
       });
@@ -109,7 +114,12 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
         audioBuffer={audioBuffer}
         splices={splices}
         onAddMarker={addMarker}
-        zoomToRangeRef={zoomToRangeRef}
+        zoomToRangeRef={zoomToRangeRef || internalZoomToRangeRef}
+        onZoomLevelChange={(setZoomLevel) => {
+          if (setZoomLevelRef) {
+            setZoomLevelRef.current = setZoomLevel;
+          }
+        }}
       />
 
       {/* Container for the SpliceDetail to ensure consistent width */}

@@ -34,6 +34,7 @@ interface WaveformViewProps {
     | null
   >;
   maxZoom?: number;
+  onZoomLevelChange?: (setZoomLevel: (level: number) => void) => void;
 }
 
 export function WaveformView({
@@ -42,6 +43,7 @@ export function WaveformView({
   onAddMarker,
   zoomToRangeRef,
   maxZoom = 50,
+  onZoomLevelChange,
 }: WaveformViewProps): ReactElement {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const wrapperSize = useElementSize({ elementRef: wrapperRef });
@@ -70,6 +72,13 @@ export function WaveformView({
       }
     };
   }, [zoomToRange, zoomToRangeRef]);
+  
+  // Expose the setZoomLevel function via callback if provided
+  useEffect(() => {
+    if (onZoomLevelChange) {
+      onZoomLevelChange(setZoomLevel);
+    }
+  }, [onZoomLevelChange, setZoomLevel]);
 
   // Add a non-passive wheel event listener to the wrapper to prevent page scrolling
   // while still allowing our zoom functionality to work
@@ -143,7 +152,7 @@ export function WaveformView({
           />
         </div>
         <div className={styles.helpText}>
-          Shift+Click to add marker • Scroll to zoom • Alt+Drag to pan
+          Shift+Click to add marker • Scroll to zoom • Alt+Drag to pan • ↑ to zoom out • ↓ to zoom to splice
         </div>
       </div>
     </div>
