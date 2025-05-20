@@ -1,6 +1,7 @@
 import { type ReactElement } from "react";
 import { type OptionDefinition } from "../../types/optionsTypes";
 import styles from "./OptionItem.module.css";
+import { cleanOptionDescription, optionExplanations } from "../../utils/cleanOptionDescription";
 
 interface OptionItemProps {
   option: OptionDefinition;
@@ -19,7 +20,16 @@ export function OptionItem({
     <div className={styles.optionItem}>
       <div className={styles.optionHeader}>
         <div className={styles.optionCode}>{option.code}</div>
-        <div className={styles.optionDescription}>{option.description}</div>
+        <div className={styles.optionInfo}>
+          <div className={styles.optionDescription}>
+            {cleanOptionDescription(option.description)}
+          </div>
+          {optionExplanations[option.code] && (
+            <div className={styles.optionExplanation}>
+              {optionExplanations[option.code]}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className={styles.optionControl}>
