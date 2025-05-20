@@ -4,7 +4,7 @@
 }
 
 .slider {
-  width: 120px;
+  width: 192px; /* Increased from 120px (120 * 1.6 = 192) */
   margin-right: 8px;
   cursor: pointer;
 }

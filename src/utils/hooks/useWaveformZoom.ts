@@ -102,6 +102,16 @@ export function useWaveformZoom({
     [viewPort, audioDuration, animationDuration, easingFunction]
   );
 
+  // Helper function to apply logarithmic scaling to zoom factor
+  const applyLogScaling = useCallback((currentZoom: number, delta: number): number => {
+    // The higher the zoom level, the smaller the effect of the delta
+    // This creates a more consistent zoom feel regardless of current zoom level
+    const scaleFactor = Math.log10(currentZoom + 1) * 0.5 + 0.5;
+    // Adjust sensitivity - increased from 0.4 to 0.6 for more responsive zooming
+    const adjustedDelta = 1 + (delta - 1) * 0.6 * (1 / scaleFactor);
+    return adjustedDelta;
+  }, []);
+
   // Handle mouse wheel for zooming
   const handleWheel = useCallback(
     (e: React.WheelEvent, mouseX: number) => {
@@ -120,8 +130,11 @@ export function useWaveformZoom({
       const mouseRelativePosition =
         (mouseTimePosition - viewPort.from) / viewPortWidth;
 
-      // Calculate new zoom level
-      const zoomDelta = e.deltaY > 0 ? 0.9 : 1.1; // Zoom out or in
+      // Calculate new zoom level with adjusted sensitivity and logarithmic scaling
+      // Base delta values adjusted for better responsiveness
+      const baseDelta = e.deltaY > 0 ? 0.93 : 1.07; // Increased from 0.95/1.05
+      const zoomDelta = applyLogScaling(zoomLevel, baseDelta);
+      
       const newZoomLevel = Math.min(
         maxZoom,
         Math.max(1, zoomLevel * zoomDelta)
@@ -154,7 +167,7 @@ export function useWaveformZoom({
 
       return true; // Signal that we handled the event
     },
-    [viewPort, zoomLevel, audioDuration, maxZoom]
+    [viewPort, zoomLevel, audioDuration, maxZoom, applyLogScaling]
   );
 
   // Handle dragging for panning
