@@ -1,8 +1,120 @@
-.folderPage h2 {
+.folderPage {
+  display: flex;
+  flex-direction: column;
+}
+
+.folderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1.5rem;
+}
+
+.folderHeader h2 {
+  margin: 0;
   color: rgba(0, 0, 0, 0.87);
 }
 
 .optionsContainer {
   margin-bottom: 1.5rem;
+}
+
+/* No folder selected state */
+.noFolderContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 1rem;
+  margin-top: 2rem;
+}
+
+.noFolderContainer p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  max-width: 500px;
+}
+
+.selectFolderBtnLarge {
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.selectFolderBtnLarge:hover {
+  background-color: #1a2530;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  color: white;
+}
+
+/* Folder selected state */
+.folderContentContainer {
+  width: 100%;
+}
+
+.folderActions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.refreshFolderBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #4a6785;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.refreshFolderBtn:hover {
+  background-color: #3a526b;
+}
+
+.refreshFolderBtn svg {
+  /* Keep the SVG styling but remove rotation */
+}
+
+.selectFolderBtnSmall {
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.selectFolderBtnSmall:hover {
+  background-color: #1a2530;
+}
+
+@media (max-width: 600px) {
+  .folderHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .buttonText {
+    display: none;
+  }
+  
+  .refreshFolderBtn {
+    padding: 0.5rem;
+  }
 }

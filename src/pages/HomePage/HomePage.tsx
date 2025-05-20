@@ -1,17 +1,9 @@
 import { type ReactElement } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./HomePage.module.css";
-import { getFolderContent } from "../../utils/getFolderContent";
-import { setFolderContent } from "../../stores/folderContentStore";
+import { routes } from "../../routes/routes";
 
 export function HomePage(): ReactElement {
-  const navigate = useNavigate();
-  const onFolderSelectClick = async () => {
-    const directoryHandle = await window.showDirectoryPicker();
-
-    setFolderContent(await getFolderContent(directoryHandle));
-    navigate("/folder");
-  };
 
   return (
     <div className={styles.homePage}>
@@ -31,9 +23,9 @@ export function HomePage(): ReactElement {
           className={styles.homePageImage}
         />
       </div>
-      <button onClick={onFolderSelectClick} className={styles.selectFolderBtn}>
-        Select Reels Folder
-      </button>
+      <Link to={routes.folder} className={styles.getStartedBtn}>
+        Get Started
+      </Link>
     </div>
   );
 }
