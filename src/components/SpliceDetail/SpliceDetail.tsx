@@ -7,7 +7,7 @@ import { useAudioPlayer } from "../../utils/hooks/useAudioPlayer";
 import styles from "./SpliceDetail.module.css";
 import type { Splice } from "../../types/types";
 import { getSplicePath } from "../../routes/routes";
-import { useSplice } from "../../utils/hooks/useSplice";
+import { useSplice } from "../../utils/hooks/useSpliceFromUrl";
 
 type Props = {
   splices: Array<Splice>;
