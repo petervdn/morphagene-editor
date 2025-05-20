@@ -1,4 +1,4 @@
-import type { FolderContent } from "../stores/folderContentStore";
+import type { FolderContent, OptionsFile } from "../stores/folderContentStore";
 import type { Reel } from "../types/types";
 import { parseWavFileHeader } from "./audio/parseWavFileHeader";
 import { reelFileNames } from "./reelFileNames";
@@ -8,21 +8,42 @@ export async function getFolderContent(
   directoryHandle: FileSystemDirectoryHandle
 ): Promise<FolderContent> {
   const reels: Array<Reel> = [];
+  let options: OptionsFile | null = null;
 
   for await (const entry of directoryHandle.values()) {
-    const index = reelFileNames.indexOf(entry.name);
-    if (entry.kind === "file" && index > -1) {
-      const id = (index + 1).toString();
-      const file = await entry.getFile();
-      const wavHeaderData = await parseWavFileHeader(file);
+    if (entry.kind === "file") {
+      const index = reelFileNames.indexOf(entry.name);
+      
+      if (index > -1) {
+        // Handle WAV files (reels)
+        const id = (index + 1).toString();
+        const file = await entry.getFile();
+        const wavHeaderData = await parseWavFileHeader(file);
 
-      reels.push({
-        id,
-        file,
-        fileHandle: entry,
-        name: `Reel #${id}`,
-        wavHeaderData,
-      });
+        reels.push({
+          id,
+          file,
+          fileHandle: entry,
+          name: `Reel #${id}`,
+          wavHeaderData,
+        });
+      } else if (entry.name.toLowerCase() === "options.txt") {
+        // Handle options.txt file
+        const file = await entry.getFile();
+        let content: string | null = null;
+        
+        try {
+          content = await file.text();
+        } catch (error) {
+          console.error("Error reading options.txt file:", error);
+        }
+        
+        options = {
+          file,
+          fileHandle: entry,
+          content,
+        };
+      }
     }
   }
 
@@ -31,5 +52,6 @@ export async function getFolderContent(
   return {
     directoryHandle,
     reels,
+    options,
   };
 }

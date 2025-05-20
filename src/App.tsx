@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { HomePage } from "./pages/HomePage/HomePage";
 import { FolderPage } from "./pages/FolderPage/FolderPage";
 import { ReelPage } from "./pages/ReelPage/ReelPage";
+import { OptionsPage } from "./pages/OptionsPage/OptionsPage";
 import { routes } from "./routes/routes";
 import { AudioContextProvider } from "./context/AudioContextProvider";
 import { Footer } from "./components/Footer/Footer";
@@ -24,6 +25,7 @@ function App() {
                 <Route path={routes.home} element={<HomePage />} />
                 <Route path={routes.folder} element={<FolderPage />} />
                 <Route path={routes.reel} element={<ReelPage />} />
+                <Route path={routes.options} element={<OptionsPage />} />
               </Routes>
             </div>
           </div>

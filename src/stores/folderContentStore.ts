@@ -1,9 +1,16 @@
 import { create } from "zustand";
 import type { CuePoint, Reel } from "../types/types";
 
+export type OptionsFile = {
+  file: File;
+  fileHandle: FileSystemFileHandle;
+  content: string | null;
+};
+
 export type FolderContent = {
   directoryHandle: FileSystemDirectoryHandle;
   reels: Array<Reel>;
+  options: OptionsFile | null;
 };
 
 type FolderContentStore = {

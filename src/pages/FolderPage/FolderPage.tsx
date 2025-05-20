@@ -4,6 +4,7 @@ import styles from "./FolderPage.module.css";
 import { NoFolder } from "../../components/NoFolder";
 import { useFolderContent } from "../../stores/folderContentStore";
 import { ReelsList } from "../../components/ReelsList/ReelsList";
+import { OptionsListItem } from "../../components/OptionsListItem/OptionsListItem";
 
 export function FolderPage(): ReactElement {
   const folderContent = useFolderContent();
@@ -15,8 +16,13 @@ export function FolderPage(): ReactElement {
       {folderContent && (
         <>
           <h2>
-            Showing reels in folder "{folderContent.directoryHandle.name}"
+            Showing files in folder "{folderContent.directoryHandle.name}"
           </h2>
+          {folderContent.options && (
+            <div className={styles.optionsContainer}>
+              <OptionsListItem options={folderContent.options} />
+            </div>
+          )}
           <ReelsList reels={folderContent.reels} />
         </>
       )}

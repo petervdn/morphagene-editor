@@ -1,0 +1,41 @@
+.optionsItem {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: #212529;
+  border-left: 4px solid #6c757d;
+}
+
+.optionsItem:hover {
+  background-color: #dee2e6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.optionsIcon {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  color: #6c757d;
+}
+
+.optionsDetails {
+  flex: 1;
+}
+
+.optionsName {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+}
+
+.optionsInfo {
+  display: flex;
+  font-size: 0.8rem;
+  color: #6c757d;
+  gap: 1rem;
+}

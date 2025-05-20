@@ -1,0 +1,24 @@
+.optionsPage {
+  padding: 1rem;
+}
+
+.optionsContent {
+  margin-top: 1.5rem;
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  white-space: pre-wrap;
+  font-family: monospace;
+  max-height: 70vh;
+  overflow-y: auto;
+  border: 1px solid #e9ecef;
+}
+
+.noOptions {
+  margin-top: 2rem;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+  color: #6c757d;
+}
