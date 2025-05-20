@@ -1,5 +1,5 @@
-import { useCallback, useRef, useEffect, type ReactElement } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useCallback, useRef, type ReactElement } from "react";
+import { useParams, useLocation } from "react-router-dom";
 import { PiFilmReel } from "react-icons/pi";
 import { FiSave } from "react-icons/fi";
 import { BiSolidErrorCircle } from "react-icons/bi";
@@ -10,7 +10,6 @@ import { SpliceDetail } from "../SpliceDetail/SpliceDetail";
 import type { CuePoint, Reel } from "../../types/types";
 import { useSplices } from "../../utils/hooks/useSplices";
 import { useFolderContentStore } from "../../stores/folderContentStore";
-import { getSplicePath } from "../../routes/routes";
 
 type Props = {
   reel: Reel;
@@ -19,7 +18,7 @@ type Props = {
 
 export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
   const { reelId } = useParams();
-  const navigate = useNavigate();
+
   const location = useLocation();
   // Create a ref to hold the zoomToRange function from WaveformView
   const zoomToRangeRef = useRef<
@@ -65,14 +64,6 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
     audioBuffer,
     onReelUpdated: handleReelUpdated,
   });
-
-  // Redirect to the first splice if we're at the reel page without a splice selected
-  useEffect(() => {
-    if (splices.length > 0 && location.pathname === `/folder/reel/${reelId}`) {
-      // Navigate to the first splice
-      navigate(getSplicePath(reelId!, 0), { replace: true });
-    }
-  }, [splices, reelId, navigate, location.pathname]);
 
   return (
     <>

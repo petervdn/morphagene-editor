@@ -25,7 +25,6 @@ function App() {
                 <Route path={routes.home} element={<HomePage />} />
                 <Route path={routes.folder} element={<FolderPage />} />
                 <Route path={routes.options} element={<OptionsPage />} />
-                <Route path={routes.reel} element={<ReelPage />} />
                 <Route path={routes.splice} element={<ReelPage />} />
               </Routes>
             </div>

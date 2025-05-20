@@ -1,5 +1,4 @@
 import type { ReactElement } from "react";
-import { useNavigate } from "react-router-dom";
 import { Breadcrumbs } from "../../components/Breadcrumbs/Breadcrumbs";
 import styles from "./FolderPage.module.css";
 import {
@@ -11,7 +10,6 @@ import { OptionsListItem } from "../../components/OptionsListItem/OptionsListIte
 import { getFolderContent } from "../../utils/getFolderContent";
 
 export function FolderPage(): ReactElement {
-  const navigate = useNavigate();
   const folderContent = useFolderContent();
 
   const onFolderSelectClick = async () => {
