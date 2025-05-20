@@ -4,7 +4,7 @@ import type { Splice } from "../../types/types";
 import { useElementSize } from "../../utils/hooks/useElementSize";
 import { useWaveformZoom } from "../../utils/hooks/useWaveformZoom";
 import { WaveformCanvas } from "./layers/WaveformCanvas";
-import { SplicesCanvas } from "./layers/SplicesCanvas";
+import { SplicesHtml } from "./layers/SplicesHtml";
 import { PlayheadCanvas } from "./layers/PlayheadCanvas";
 import { InteractionLayer } from "./layers/InteractionLayer";
 import { ZoomSlider } from "./ZoomSlider";
@@ -115,10 +115,14 @@ export function WaveformView({
                 splices={splices}
               />
             )}
-            <SplicesCanvas
+            <SplicesHtml
               splices={splices}
               viewPort={viewPort}
               size={wrapperSize}
+              onSpliceClick={(index) => {
+                // Add click handler functionality here if needed
+                console.log(`Splice ${index + 1} clicked`);
+              }}
             />
             <PlayheadCanvas viewPort={viewPort} size={wrapperSize} />
             <InteractionLayer

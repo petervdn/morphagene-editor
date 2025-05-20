@@ -103,10 +103,19 @@ export function drawWaveform({
       context.stroke();
     }
     
-    // Second pass: Draw highlighted parts (black)
+    // Second pass: Draw highlighted parts (white on blue background)
     if (highlightRange) {
+      // First draw the blue background for the highlighted area
+      const highlightStartX = Math.round((highlightRange.start - viewPort.from) / (viewPort.to - viewPort.from) * width);
+      const highlightEndX = Math.round((highlightRange.end - viewPort.from) / (viewPort.to - viewPort.from) * width);
+      const highlightWidth = Math.max(1, highlightEndX - highlightStartX);
+      
+      context.fillStyle = "#1E90FF"; // Fresh blue background
+      context.fillRect(highlightStartX, channelTop, highlightWidth, channelHeight);
+      
+      // Then draw the white waveform on top
       context.beginPath();
-      context.strokeStyle = "#000000"; // Black
+      context.strokeStyle = "#FFFFFF"; // White
       context.lineWidth = 1.5;
       
       isFirstPoint = true;
