@@ -25,6 +25,7 @@ export function InteractionLayer({
   onDrag,
 }: Props): ReactElement {
   const [isShiftPressed, setIsShiftPressed] = useState(false);
+  const [isAltPressed, setIsAltPressed] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [lastX, setLastX] = useState(0);
   const interactionRef = useRef<HTMLDivElement>(null);
@@ -34,12 +35,20 @@ export function InteractionLayer({
     const handleKeyDown = ({ key }: KeyboardEvent) => {
       if (key === "Shift") {
         setIsShiftPressed(true);
+      } else if (key === "Alt") {
+        setIsAltPressed(true);
       }
     };
 
     const handleKeyUp = ({ key }: KeyboardEvent) => {
       if (key === "Shift") {
         setIsShiftPressed(false);
+      } else if (key === "Alt") {
+        setIsAltPressed(false);
+        // Stop dragging if Alt is released during a drag operation
+        if (isDragging) {
+          setIsDragging(false);
+        }
       }
     };
 
@@ -50,7 +59,7 @@ export function InteractionLayer({
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
     };
-  }, []);
+  }, [isDragging]);
 
   // Handle mouse events for dragging
   useEffect(() => {
@@ -91,13 +100,16 @@ export function InteractionLayer({
         return;
       }
       
-      // Only start dragging if onDrag is provided
-      if (!onDrag) return;
+      // Only start dragging if Alt is pressed and onDrag is provided
+      if (!onDrag || !(e.altKey || isAltPressed)) return;
+      
+      // Prevent default browser behavior when Alt+clicking
+      e.preventDefault();
       
       setIsDragging(true);
       setLastX(e.clientX);
     },
-    [onDrag]
+    [onDrag, isAltPressed]
   );
 
   const handleClick = useCallback(
@@ -165,7 +177,7 @@ export function InteractionLayer({
           ? "crosshair" 
           : isDragging 
             ? "grabbing" 
-            : onDrag 
+            : isAltPressed && onDrag
               ? "grab" 
               : "default",
       }}

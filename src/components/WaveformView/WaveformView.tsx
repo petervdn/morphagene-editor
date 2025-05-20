@@ -116,7 +116,7 @@ export function WaveformView({
           />
         </div>
         <div className={styles.helpText}>
-          Shift+Click to add marker • Scroll to zoom • Drag to pan
+          Shift+Click to add marker • Scroll to zoom • Alt+Drag to pan
         </div>
       </div>
     </div>
