@@ -96,6 +96,12 @@
   cursor: not-allowed;
 }
 
+.disabledLink {
+  opacity: 0.5;
+  pointer-events: none;
+  text-decoration: none;
+}
+
 .navigationButtons {
   display: flex;
   justify-content: space-between;

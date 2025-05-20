@@ -1,5 +1,5 @@
 import { useCallback, type ReactElement } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { BsTrash, BsPlayCircle, BsStopCircle, BsZoomIn } from "react-icons/bs";
 import { MdSkipPrevious, MdSkipNext } from "react-icons/md";
 import { RiScissorsCutLine } from "react-icons/ri";
@@ -26,37 +26,40 @@ export function SpliceDetail({
   const { spliceIndex: spliceIndexParam } = useParams();
   const navigate = useNavigate();
   const audioPlayerProps = useAudioPlayer();
-  
+
   // Parse the splice index from the URL parameter
-  const spliceIndex = parseInt(spliceIndexParam || "0", 10);
-  
+  const spliceIndex = parseInt(spliceIndexParam || "0", 10) - 1;
+
   // Get the current splice
   const splice = splices[spliceIndex];
-  
+
   // Check if this is the first or last splice
   const isFirstSplice = spliceIndex === 0;
   const isLastSplice = spliceIndex === splices.length - 1;
-  
+
   // Calculate splice duration
   const spliceDuration = splice ? (splice.end - splice.start).toFixed(2) : "0";
-  
+
   // Check if the splice is currently playing
   const isPlaying = audioPlayerProps?.playingSound?.splice === splice;
-  
+
   // Handle play/stop
   const handlePlayToggle = useCallback(() => {
+    if (!audioPlayerProps) {
+      return;
+    }
     if (isPlaying) {
       audioPlayerProps.playingSound?.stop();
     } else if (splice && audioBuffer) {
       audioPlayerProps.playSound({ audioBuffer, splice });
     }
   }, [isPlaying, audioPlayerProps, splice, audioBuffer]);
-  
+
   // Handle delete
   const handleDelete = useCallback(() => {
     if (onDeleteSplice && !isFirstSplice) {
       onDeleteSplice(spliceIndex);
-      
+
       // Navigate to the previous splice if available, otherwise to the next one
       if (spliceIndex > 0) {
         navigate(getSplicePath(reelId, spliceIndex - 1), { replace: true });
@@ -64,33 +67,28 @@ export function SpliceDetail({
         navigate(getSplicePath(reelId, 0), { replace: true });
       }
     }
-  }, [onDeleteSplice, isFirstSplice, spliceIndex, navigate, reelId, splices.length]);
-  
+  }, [
+    onDeleteSplice,
+    isFirstSplice,
+    spliceIndex,
+    navigate,
+    reelId,
+    splices.length,
+  ]);
+
   // Handle zoom
   const handleZoom = useCallback(() => {
     if (onZoomToSplice && splice) {
       onZoomToSplice(splice.start, splice.end);
     }
   }, [onZoomToSplice, splice]);
-  
-  // Handle navigation to previous splice
-  const handlePrevSplice = useCallback(() => {
-    if (spliceIndex > 0) {
-      navigate(getSplicePath(reelId, spliceIndex - 1));
-    }
-  }, [navigate, reelId, spliceIndex]);
-  
-  // Handle navigation to next splice
-  const handleNextSplice = useCallback(() => {
-    if (spliceIndex < splices.length - 1) {
-      navigate(getSplicePath(reelId, spliceIndex + 1));
-    }
-  }, [navigate, reelId, spliceIndex, splices.length]);
-  
+
+  // Navigation is now handled directly by Link components
+
   if (!splice) {
     return <div>Splice not found</div>;
   }
-  
+
   return (
     <div className={styles.spliceDetail}>
       <div className={styles.spliceHeader}>
@@ -98,7 +96,7 @@ export function SpliceDetail({
           <RiScissorsCutLine /> Splice {spliceIndex + 1}
         </h3>
       </div>
-      
+
       <div className={styles.spliceInfo}>
         <div className={styles.infoItem}>
           <span className={styles.infoLabel}>Start Time</span>
@@ -113,7 +111,7 @@ export function SpliceDetail({
           <span className={styles.infoValue}>{spliceDuration}s</span>
         </div>
       </div>
-      
+
       <div className={styles.spliceActions}>
         <button
           className={`${styles.actionButton} ${styles.playButton}`}
@@ -131,7 +129,7 @@ export function SpliceDetail({
             </>
           )}
         </button>
-        
+
         <button
           className={`${styles.actionButton} ${styles.zoomButton}`}
           onClick={handleZoom}
@@ -140,7 +138,7 @@ export function SpliceDetail({
         >
           <BsZoomIn /> Zoom to Splice
         </button>
-        
+
         <button
           className={`${styles.actionButton} ${styles.deleteButton} ${
             isFirstSplice ? styles.disabledButton : ""
@@ -153,27 +151,33 @@ export function SpliceDetail({
           <BsTrash /> Delete
         </button>
       </div>
-      
+
       <div className={styles.navigationButtons}>
-        <button
-          className={styles.navButton}
-          onClick={handlePrevSplice}
-          disabled={isFirstSplice}
-          type="button"
+        <Link
+          to={spliceIndex > 0 ? getSplicePath(reelId, spliceIndex) : "#"}
+          className={`${styles.navButton} ${
+            isFirstSplice ? styles.disabledLink : ""
+          }`}
+          onClick={(e) => isFirstSplice && e.preventDefault()}
           title="Go to previous splice"
         >
           <MdSkipPrevious /> Previous Splice
-        </button>
-        
-        <button
-          className={styles.navButton}
-          onClick={handleNextSplice}
-          disabled={isLastSplice}
-          type="button"
+        </Link>
+
+        <Link
+          to={
+            spliceIndex < splices.length - 1
+              ? getSplicePath(reelId, spliceIndex + 2)
+              : "#"
+          }
+          className={`${styles.navButton} ${
+            isLastSplice ? styles.disabledLink : ""
+          }`}
+          onClick={(e) => isLastSplice && e.preventDefault()}
           title="Go to next splice"
         >
-          Next Splice <MdSkipNext />
-        </button>
+          <MdSkipNext /> Next Splice
+        </Link>
       </div>
     </div>
   );

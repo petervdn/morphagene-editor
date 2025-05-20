@@ -1,5 +1,5 @@
 import { useCallback, useRef, useEffect, type ReactElement } from "react";
-import { Outlet, useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { PiFilmReel } from "react-icons/pi";
 import { FiSave } from "react-icons/fi";
 import { BiSolidErrorCircle } from "react-icons/bi";
@@ -22,17 +22,24 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
   const navigate = useNavigate();
   const location = useLocation();
   // Create a ref to hold the zoomToRange function from WaveformView
-  const zoomToRangeRef = useRef<((start: number, end: number, options?: {
-    duration?: number;
-    easing?: string;
-  }) => void) | null>(null);
-  
+  const zoomToRangeRef = useRef<
+    | ((
+        start: number,
+        end: number,
+        options?: {
+          duration?: number;
+          easing?: string;
+        }
+      ) => void)
+    | null
+  >(null);
+
   // Function to zoom to a specific splice range
   const handleZoomToSplice = useCallback((start: number, end: number) => {
     if (zoomToRangeRef.current) {
       zoomToRangeRef.current(start, end, {
         duration: 700, // 700ms animation
-        easing: 'easeOutCubic' // only ease-out, no ease-in
+        easing: "easeOutCubic", // only ease-out, no ease-in
       });
     }
   }, []);
@@ -50,9 +57,6 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
     splices,
     highlightedSpliceIndex,
     hasUnsavedChanges,
-    onSpliceClick,
-    onSpliceMouseEnter,
-    onSpliceMouseLeave,
     onSpliceDelete,
     addMarker,
     saveChanges,
@@ -80,7 +84,9 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
           </h2>
           <div className={styles.reelMetadata}>
             <span>{reel.file.name}</span>
-            <span>{(reel.wavHeaderData.fileSize / 1024 / 1024).toFixed(2)} MB</span>
+            <span>
+              {(reel.wavHeaderData.fileSize / 1024 / 1024).toFixed(2)} MB
+            </span>
             <span>{reel.wavHeaderData.duration.toFixed(2)} seconds</span>
           </div>
         </div>
@@ -116,11 +122,11 @@ export function ReelDetails({ reel, audioBuffer }: Props): ReactElement {
         onAddMarker={addMarker}
         zoomToRangeRef={zoomToRangeRef}
       />
-      
+
       {/* Container for the SpliceDetail to ensure consistent width */}
       <div className={styles.spliceDetailContainer}>
         {/* Render the SpliceDetail component directly if we're on a splice route */}
-        {location.pathname.includes('/splice/') && (
+        {location.pathname.includes("/splice/") && (
           <SpliceDetail
             splices={splices}
             audioBuffer={audioBuffer}
