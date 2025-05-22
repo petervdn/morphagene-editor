@@ -1,9 +1,19 @@
 export type Reel = {
   id: string;
   name: string;
-  file: File;
+  fileName: string;
   fileHandle: FileSystemFileHandle;
   wavHeaderData: WavHeaderData;
+  audioBuffer: AudioBuffer | null;
+};
+
+export type ReelWithAudioBuffer = Omit<Reel, "audioBuffer"> & {
+  audioBuffer: AudioBuffer;
+};
+
+export type MorphageneOptions = {
+  fileHandle: FileSystemFileHandle;
+  content: string;
 };
 
 export type Size = {

@@ -1,16 +1,16 @@
 import { type ReactElement } from "react";
 import { Link } from "react-router-dom";
 import styles from "./ReelsListItem.module.css";
-import { getReelPath } from "../../routes/routes";
 import { PiFilmReel } from "react-icons/pi";
 import type { Reel } from "../../types/types";
+import { getReelPath } from "../../routes/utils/getReelPath";
 
 type Props = {
   reel: Reel;
 };
 
 export function ReelListItem({
-  reel: { file, id, name, wavHeaderData },
+  reel: { fileName, id, name, wavHeaderData },
 }: Props): ReactElement {
   return (
     <li className={styles.reelListItem}>
@@ -21,7 +21,7 @@ export function ReelListItem({
         </span>
         <span className={styles.reelMeta}>
           <>
-            {file.name} • {wavHeaderData.duration.toFixed(1)}s •{" "}
+            {fileName} • {wavHeaderData.duration.toFixed(1)}s •{" "}
             {wavHeaderData.cuePoints.length} splices
           </>
         </span>

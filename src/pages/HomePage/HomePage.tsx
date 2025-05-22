@@ -4,7 +4,6 @@ import styles from "./HomePage.module.css";
 import { routes } from "../../routes/routes";
 
 export function HomePage(): ReactElement {
-
   return (
     <div className={styles.homePage}>
       <div className={styles.homePageContent}>
@@ -23,7 +22,7 @@ export function HomePage(): ReactElement {
           className={styles.homePageImage}
         />
       </div>
-      <Link to={routes.folder} className={styles.getStartedBtn}>
+      <Link to={routes.folder} className={styles.start}>
         Get Started
       </Link>
     </div>

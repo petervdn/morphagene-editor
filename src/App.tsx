@@ -1,13 +1,9 @@
 import styles from "./App.module.css";
-import { Route, Routes } from "react-router-dom";
-import { HomePage } from "./pages/HomePage/HomePage";
-import { FolderPage } from "./pages/FolderPage/FolderPage";
-import { ReelPage } from "./pages/ReelPage/ReelPage";
-import { OptionsPage } from "./pages/OptionsPage/OptionsPage";
-import { routes } from "./routes/routes";
+import { RouterProvider } from "react-router-dom";
 import { AudioContextProvider } from "./context/AudioContextProvider";
 import { Footer } from "./components/Footer/Footer";
 import { AudioPlayerProvider } from "./context/AudioPlayerProvider";
+import { router } from "./routes/router";
 
 function App() {
   return (
@@ -21,12 +17,7 @@ function App() {
           </header>
           <div className={styles.appContainer}>
             <div className={styles.contentWrapper}>
-              <Routes>
-                <Route path={routes.home} element={<HomePage />} />
-                <Route path={routes.folder} element={<FolderPage />} />
-                <Route path={routes.options} element={<OptionsPage />} />
-                <Route path={routes.splice} element={<ReelPage />} />
-              </Routes>
+              <RouterProvider router={router} />
             </div>
           </div>
           <Footer />

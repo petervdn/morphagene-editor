@@ -4,8 +4,7 @@ export function createSplicesFromMarkers(
   markers: Array<Marker>
 ): Array<Splice> {
   if (markers.length === 0) {
-    // Return an empty array instead of throwing an error
-    return [];
+    throw new Error("There should always be at least one marker");
   }
 
   return markers.reduce<Array<Splice>>((accumulator, current, index) => {

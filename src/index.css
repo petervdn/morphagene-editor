@@ -19,17 +19,18 @@ a {
   font-weight: 500;
   color: #2c3e50;
   text-decoration: inherit;
-  transition: color 0.2s ease;
+  /* transition: color 0.2s ease; */
 }
 
 a:hover {
-  color: #1a2530;
+  /* color: #1a2530; */
+  text-decoration: underline;
 }
 
 /* Override visited link color */
-a:visited {
+/* a:visited {
   color: #2c3e50;
-}
+} */
 
 body {
   margin: 0;
@@ -44,7 +45,6 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  /* background-color: #1a1a1a; */
   cursor: pointer;
   transition: border-color 0.25s;
 }

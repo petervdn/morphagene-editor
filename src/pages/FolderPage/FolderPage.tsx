@@ -84,12 +84,12 @@ export function FolderPage(): ReactElement {
             </div>
           </div>
 
+          <ReelsList reels={folderContent.reels} />
           {folderContent.options && (
             <div className={styles.optionsContainer}>
-              <OptionsListItem options={folderContent.options} />
+              <OptionsListItem />
             </div>
           )}
-          <ReelsList reels={folderContent.reels} />
         </div>
       )}
     </div>

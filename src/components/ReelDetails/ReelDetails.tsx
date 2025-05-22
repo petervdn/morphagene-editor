@@ -1,74 +1,66 @@
-import { useCallback, useRef, type ReactElement } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { type ReactElement } from "react";
 import { PiFilmReel } from "react-icons/pi";
-import { FiSave } from "react-icons/fi";
-import { BiSolidErrorCircle } from "react-icons/bi";
-import { MdRestartAlt } from "react-icons/md";
 import styles from "./ReelDetails.module.css";
-import { WaveformView } from "../WaveformView/WaveformView";
+import type { ReelWithAudioBuffer } from "../../types/types";
 import { SpliceDetail } from "../SpliceDetail/SpliceDetail";
-import type { CuePoint, Reel } from "../../types/types";
-import { useSplices } from "../../utils/hooks/useSplices";
-import { useFolderContentStore } from "../../stores/folderContentStore";
+import { useActiveSplice } from "../../utils/hooks/useActiveSplice";
 
 type Props = {
-  reel: Reel;
-  audioBuffer: AudioBuffer;
-  zoomToRangeRef?: React.MutableRefObject<
-    | ((start: number, end: number, options?: any) => void)
-    | null
-  >;
-  setZoomLevelRef?: React.MutableRefObject<((level: number) => void) | null>;
+  reel: ReelWithAudioBuffer;
+  // zoomToRangeRef?: React.MutableRefObject<
+  //   ((start: number, end: number, options?: any) => void) | null
+  // >;
+  // setZoomLevelRef?: React.MutableRefObject<((level: number) => void) | null>;
 };
 
-export function ReelDetails({ reel, audioBuffer, zoomToRangeRef, setZoomLevelRef }: Props): ReactElement {
-  const { reelId } = useParams();
+export function ReelDetails({ reel }: Props): ReactElement {
+  // const location = useLocation();
+  // // Create a ref to hold the zoomToRange function from WaveformView
+  // const internalZoomToRangeRef = useRef<
+  //   | ((
+  //       start: number,
+  //       end: number,
+  //       options?: {
+  //         duration?: number;
+  //         easing?: string;
+  //       }
+  //     ) => void)
+  //   | null
+  // >(null);
 
-  const location = useLocation();
-  // Create a ref to hold the zoomToRange function from WaveformView
-  const internalZoomToRangeRef = useRef<
-    | ((
-        start: number,
-        end: number,
-        options?: {
-          duration?: number;
-          easing?: string;
-        }
-      ) => void)
-    | null
-  >(null);
+  // // Function to zoom to a specific splice range
+  // const handleZoomToSplice = useCallback((start: number, end: number) => {
+  //   if (internalZoomToRangeRef.current) {
+  //     internalZoomToRangeRef.current(start, end, {
+  //       duration: 700, // 700ms animation
+  //       easing: "easeOutCubic", // only ease-out, no ease-in
+  //     });
+  //   }
+  // }, []);
+  // const updateReelCuePoints = useFolderContentStore(
+  //   (state) => state.updateReelCuePoints
+  // );
 
-  // Function to zoom to a specific splice range
-  const handleZoomToSplice = useCallback((start: number, end: number) => {
-    if (internalZoomToRangeRef.current) {
-      internalZoomToRangeRef.current(start, end, {
-        duration: 700, // 700ms animation
-        easing: "easeOutCubic", // only ease-out, no ease-in
-      });
-    }
-  }, []);
-  const updateReelCuePoints = useFolderContentStore(
-    (state) => state.updateReelCuePoints
-  );
+  // const handleReelUpdated = useCallback(
+  //   (reelId: string, cuePoints: Array<CuePoint>) => {
+  //     updateReelCuePoints(reelId, cuePoints);
+  //   },
+  //   [updateReelCuePoints]
+  // );
+  // const {
+  //   splices,
+  //   hasUnsavedChanges,
+  //   onSpliceDelete,
+  //   addMarker,
+  //   saveChanges,
+  //   resetChanges,
+  // } = useSplices({
+  //   reel,
+  //   audioBuffer,
+  //   onReelUpdated: handleReelUpdated,
+  // });
 
-  const handleReelUpdated = useCallback(
-    (reelId: string, cuePoints: Array<CuePoint>) => {
-      updateReelCuePoints(reelId, cuePoints);
-    },
-    [updateReelCuePoints]
-  );
-  const {
-    splices,
-    hasUnsavedChanges,
-    onSpliceDelete,
-    addMarker,
-    saveChanges,
-    resetChanges,
-  } = useSplices({
-    reel,
-    audioBuffer,
-    onReelUpdated: handleReelUpdated,
-  });
+  const splice = useActiveSplice({ reel });
 
   return (
     <>
@@ -78,14 +70,14 @@ export function ReelDetails({ reel, audioBuffer, zoomToRangeRef, setZoomLevelRef
             <PiFilmReel /> {reel.name}
           </h2>
           <div className={styles.reelMetadata}>
-            <span>{reel.file.name}</span>
+            <span>{reel.fileName}</span>
             <span>
               {(reel.wavHeaderData.fileSize / 1024 / 1024).toFixed(2)} MB
             </span>
             <span>{reel.wavHeaderData.duration.toFixed(2)} seconds</span>
           </div>
         </div>
-        {hasUnsavedChanges && (
+        {/* {hasUnsavedChanges && (
           <div className={styles.saveContainer}>
             <div className={styles.unsavedIndicator}>
               <BiSolidErrorCircle className={styles.warningIcon} />
@@ -108,9 +100,9 @@ export function ReelDetails({ reel, audioBuffer, zoomToRangeRef, setZoomLevelRef
               </button>
             </div>
           </div>
-        )}
+        )} */}
       </div>
-      <WaveformView
+      {/* <WaveformView
         audioBuffer={audioBuffer}
         splices={splices}
         onAddMarker={addMarker}
@@ -120,18 +112,15 @@ export function ReelDetails({ reel, audioBuffer, zoomToRangeRef, setZoomLevelRef
             setZoomLevelRef.current = setZoomLevel;
           }
         }}
-      />
+      /> */}
 
-      {/* Container for the SpliceDetail to ensure consistent width */}
       <div className={styles.spliceDetailContainer}>
-        {/* Render the SpliceDetail component directly if we're on a splice route */}
-        {location.pathname.includes("/splice/") && (
+        {splice && (
           <SpliceDetail
-            splices={splices}
-            audioBuffer={audioBuffer}
-            reelId={reelId!}
-            onDeleteSplice={onSpliceDelete}
-            onZoomToSplice={handleZoomToSplice}
+            splice={splice}
+            reel={reel}
+            // onDeleteSplice={onSpliceDelete}
+            // onZoomToSplice={handleZoomToSplice}
           />
         )}
       </div>

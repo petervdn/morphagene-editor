@@ -1,40 +1,47 @@
 import { useCallback, type ReactElement } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BsTrash, BsPlayCircle, BsStopCircle, BsZoomIn } from "react-icons/bs";
 import { MdSkipPrevious, MdSkipNext } from "react-icons/md";
 import { RiScissorsCutLine } from "react-icons/ri";
 import { useAudioPlayer } from "../../utils/hooks/useAudioPlayer";
 import styles from "./SpliceDetail.module.css";
-import type { Splice } from "../../types/types";
-import { getSplicePath } from "../../routes/routes";
-import { useSplice } from "../../utils/hooks/useSpliceFromUrl";
+import type { ReelWithAudioBuffer, Splice } from "../../types/types";
+import { useSpliceNavigation } from "../../utils/hooks/useSpliceNavigation";
+import { usePathParams } from "../../utils/hooks/usePathParams";
 
 type Props = {
-  splices: Array<Splice>;
-  audioBuffer: AudioBuffer;
-  reelId: string;
-  onDeleteSplice: (index: number) => void;
-  onZoomToSplice: (start: number, end: number) => void;
+  splice: Splice;
+  // audioBuffer: AudioBuffer;
+  reel: ReelWithAudioBuffer;
+  // onDeleteSplice: (index: number) => void;
+  // onZoomToSplice: (start: number, end: number) => void;
 };
 
 export function SpliceDetail({
-  splices,
-  audioBuffer,
-  reelId,
-  onDeleteSplice,
-  onZoomToSplice,
-}: Props): ReactElement {
-  // const { spliceIndex: spliceIndexParam } = useParams();
-  const navigate = useNavigate();
+  splice,
+  // audioBuffer,
+  reel,
+}: // onDeleteSplice,
+// onZoomToSplice,
+Props): ReactElement {
+  const { spliceId } = usePathParams();
+  // const navigate = useNavigate();
   const audioPlayerProps = useAudioPlayer();
+
   const {
-    isFirstSplice,
-    isLastSplice,
-    splice,
-    spliceDuration,
-    spliceIndex,
-    spliceId,
-  } = useSplice(splices);
+    hasNextSplice,
+    hasPreviousSplice,
+    nextSplicePath,
+    previousSplicePath,
+  } = useSpliceNavigation({ reel, activeSplice: splice });
+  // const {
+  //   isFirstSplice,
+  //   isLastSplice,
+  //   splice,
+  //   spliceDuration,
+  //   spliceIndex,
+  //   spliceId,
+  // } = useSplice(splices);
 
   // Check if the splice is currently playing
   const isPlaying = audioPlayerProps?.playingSound?.splice === splice;
@@ -46,43 +53,47 @@ export function SpliceDetail({
     }
     if (isPlaying) {
       audioPlayerProps.playingSound?.stop();
-    } else if (splice && audioBuffer) {
-      audioPlayerProps.playSound({ audioBuffer, splice });
+    } else {
+      audioPlayerProps.playSound({ audioBuffer: reel.audioBuffer, splice });
     }
-  }, [isPlaying, audioPlayerProps, splice, audioBuffer]);
+  }, [audioPlayerProps, isPlaying, reel.audioBuffer, splice]);
 
   // Handle delete
-  const handleDelete = useCallback(() => {
-    if (spliceIndex === undefined || spliceId === undefined) {
-      return;
-    }
+  // const handleDelete = useCallback(() => {
+  //   if (spliceIndex === undefined || spliceId === undefined) {
+  //     return;
+  //   }
 
-    if (onDeleteSplice && !isFirstSplice) {
-      onDeleteSplice(spliceIndex);
+  //   if (onDeleteSplice && !isFirstSplice) {
+  //     onDeleteSplice(spliceIndex);
 
-      // Navigate to the previous splice if available, otherwise to the next one
-      // if (spliceIndex > 0) {
-      //   navigate(getSplicePath(reelId, spliceId), { replace: true });
-      // } else if (splices.length > 1) {
-      //   navigate(getSplicePath(reelId, 0), { replace: true });
-      // }
-      navigate(getSplicePath(reelId, "1"), { replace: true });
-    }
-  }, [spliceIndex, spliceId, onDeleteSplice, isFirstSplice, navigate, reelId]);
+  //     // Navigate to the previous splice if available, otherwise to the next one
+  //     // if (spliceIndex > 0) {
+  //     //   navigate(getSplicePath(reelId, spliceId), { replace: true });
+  //     // } else if (splices.length > 1) {
+  //     //   navigate(getSplicePath(reelId, 0), { replace: true });
+  //     // }
+  //     navigate(getSplicePath(reel.id, "1"), { replace: true });
+  //   }
+  // }, [spliceIndex, spliceId, onDeleteSplice, isFirstSplice, navigate, reel.id]);
 
   // Handle zoom
-  const handleZoom = useCallback(() => {
-    if (onZoomToSplice && splice) {
-      onZoomToSplice(splice.start, splice.end);
-    }
-  }, [onZoomToSplice, splice]);
+  // const handleZoom = useCallback(() => {
+  //   if (onZoomToSplice && splice) {
+  //     onZoomToSplice(splice.start, splice.end);
+  //   }
+  // }, [onZoomToSplice, splice]);
 
   // Navigation is now handled directly by Link components
 
-  if (!splice || typeof spliceIndex !== "number") {
-    return <div>Splice not found</div>;
-  }
+  // if (!splice || typeof spliceIndex !== "number") {
+  //   return <div>Splice not found</div>;
+  // }
 
+  console.log({
+    nextSplicePath,
+    previousSplicePath,
+  });
   return (
     <div className={styles.spliceDetail}>
       <div className={styles.spliceHeader}>
@@ -102,7 +113,7 @@ export function SpliceDetail({
         </div>
         <div className={styles.infoItem}>
           <span className={styles.infoLabel}>Duration</span>
-          <span className={styles.infoValue}>{spliceDuration}s</span>
+          <span className={styles.infoValue}>{2}s</span>
         </div>
       </div>
 
@@ -126,7 +137,7 @@ export function SpliceDetail({
 
         <button
           className={`${styles.actionButton} ${styles.zoomButton}`}
-          onClick={handleZoom}
+          //onClick={handleZoom}
           type="button"
           title="Zoom to splice"
         >
@@ -134,13 +145,11 @@ export function SpliceDetail({
         </button>
 
         <button
-          className={`${styles.actionButton} ${styles.deleteButton} ${
-            isFirstSplice ? styles.disabledButton : ""
-          }`}
-          onClick={handleDelete}
-          disabled={isFirstSplice}
+          className={`${styles.actionButton} ${styles.deleteButton}`}
+          // onClick={handleDelete}
+          // disabled={isFirstSplice}
           type="button"
-          title={isFirstSplice ? "Cannot delete first splice" : "Delete splice"}
+          // title={isFirstSplice ? "Cannot delete first splice" : "Delete splice"}
         >
           <BsTrash /> Delete
         </button>
@@ -148,28 +157,20 @@ export function SpliceDetail({
 
       <div className={styles.navigationButtons}>
         <Link
-          to={
-            spliceIndex > 0 ? getSplicePath(reelId, String(spliceIndex)) : "#"
-          }
+          to={previousSplicePath ?? ""}
           className={`${styles.navButton} ${
-            isFirstSplice ? styles.disabledLink : ""
+            !hasPreviousSplice ? styles.disabledLink : ""
           }`}
-          onClick={(e) => isFirstSplice && e.preventDefault()}
           title="Go to previous splice"
         >
           <MdSkipPrevious /> Previous Splice
         </Link>
 
         <Link
-          to={
-            spliceIndex < splices.length - 1
-              ? getSplicePath(reelId, String(spliceIndex + 2))
-              : "#"
-          }
+          to={nextSplicePath ?? ""}
           className={`${styles.navButton} ${
-            isLastSplice ? styles.disabledLink : ""
+            !hasNextSplice ? styles.disabledLink : ""
           }`}
-          onClick={(e) => isLastSplice && e.preventDefault()}
           title="Go to next splice"
         >
           <MdSkipNext /> Next Splice
