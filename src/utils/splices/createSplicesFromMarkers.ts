@@ -1,4 +1,4 @@
-import type { Marker, Splice } from "../types/types";
+import type { Marker, Splice } from "../../types/types";
 
 export function createSplicesFromMarkers(
   markers: Array<Marker>

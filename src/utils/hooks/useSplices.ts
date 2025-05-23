@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import type { CuePoint, Marker, Reel, Splice } from "../../types/types";
-import { createSplicesFromMarkers } from "../createSplicesFromMarkers";
+import { createSplicesFromMarkers } from "../splices/createSplicesFromMarkers";
 
 type UseSplicesProps = {
   reel: Reel;

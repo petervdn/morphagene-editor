@@ -1,7 +1,7 @@
-import type { FolderContent } from "../stores/folderContentStore";
-import type { MorphageneOptions, Reel } from "../types/types";
-import { parseWavFileHeader } from "./audio/parseWavFileHeader";
-import { reelFileNames } from "./reelFileNames";
+import type { FolderContent } from "../../stores/folderContentStore";
+import type { MorphageneOptions, Reel } from "../../types/types";
+import { parseWavFileHeader } from "../audio/parseWavFileHeader";
+import { reelFileNames } from "../../constants/reelFileNames";
 
 // todo: prevent gaps?
 export async function getFolderContent(

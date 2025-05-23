@@ -2,7 +2,7 @@ import {
   type OptionDefinition,
   type OptionsData,
   optionDefinitions,
-} from "../types/optionsTypes";
+} from "../../types/optionsTypes";
 
 /**
  * Parses the options.txt file content into a structured format

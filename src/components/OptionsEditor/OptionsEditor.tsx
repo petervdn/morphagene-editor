@@ -3,7 +3,7 @@ import { type OptionsData } from "../../types/optionsTypes";
 import {
   parseOptionsFile,
   serializeOptionsData,
-} from "../../utils/parseOptionsFile";
+} from "../../utils/folder/parseOptionsFile";
 import { OptionItem } from "./OptionItem";
 import styles from "./OptionsEditor.module.css";
 import { FiSave, FiAlertCircle, FiCheckCircle } from "react-icons/fi";

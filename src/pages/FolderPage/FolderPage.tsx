@@ -7,7 +7,7 @@ import {
 } from "../../stores/folderContentStore";
 import { ReelsList } from "../../components/ReelsList/ReelsList";
 import { OptionsListItem } from "../../components/OptionsListItem/OptionsListItem";
-import { getFolderContent } from "../../utils/getFolderContent";
+import { getFolderContent } from "../../utils/folder/getFolderContent";
 
 export function FolderPage(): ReactElement {
   const folderContent = useFolderContent();

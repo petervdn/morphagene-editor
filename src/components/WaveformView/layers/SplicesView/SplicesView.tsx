@@ -1,5 +1,10 @@
 import type { ReactElement } from "react";
-import type { Range, Size, Splice } from "../../../../types/types";
+import type {
+  Range,
+  ReelWithAudioBuffer,
+  Size,
+  Splice,
+} from "../../../../types/types";
 import styles from "./SplicesView.module.css";
 import { SplicesViewItem } from "./SplicesViewItem";
 
@@ -7,9 +12,15 @@ type Props = {
   size: Size;
   splices: Array<Splice>;
   viewPort: Range;
+  reel: ReelWithAudioBuffer;
 };
 
-export function SplicesView({ size, splices, viewPort }: Props): ReactElement {
+export function SplicesView({
+  size,
+  splices,
+  viewPort,
+  reel,
+}: Props): ReactElement {
   return (
     <div
       className={styles.wrapper}
@@ -17,7 +28,8 @@ export function SplicesView({ size, splices, viewPort }: Props): ReactElement {
     >
       {splices.map((splice, index) => (
         <SplicesViewItem
-          index={index}
+          reel={reel}
+          spliceIndex={index}
           splice={splice}
           size={size}
           viewPort={viewPort}

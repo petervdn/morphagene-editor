@@ -106,7 +106,7 @@ export function ReelDetails({ reel }: Props): ReactElement {
         )} */}
       </div>
       <WaveformView
-        audioBuffer={reel.audioBuffer}
+        reel={reel}
         splices={splices}
         // onAddMarker={addMarker}
         // zoomToRangeRef={zoomToRangeRef || internalZoomToRangeRef}

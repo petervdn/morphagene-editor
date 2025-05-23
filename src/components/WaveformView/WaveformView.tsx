@@ -1,14 +1,16 @@
 import { useRef, type ReactElement } from "react";
 import styles from "./WaveformView.module.css";
-import type { Splice } from "../../types/types";
+import type { ReelWithAudioBuffer, Splice } from "../../types/types";
 import { useElementSize } from "../../utils/hooks/useElementSize";
 import { useWaveformZoom } from "../../utils/hooks/useWaveformZoom";
 import { WaveformCanvas } from "./layers/WaveformCanvas";
 import { SplicesView } from "./layers/SplicesView/SplicesView";
+import { PlayheadCanvas } from "./layers/PlayheadCanvas";
 
 interface WaveformViewProps {
-  audioBuffer: AudioBuffer;
+  // audioBuffer: AudioBuffer;
   splices: Splice[];
+  reel: ReelWithAudioBuffer;
 
   // onAddMarker?: (time: number) => void;
   // zoomToRangeRef?: React.MutableRefObject<
@@ -35,7 +37,7 @@ interface WaveformViewProps {
 }
 
 export function WaveformView({
-  audioBuffer,
+  reel,
   splices,
 }: // onAddMarker,
 // zoomToRangeRef,
@@ -53,7 +55,7 @@ WaveformViewProps): ReactElement {
     // setZoomLevel,
     // zoomToRange,
   } = useWaveformZoom({
-    audioDuration: audioBuffer.duration,
+    audioDuration: reel.audioBuffer.duration,
     // maxZoom,
   });
 
@@ -115,21 +117,24 @@ WaveformViewProps): ReactElement {
           <>
             <div className={styles.layer}>
               <WaveformCanvas
-                audioBuffer={audioBuffer}
+                audioBuffer={reel.audioBuffer}
                 viewPort={viewPort}
                 size={wrapperSize}
               />
             </div>
+            <div className={styles.layer}>
+              <PlayheadCanvas viewPort={viewPort} size={wrapperSize} />
+            </div>
 
             <div className={styles.layer}>
               <SplicesView
+                reel={reel}
                 size={wrapperSize}
                 splices={splices}
                 viewPort={viewPort}
               />
             </div>
 
-            {/* <PlayheadCanvas viewPort={viewPort} size={wrapperSize} /> */}
             {/* <InteractionLayer
               viewPort={viewPort}
               size={wrapperSize}
