@@ -6,6 +6,7 @@ import { SpliceDetail } from "../SpliceDetail/SpliceDetail";
 import { useActiveSplice } from "../../utils/hooks/useActiveSplice";
 import { useSplices } from "../../utils/hooks/useSplices";
 import { WaveformView } from "../WaveformView/WaveformView";
+import { SpliceNavigation } from "../SpliceNavigation/SpliceNavigation";
 
 type Props = {
   reel: ReelWithAudioBuffer;
@@ -117,17 +118,21 @@ export function ReelDetails({ reel }: Props): ReactElement {
         // }}
       />
 
-      <div className={styles.spliceDetailContainer}>
-        {splice && (
-          <SpliceDetail
-            splice={splice}
-            reel={reel}
-            totalAmountOfSplices={splices?.length}
-            // onDeleteSplice={onSpliceDelete}
-            // onZoomToSplice={handleZoomToSplice}
-          />
-        )}
-      </div>
+      {splice && (
+        <>
+          <SpliceNavigation reel={reel} activeSplice={splice} />
+
+          <div className={styles.spliceDetailContainer}>
+            <SpliceDetail
+              splice={splice}
+              reel={reel}
+              totalAmountOfSplices={splices?.length}
+              // onDeleteSplice={onSpliceDelete}
+              // onZoomToSplice={handleZoomToSplice}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 }

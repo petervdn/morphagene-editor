@@ -8,14 +8,10 @@
   width: 100%;
   height: 250px;
   background-color: #f8f9fa;
-  /* border-radius: 6px;
-  border: 1px solid #e9ecef; */
   position: relative;
   overflow: hidden;
   margin-bottom: 8px;
 }
-
-/* Canvas layers are now positioned directly in the SizedCanvas component */
 
 .wrapper canvas {
   display: block;

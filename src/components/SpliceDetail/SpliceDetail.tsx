@@ -8,6 +8,7 @@ import styles from "./SpliceDetail.module.css";
 import type { ReelWithAudioBuffer, Splice } from "../../types/types";
 import { useSpliceNavigation } from "../../utils/hooks/useSpliceNavigation";
 import { usePathParams } from "../../utils/hooks/usePathParams";
+import { SpliceNavigation } from "../SpliceNavigation/SpliceNavigation";
 
 type Props = {
   splice: Splice;
@@ -30,12 +31,6 @@ Props): ReactElement {
   // const navigate = useNavigate();
   const audioPlayerProps = useAudioPlayer();
 
-  const {
-    hasNextSplice,
-    hasPreviousSplice,
-    nextSplicePath,
-    previousSplicePath,
-  } = useSpliceNavigation({ reel, activeSplice: splice });
   // const {
   //   isFirstSplice,
   //   isLastSplice,
@@ -152,28 +147,6 @@ Props): ReactElement {
         >
           <BsTrash /> Delete
         </button>
-      </div>
-
-      <div className={styles.navigationButtons}>
-        <Link
-          to={previousSplicePath ?? ""}
-          className={`${styles.navButton} ${
-            !hasPreviousSplice ? styles.disabledLink : ""
-          }`}
-          title="Go to previous splice"
-        >
-          <MdSkipPrevious /> Previous Splice
-        </Link>
-
-        <Link
-          to={nextSplicePath ?? ""}
-          className={`${styles.navButton} ${
-            !hasNextSplice ? styles.disabledLink : ""
-          }`}
-          title="Go to next splice"
-        >
-          <MdSkipNext /> Next Splice
-        </Link>
       </div>
     </div>
   );
