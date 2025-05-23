@@ -4,7 +4,7 @@ import type { Splice } from "../../types/types";
 import { useElementSize } from "../../utils/hooks/useElementSize";
 import { useWaveformZoom } from "../../utils/hooks/useWaveformZoom";
 import { WaveformCanvas } from "./layers/WaveformCanvas";
-import { PlayheadCanvas } from "./layers/PlayheadCanvas";
+import { SplicesView } from "./layers/SplicesView/SplicesView";
 
 interface WaveformViewProps {
   audioBuffer: AudioBuffer;
@@ -113,22 +113,22 @@ WaveformViewProps): ReactElement {
       <div className={styles.wrapper} ref={wrapperRef}>
         {wrapperSize && (
           <>
-            {audioBuffer && (
+            <div className={styles.layer}>
               <WaveformCanvas
                 audioBuffer={audioBuffer}
                 viewPort={viewPort}
                 size={wrapperSize}
               />
-            )}
-            {/* <SplicesHtml
-              splices={splices}
-              viewPort={viewPort}
-              size={wrapperSize}
-              onSpliceClick={(index) => {
-                // Add click handler functionality here if needed
-                console.log(`Splice ${index + 1} clicked`);
-              }}
-            /> */}
+            </div>
+
+            <div className={styles.layer}>
+              <SplicesView
+                size={wrapperSize}
+                splices={splices}
+                viewPort={viewPort}
+              />
+            </div>
+
             {/* <PlayheadCanvas viewPort={viewPort} size={wrapperSize} /> */}
             {/* <InteractionLayer
               viewPort={viewPort}
