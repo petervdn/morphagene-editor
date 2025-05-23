@@ -4,6 +4,8 @@ import styles from "./ReelDetails.module.css";
 import type { ReelWithAudioBuffer } from "../../types/types";
 import { SpliceDetail } from "../SpliceDetail/SpliceDetail";
 import { useActiveSplice } from "../../utils/hooks/useActiveSplice";
+import { useSplices } from "../../utils/hooks/useSplices";
+import { WaveformView } from "../WaveformView/WaveformView";
 
 type Props = {
   reel: ReelWithAudioBuffer;
@@ -61,6 +63,7 @@ export function ReelDetails({ reel }: Props): ReactElement {
   // });
 
   const splice = useActiveSplice({ reel });
+  const { splices } = useSplices({ reel });
 
   return (
     <>
@@ -102,23 +105,24 @@ export function ReelDetails({ reel }: Props): ReactElement {
           </div>
         )} */}
       </div>
-      {/* <WaveformView
-        audioBuffer={audioBuffer}
+      <WaveformView
+        audioBuffer={reel.audioBuffer}
         splices={splices}
-        onAddMarker={addMarker}
-        zoomToRangeRef={zoomToRangeRef || internalZoomToRangeRef}
-        onZoomLevelChange={(setZoomLevel) => {
-          if (setZoomLevelRef) {
-            setZoomLevelRef.current = setZoomLevel;
-          }
-        }}
-      /> */}
+        // onAddMarker={addMarker}
+        // zoomToRangeRef={zoomToRangeRef || internalZoomToRangeRef}
+        // onZoomLevelChange={(setZoomLevel) => {
+        //   if (setZoomLevelRef) {
+        //     setZoomLevelRef.current = setZoomLevel;
+        //   }
+        // }}
+      />
 
       <div className={styles.spliceDetailContainer}>
         {splice && (
           <SpliceDetail
             splice={splice}
             reel={reel}
+            totalAmountOfSplices={splices?.length}
             // onDeleteSplice={onSpliceDelete}
             // onZoomToSplice={handleZoomToSplice}
           />

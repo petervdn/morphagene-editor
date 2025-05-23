@@ -11,14 +11,16 @@ import { usePathParams } from "../../utils/hooks/usePathParams";
 
 type Props = {
   splice: Splice;
-  // audioBuffer: AudioBuffer;
+  totalAmountOfSplices: number;
   reel: ReelWithAudioBuffer;
+  // audioBuffer: AudioBuffer;
   // onDeleteSplice: (index: number) => void;
   // onZoomToSplice: (start: number, end: number) => void;
 };
 
 export function SpliceDetail({
   splice,
+  totalAmountOfSplices,
   // audioBuffer,
   reel,
 }: // onDeleteSplice,
@@ -90,15 +92,12 @@ Props): ReactElement {
   //   return <div>Splice not found</div>;
   // }
 
-  console.log({
-    nextSplicePath,
-    previousSplicePath,
-  });
   return (
     <div className={styles.spliceDetail}>
       <div className={styles.spliceHeader}>
         <h3 className={styles.spliceTitle}>
-          <RiScissorsCutLine /> Splice {spliceId}
+          <RiScissorsCutLine /> Splice {spliceId}{" "}
+          <small>of {totalAmountOfSplices}</small>
         </h3>
       </div>
 

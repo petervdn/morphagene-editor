@@ -5,6 +5,11 @@ import { Footer } from "./components/Footer/Footer";
 import { AudioPlayerProvider } from "./context/AudioPlayerProvider";
 import { router } from "./routes/router";
 
+/*
+- add mm linting
+- unify ids/index for both reels and splices
+*/
+
 function App() {
   return (
     <AudioContextProvider>

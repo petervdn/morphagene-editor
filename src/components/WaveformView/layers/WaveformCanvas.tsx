@@ -1,46 +1,36 @@
 import { useEffect, useCallback, type ReactElement, useRef } from "react";
-import { drawWaveform } from "../../../utils/canvas/drawWaveform";
-import type { ViewPort, Splice } from "../../../types/types";
+import type { Range } from "../../../types/types";
 import type { Size } from "../../../types/types";
 import { SizedCanvas } from "../../SizedCanvas/SizedCanvas";
-import { useSplice } from "../../../utils/hooks/useSpliceFromUrl";
+import { drawWaveformChannels } from "../../../utils/canvas/drawWaveform";
 
 type Props = {
   audioBuffer: AudioBuffer;
-  viewPort: ViewPort;
+  viewPort: Range;
   size: Size;
-  splices: Array<Splice>;
+  highlightRange?: Range;
 };
 
 export function WaveformCanvas({
   audioBuffer,
   viewPort,
   size,
-  splices,
+  highlightRange,
 }: Props): ReactElement {
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
 
-  // Get the selected splice from the URL
-  const { splice } = useSplice(splices);
-
   useEffect(() => {
-    if (!contextRef.current || !viewPort || !size) {
+    if (!contextRef.current) {
       return;
     }
 
-    // Only create a highlight range if a splice is selected
-    const highlightRange = splice
-      ? { start: splice.start, end: splice.end }
-      : undefined;
-
-    drawWaveform({
+    drawWaveformChannels({
       audioBuffer,
       context: contextRef.current,
       viewPort,
-      numberOfChannels: audioBuffer.numberOfChannels,
-      highlightRange,
+      channels: [0, 1],
     });
-  }, [audioBuffer, viewPort, size, splice]);
+  }, [audioBuffer, viewPort, size, highlightRange]);
 
   const onCanvasRef = useCallback((canvasElement: HTMLCanvasElement | null) => {
     contextRef.current = canvasElement?.getContext("2d") ?? null;

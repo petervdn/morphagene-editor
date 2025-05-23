@@ -21,9 +21,9 @@ export type Size = {
   height: number;
 };
 
-export type ViewPort = {
-  from: number;
-  to: number;
+export type Range = {
+  start: number;
+  end: number;
 };
 
 export type CuePoint = {
@@ -60,7 +60,4 @@ export type Marker = {
   time: number;
 };
 
-export type Splice = {
-  start: number;
-  end: number;
-};
+export type Splice = Range;

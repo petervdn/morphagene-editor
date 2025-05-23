@@ -1,115 +1,112 @@
-import { useRef, useEffect, type ReactElement } from "react";
+import { useRef, type ReactElement } from "react";
 import styles from "./WaveformView.module.css";
 import type { Splice } from "../../types/types";
 import { useElementSize } from "../../utils/hooks/useElementSize";
 import { useWaveformZoom } from "../../utils/hooks/useWaveformZoom";
 import { WaveformCanvas } from "./layers/WaveformCanvas";
-import { SplicesHtml } from "./layers/SplicesHtml";
 import { PlayheadCanvas } from "./layers/PlayheadCanvas";
-import { InteractionLayer } from "./layers/InteractionLayer";
-import { ZoomSlider } from "./ZoomSlider";
 
 interface WaveformViewProps {
-  audioBuffer: AudioBuffer | null;
+  audioBuffer: AudioBuffer;
   splices: Splice[];
 
-  onAddMarker?: (time: number) => void;
-  zoomToRangeRef?: React.MutableRefObject<
-    | ((
-        start: number,
-        end: number,
-        options?: {
-          duration?: number;
-          easing?:
-            | "linear"
-            | "easeInQuad"
-            | "easeOutQuad"
-            | "easeInOutQuad"
-            | "easeInCubic"
-            | "easeOutCubic"
-            | "easeInOutCubic"
-            | "easeOutElastic";
-        }
-      ) => void)
-    | null
-  >;
-  maxZoom?: number;
-  onZoomLevelChange?: (setZoomLevel: (level: number) => void) => void;
+  // onAddMarker?: (time: number) => void;
+  // zoomToRangeRef?: React.MutableRefObject<
+  //   | ((
+  //       start: number,
+  //       end: number,
+  //       options?: {
+  //         duration?: number;
+  //         easing?:
+  //           | "linear"
+  //           | "easeInQuad"
+  //           | "easeOutQuad"
+  //           | "easeInOutQuad"
+  //           | "easeInCubic"
+  //           | "easeOutCubic"
+  //           | "easeInOutCubic"
+  //           | "easeOutElastic";
+  //       }
+  //     ) => void)
+  //   | null
+  // >;
+  // maxZoom?: number;
+  // onZoomLevelChange?: (setZoomLevel: (level: number) => void) => void;
 }
 
 export function WaveformView({
   audioBuffer,
   splices,
-  onAddMarker,
-  zoomToRangeRef,
-  maxZoom = 50,
-  onZoomLevelChange,
-}: WaveformViewProps): ReactElement {
+}: // onAddMarker,
+// zoomToRangeRef,
+// maxZoom = 50,
+// onZoomLevelChange,
+WaveformViewProps): ReactElement {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const wrapperSize = useElementSize({ elementRef: wrapperRef });
 
   const {
     viewPort,
-    zoomLevel,
-    handleWheel,
-    handleDrag,
-    setZoomLevel,
-    zoomToRange,
+    // zoomLevel,
+    // handleWheel,
+    // handleDrag,
+    // setZoomLevel,
+    // zoomToRange,
   } = useWaveformZoom({
-    audioDuration: audioBuffer?.duration || 0,
-    maxZoom,
+    audioDuration: audioBuffer.duration,
+    // maxZoom,
   });
 
-  // Expose the zoomToRange function via ref if provided
-  useEffect(() => {
-    if (zoomToRangeRef) {
-      zoomToRangeRef.current = zoomToRange;
-    }
+  // // Expose the zoomToRange function via ref if provided
+  // useEffect(() => {
+  //   if (zoomToRangeRef) {
+  //     zoomToRangeRef.current = zoomToRange;
+  //   }
 
-    return () => {
-      if (zoomToRangeRef) {
-        zoomToRangeRef.current = null;
-      }
-    };
-  }, [zoomToRange, zoomToRangeRef]);
-  
-  // Expose the setZoomLevel function via callback if provided
-  useEffect(() => {
-    if (onZoomLevelChange) {
-      onZoomLevelChange(setZoomLevel);
-    }
-  }, [onZoomLevelChange, setZoomLevel]);
+  //   return () => {
+  //     if (zoomToRangeRef) {
+  //       zoomToRangeRef.current = null;
+  //     }
+  //   };
+  // }, [zoomToRange, zoomToRangeRef]);
 
-  // Add a non-passive wheel event listener to the wrapper to prevent page scrolling
-  // while still allowing our zoom functionality to work
-  useEffect(() => {
-    const wrapperElement = wrapperRef.current;
-    if (!wrapperElement) return;
+  // // Expose the setZoomLevel function via callback if provided
+  // useEffect(() => {
+  //   if (onZoomLevelChange) {
+  //     onZoomLevelChange(setZoomLevel);
+  //   }
+  // }, [onZoomLevelChange, setZoomLevel]);
 
-    const handleWheelEvent = (e: WheelEvent) => {
-      // Prevent the default scroll behavior
-      e.preventDefault();
-      e.stopPropagation();
+  // // Add a non-passive wheel event listener to the wrapper to prevent page scrolling
+  // // while still allowing our zoom functionality to work
+  // useEffect(() => {
+  //   const wrapperElement = wrapperRef.current;
+  //   if (!wrapperElement) return;
 
-      // Calculate the mouse X position relative to the container
-      const rect = wrapperElement.getBoundingClientRect();
-      const mouseX = (e.clientX - rect.left) / rect.width;
+  //   const handleWheelEvent = (e: WheelEvent) => {
+  //     // Prevent the default scroll behavior
+  //     e.preventDefault();
+  //     e.stopPropagation();
 
-      // Call our zoom handler
-      handleWheel(e as any, mouseX);
+  //     // Calculate the mouse X position relative to the container
+  //     const rect = wrapperElement.getBoundingClientRect();
+  //     const mouseX = (e.clientX - rect.left) / rect.width;
 
-      return false;
-    };
+  //     // Call our zoom handler
+  //     handleWheel(e as any, mouseX);
 
-    // Add the event listener with { passive: false } to allow preventDefault
-    wrapperElement.addEventListener("wheel", handleWheelEvent, {
-      passive: false,
-    });
+  //     return false;
+  //   };
 
-    return () => {
-      wrapperElement.removeEventListener("wheel", handleWheelEvent);
-    };
-  }, [handleWheel]);
+  //   // Add the event listener with { passive: false } to allow preventDefault
+  //   wrapperElement.addEventListener("wheel", handleWheelEvent, {
+  //     passive: false,
+  //   });
+
+  //   return () => {
+  //     wrapperElement.removeEventListener("wheel", handleWheelEvent);
+  //   };
+  // }, [handleWheel]);
 
   return (
     <div className={styles.waveformContainer}>
@@ -121,10 +118,9 @@ export function WaveformView({
                 audioBuffer={audioBuffer}
                 viewPort={viewPort}
                 size={wrapperSize}
-                splices={splices}
               />
             )}
-            <SplicesHtml
+            {/* <SplicesHtml
               splices={splices}
               viewPort={viewPort}
               size={wrapperSize}
@@ -132,18 +128,18 @@ export function WaveformView({
                 // Add click handler functionality here if needed
                 console.log(`Splice ${index + 1} clicked`);
               }}
-            />
-            <PlayheadCanvas viewPort={viewPort} size={wrapperSize} />
-            <InteractionLayer
+            /> */}
+            {/* <PlayheadCanvas viewPort={viewPort} size={wrapperSize} /> */}
+            {/* <InteractionLayer
               viewPort={viewPort}
               size={wrapperSize}
               onShiftClick={onAddMarker || (() => {})}
               onDrag={handleDrag}
-            />
+            /> */}
           </>
         )}
       </div>
-      <div className={styles.controlsArea}>
+      {/* <div className={styles.controlsArea}>
         <div className={styles.zoomControls}>
           <ZoomSlider
             zoomLevel={zoomLevel}
@@ -152,9 +148,10 @@ export function WaveformView({
           />
         </div>
         <div className={styles.helpText}>
-          Shift+Click to add marker • Scroll to zoom • Alt+Drag to pan • ↑ to zoom out • ↓ to zoom to splice
+          Shift+Click to add marker • Scroll to zoom • Alt+Drag to pan • ↑ to
+          zoom out • ↓ to zoom to splice
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
