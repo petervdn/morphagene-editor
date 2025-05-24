@@ -4,21 +4,20 @@ import type { ReelWithAudioBuffer, Splice } from "../../types/types";
 import { useSpliceNavigation } from "../../utils/hooks/useSpliceNavigation";
 import styles from "./SpliceActions.module.css";
 import { MdSkipNext, MdSkipPrevious } from "react-icons/md";
-import { BsTrash, BsPlayCircle, BsStopCircle, BsZoomIn } from "react-icons/bs";
+import { BsTrash, BsPlayCircle, BsStopCircle } from "react-icons/bs";
 import { useAudioPlayer } from "../../utils/hooks/useAudioPlayer";
 
 type SpliceActionsProps = {
   reel: ReelWithAudioBuffer;
   activeSplice: Splice;
   onZoomToSplice?: () => void;
-  onDeleteSplice?: () => void;
+  onDeleteClick?: () => void;
 };
 
-export function SpliceActions({ 
-  reel, 
+export function SpliceActions({
+  reel,
   activeSplice,
-  onZoomToSplice,
-  onDeleteSplice 
+  onDeleteClick,
 }: SpliceActionsProps) {
   const {
     hasNextSplice,
@@ -37,7 +36,10 @@ export function SpliceActions({
     if (isPlaying) {
       audioPlayerProps.playingSound?.stop();
     } else {
-      audioPlayerProps.playSound({ audioBuffer: reel.audioBuffer, splice: activeSplice });
+      audioPlayerProps.playSound({
+        audioBuffer: reel.audioBuffer,
+        splice: activeSplice,
+      });
     }
   }, [audioPlayerProps, isPlaying, reel.audioBuffer, activeSplice]);
 
@@ -53,34 +55,28 @@ export function SpliceActions({
           >
             {isPlaying ? (
               <>
-                <BsStopCircle />Stop
+                <BsStopCircle />
+                Stop
               </>
             ) : (
               <>
-                <BsPlayCircle />Play
+                <BsPlayCircle />
+                Play 
               </>
             )}
           </button>
 
           <button
-            className={`${styles.actionButton} ${styles.zoomButton}`}
-            onClick={onZoomToSplice}
-            type="button"
-            title="Zoom to splice"
-          >
-            <BsZoomIn />Zoom
-          </button>
-
-          <button
             className={`${styles.actionButton} ${styles.deleteButton}`}
-            onClick={onDeleteSplice}
+            onClick={onDeleteClick}
             type="button"
             title="Delete splice"
           >
-            <BsTrash />Del
+            <BsTrash />
+            Delete
           </button>
         </div>
-        
+
         <div className={styles.navigationButtons}>
           <Link
             to={previousSplicePath ?? ""}

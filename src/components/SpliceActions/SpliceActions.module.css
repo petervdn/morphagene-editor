@@ -75,7 +75,10 @@
 .actionButton svg {
   font-size: 1rem;
   margin-right: 4px;
-  margin-left: 4px;
+}
+
+.playButton {
+  width: 75px;
 }
 
 .playButton:hover {
