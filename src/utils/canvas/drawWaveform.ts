@@ -51,6 +51,10 @@ function drawWaveformChannel({
   context.lineWidth = 1;
   context.beginPath();
 
+  // draw zero line
+  context.moveTo(0, halfY);
+  context.lineTo(width, halfY);
+
   for (let x = 0; x < width; x++) {
     // Calculate sample indices for this pixel within the viewport
     const pixelStartSample = Math.floor(startSampleIndex + x * samplesPerPixel);
