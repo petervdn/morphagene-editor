@@ -6,9 +6,7 @@ import { SpliceDetail } from "../SpliceDetail/SpliceDetail";
 import { useSplices } from "../../utils/hooks/useSplices";
 import { WaveformView } from "../WaveformView/layers/WaveformView";
 import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
-import { BiSolidErrorCircle } from "react-icons/bi";
-import { MdRestartAlt } from "react-icons/md";
-import { FiSave } from "react-icons/fi";
+import { UnsavedChangesActions } from "../UnsavedChangesActions/UnsavedChangesActions";
 
 type Props = {
   reel: ReelWithAudioBuffer;
@@ -48,30 +46,7 @@ export function ReelDetails({ reel }: Props): ReactElement {
             <span>{reel.wavHeaderData.duration.toFixed(2)} seconds</span>
           </div>
         </div>
-        {hasUnsavedChanges && (
-          <div className={styles.saveContainer}>
-            <div className={styles.unsavedIndicator}>
-              <BiSolidErrorCircle className={styles.warningIcon} />
-              <span>Unsaved changes</span>
-            </div>
-            <div className={styles.buttonGroup}>
-              <button
-                className={styles.resetButton}
-                //onClick={resetChanges}
-                title="Reset to original state"
-              >
-                <MdRestartAlt /> Revert
-              </button>
-              <button
-                className={styles.saveButton}
-                // onClick={saveChanges}
-                title="Save changes"
-              >
-                <FiSave /> Save
-              </button>
-            </div>
-          </div>
-        )}
+        {hasUnsavedChanges && <UnsavedChangesActions reel={reel} />}
       </div>
       <WaveformView
         splices={splices}
