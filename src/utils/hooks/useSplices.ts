@@ -1,23 +1,17 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type { CuePoint, Marker, Reel, Splice } from "../../types/types";
 import { createSplicesFromMarkers } from "../splices/createSplicesFromMarkers";
+import { useParamsSpliceIndex } from "./useParamsSpliceIndex";
 
 type UseSplicesProps = {
   reel: Reel;
-  // audioBuffer: AudioBuffer;
-  // onReelUpdated?: (reelId: string, cuePoints: Array<CuePoint>) => void;
 };
 
 type UseSplicesResult = {
   markers: Array<Marker>;
   splices: Array<Splice>;
-
-  // hasUnsavedChanges: boolean;
-  // onSpliceClick: (index: number) => void;
-  // onSpliceDelete: (index: number) => void;
-  // saveChanges: () => void;
-  // resetChanges: () => void;
-  // addMarker: (timeInSeconds: number) => void;
+  addSplice(time: number): void;
+  activeSplice: Splice;
 };
 
 function createMarkersFromCuePoints(cuePoints: Array<CuePoint>): Array<Marker> {
@@ -26,23 +20,30 @@ function createMarkersFromCuePoints(cuePoints: Array<CuePoint>): Array<Marker> {
   }));
 }
 
-export function useSplices({
-  reel,
-}: // audioBuffer,
-// onReelUpdated,
-UseSplicesProps): UseSplicesResult {
+export function useSplices({ reel }: UseSplicesProps): UseSplicesResult {
+  const index = useParamsSpliceIndex();
   const cuePoints = reel?.wavHeaderData?.cuePoints || [];
-  // Store the original cue points for comparison
-  // const [originalCuePoints, setOriginalCuePoints] =
-  //   useState<Array<CuePoint>>(cuePoints);
+
   const [markers, setMarkers] = useState<Array<Marker>>(() =>
     createMarkersFromCuePoints(cuePoints)
   );
-  // const audioPlayer = useAudioPlayer();
+
+  const orderedMarkers = useMemo(() => {
+    return markers.toSorted((a, b) => a.time - b.time);
+  }, [markers]);
+
+  const addSplice = useCallback((time: number) => {
+    // will actually add a marker
+    setMarkers((current) => [...current, { time }]);
+  }, []);
 
   const splices = useMemo(() => {
-    return createSplicesFromMarkers(markers);
-  }, [markers]);
+    return createSplicesFromMarkers(orderedMarkers);
+  }, [orderedMarkers]);
+
+  const activeSplice = useMemo(() => {
+    return splices[index];
+  }, [index, splices]);
 
   // const onSpliceClick = useCallback(
   //   (index: number) => {
@@ -199,8 +200,10 @@ UseSplicesProps): UseSplicesResult {
   // }
 
   return {
-    markers,
+    markers: orderedMarkers,
     splices,
+    addSplice,
+    activeSplice,
     // hasUnsavedChanges,
     // onSpliceClick,
     // onSpliceDelete,

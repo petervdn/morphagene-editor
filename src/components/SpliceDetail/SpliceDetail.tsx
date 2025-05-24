@@ -95,7 +95,12 @@ export function SpliceDetail({
         </button>
       </div>
 
-      <WaveformView splices={[]} {...waveformViewProps} viewPort={splice} />
+      <WaveformView
+        splices={[]}
+        {...waveformViewProps}
+        viewPort={splice}
+        height={150}
+      />
     </div>
   );
 }

@@ -5,27 +5,32 @@ import { useElementSize } from "../../../utils/hooks/useElementSize";
 import { WaveformCanvas } from "./WaveformLayer/WaveformLayer";
 import { SplicesView } from "./SplicesLayer/SplicesLayer";
 import { PlayheadLayer } from "./PlayheadLayer/PlayheadLayer";
+import { InteractionLayer } from "./InteractionLayer/InteractionLayer";
 
 interface WaveformViewProps {
-  splices: Splice[];
+  splices: Array<Splice>;
   reel: ReelWithAudioBuffer;
   viewPort: Range;
+  onShiftClick?(time: number): void;
+  height: number;
 }
 
 export function WaveformView({
   reel,
   viewPort,
   splices,
+  onShiftClick,
+  height,
 }: WaveformViewProps): ReactElement {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const wrapperSize = useElementSize({ elementRef: wrapperRef });
 
   return (
     <div className={styles.waveformContainer}>
-      <div className={styles.wrapper} ref={wrapperRef}>
+      <div className={styles.wrapper} ref={wrapperRef} style={{ height }}>
         {wrapperSize && (
           <>
-            <div className={styles.layer}>
+            <div className={styles.layer} id="waveform">
               <WaveformCanvas
                 audioBuffer={reel.audioBuffer}
                 viewPort={viewPort}
@@ -33,7 +38,7 @@ export function WaveformView({
               />
             </div>
 
-            <div className={styles.layer}>
+            <div className={styles.layer} id="playhead">
               <PlayheadLayer
                 viewPort={viewPort}
                 size={wrapperSize}
@@ -41,7 +46,18 @@ export function WaveformView({
               />
             </div>
 
-            <div className={styles.layer}>
+            <div className={styles.layer} id="interaction">
+              <InteractionLayer
+                viewPort={viewPort}
+                size={wrapperSize}
+                onShiftClick={onShiftClick}
+              />
+            </div>
+            <div
+              className={styles.layer}
+              id="splices"
+              style={{ pointerEvents: "none" }}
+            >
               <SplicesView
                 reel={reel}
                 size={wrapperSize}
@@ -49,12 +65,6 @@ export function WaveformView({
                 viewPort={viewPort}
               />
             </div>
-            {/* <InteractionLayer
-              viewPort={viewPort}
-              size={wrapperSize}
-              onShiftClick={onAddMarker || (() => {})}
-              onDrag={handleDrag}
-            /> */}
           </>
         )}
       </div>

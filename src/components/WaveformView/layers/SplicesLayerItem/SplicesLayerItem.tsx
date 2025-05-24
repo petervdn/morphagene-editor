@@ -68,6 +68,7 @@ export function SplicesViewItem({
           backgroundColor: color,
           color: "white",
           paddingLeft: 2,
+          pointerEvents: "auto",
         }}
       >
         {spliceIndex + 1}

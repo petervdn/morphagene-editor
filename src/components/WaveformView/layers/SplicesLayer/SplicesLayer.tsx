@@ -24,12 +24,15 @@ export function SplicesView({
   return (
     <div
       className={styles.wrapper}
-      style={{ width: size.width, height: size.height }}
+      style={{
+        ...size,
+        pointerEvents: "none",
+      }}
     >
       {splices.map((splice, index) => (
         <SplicesViewItem
           reel={reel}
-          key={`${splice.start}-${splice.end}`}
+          key={`${splice.start}-${splice}`}
           spliceIndex={index}
           splice={splice}
           size={size}

@@ -1,9 +1,8 @@
-import { type ReactElement } from "react";
+import { useCallback, type ReactElement } from "react";
 import { PiFilmReel } from "react-icons/pi";
 import styles from "./ReelDetails.module.css";
 import type { ReelWithAudioBuffer } from "../../types/types";
 import { SpliceDetail } from "../SpliceDetail/SpliceDetail";
-import { useActiveSplice } from "../../utils/hooks/useActiveSplice";
 import { useSplices } from "../../utils/hooks/useSplices";
 import { WaveformView } from "../WaveformView/layers/WaveformView";
 import { SpliceNavigation } from "../SpliceNavigation/SpliceNavigation";
@@ -11,19 +10,21 @@ import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
 
 type Props = {
   reel: ReelWithAudioBuffer;
-  // zoomToRangeRef?: React.MutableRefObject<
-  //   ((start: number, end: number, options?: any) => void) | null
-  // >;
-  // setZoomLevelRef?: React.MutableRefObject<((level: number) => void) | null>;
 };
 
 export function ReelDetails({ reel }: Props): ReactElement {
-  const splice = useActiveSplice({ reel });
-  const { splices } = useSplices({ reel });
+  const { splices, addSplice, activeSplice } = useSplices({ reel });
 
   const waveformViewProps = useWaveformView({
     reel,
   });
+
+  const onWaveformViewShiftClick = useCallback(
+    (time: number) => {
+      addSplice(time);
+    },
+    [addSplice]
+  );
 
   return (
     <>
@@ -65,19 +66,22 @@ export function ReelDetails({ reel }: Props): ReactElement {
           </div>
         )} */}
       </div>
-      <WaveformView splices={splices} {...waveformViewProps} />
+      <WaveformView
+        splices={splices}
+        {...waveformViewProps}
+        onShiftClick={onWaveformViewShiftClick}
+        height={300}
+      />
 
-      {splice && (
+      {activeSplice && (
         <>
-          <SpliceNavigation reel={reel} activeSplice={splice} />
+          <SpliceNavigation reel={reel} activeSplice={activeSplice} />
 
           <div className={styles.spliceDetailContainer}>
             <SpliceDetail
-              splice={splice}
+              splice={activeSplice}
               reel={reel}
               totalAmountOfSplices={splices?.length}
-              // onDeleteSplice={onSpliceDelete}
-              // onZoomToSplice={handleZoomToSplice}
             />
           </div>
         </>

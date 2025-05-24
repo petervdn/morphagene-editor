@@ -3,17 +3,15 @@ import {
   useState,
   useRef,
   type MouseEvent,
-  type WheelEvent,
   type ReactElement,
   useEffect,
 } from "react";
-import type { Size, ViewPort } from "../../../types/types";
+import type { Range, Size } from "../../../../types/types";
 
 type Props = {
-  viewPort: ViewPort;
+  viewPort: Range;
   size: Size;
-  onShiftClick: (timeInSeconds: number) => void;
-  onWheel?: (e: WheelEvent<HTMLDivElement>, mouseX: number) => boolean | void;
+  onShiftClick?: (timeInSeconds: number) => void;
   onDrag?: (deltaX: number, containerWidth: number) => void;
 };
 
@@ -21,169 +19,66 @@ export function InteractionLayer({
   viewPort,
   size,
   onShiftClick,
-  onWheel,
-  onDrag,
 }: Props): ReactElement {
   const [isShiftPressed, setIsShiftPressed] = useState(false);
-  const [isAltPressed, setIsAltPressed] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [lastX, setLastX] = useState(0);
-  const interactionRef = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_isAltPressed, setIsAltPressed] = useState(false);
 
-  // Handle keyboard events for the entire document
   useEffect(() => {
-    const handleKeyDown = ({ key }: KeyboardEvent) => {
+    function onKeyDown({ key }: KeyboardEvent) {
       if (key === "Shift") {
         setIsShiftPressed(true);
       } else if (key === "Alt") {
         setIsAltPressed(true);
       }
-    };
+    }
 
-    const handleKeyUp = ({ key }: KeyboardEvent) => {
+    function onKeyUp({ key }: KeyboardEvent) {
       if (key === "Shift") {
         setIsShiftPressed(false);
       } else if (key === "Alt") {
         setIsAltPressed(false);
-        // Stop dragging if Alt is released during a drag operation
-        if (isDragging) {
-          setIsDragging(false);
-        }
       }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keyup", handleKeyUp);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keyup", handleKeyUp);
-    };
-  }, [isDragging]);
-
-  // Handle mouse events for dragging
-  useEffect(() => {
-    if (!interactionRef.current || !onDrag) return;
-
-    const handleMouseMove = (e: globalThis.MouseEvent) => {
-      if (!isDragging) return;
-      
-      const deltaX = e.clientX - lastX;
-      setLastX(e.clientX);
-      
-      if (deltaX !== 0 && interactionRef.current) {
-        const width = interactionRef.current.clientWidth;
-        onDrag(deltaX, width);
-      }
-    };
-
-    const handleMouseUp = () => {
-      setIsDragging(false);
-    };
-
-    if (isDragging) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
     }
 
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("keyup", onKeyUp);
+
     return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("keyup", onKeyUp);
     };
-  }, [isDragging, lastX, onDrag]);
+  }, []);
 
-  const handleMouseDown = useCallback(
-    (e: MouseEvent<HTMLDivElement>) => {
-      // If shift is pressed, prevent selection behavior
-      if (e.shiftKey) {
-        e.preventDefault();
-        return;
-      }
-      
-      // Only start dragging if Alt is pressed and onDrag is provided
-      if (!onDrag || !(e.altKey || isAltPressed)) return;
-      
-      // Prevent default browser behavior when Alt+clicking
-      e.preventDefault();
-      
-      setIsDragging(true);
-      setLastX(e.clientX);
-    },
-    [onDrag, isAltPressed]
-  );
+  const onClick = useCallback(
+    (event: MouseEvent<HTMLDivElement>) => {
+      if (!event.shiftKey) return;
 
-  const handleClick = useCallback(
-    (e: MouseEvent<HTMLDivElement>) => {
-      // Only handle shift+click and prevent during dragging
-      if (!e.shiftKey || isDragging) return;
-      
-      // Prevent the default selection behavior when shift+clicking
-      e.preventDefault();
-      
-      // Stop propagation to prevent any parent handlers from being triggered
-      e.stopPropagation();
+      event.preventDefault();
+      event.stopPropagation();
 
       // Calculate the time based on the click position
-      const rect = e.currentTarget.getBoundingClientRect();
-      const x = e.clientX - rect.left;
+      const rect = event.currentTarget.getBoundingClientRect();
+      const x = event.clientX - rect.left;
       const xRatio = x / size.width;
 
       // Calculate the time in seconds based on the viewport
-      const timeRange = viewPort.to - viewPort.from;
-      const timeInSeconds = viewPort.from + timeRange * xRatio;
+      const timeRange = viewPort.end - viewPort.start;
+      const timeInSeconds = viewPort.start + timeRange * xRatio;
 
-      // Call the callback with the calculated time
-      onShiftClick(timeInSeconds);
+      onShiftClick?.(timeInSeconds);
     },
-    [viewPort, size, onShiftClick, isDragging]
-  );
-
-  const handleWheelEvent = useCallback(
-    (e: WheelEvent<HTMLDivElement>) => {
-      if (!onWheel) return;
-      
-      // Always stop propagation and prevent default for wheel events
-      // This ensures the page doesn't scroll when zooming
-      e.stopPropagation();
-      
-      // Try to prevent default, but this might not work in all browsers due to passive listeners
-      if (e.cancelable) {
-        e.preventDefault();
-      }
-      
-      // Calculate the mouse X position relative to the container
-      const rect = e.currentTarget.getBoundingClientRect();
-      const mouseX = (e.clientX - rect.left) / rect.width;
-      
-      // Call the wheel handler
-      onWheel(e, mouseX);
-      
-      // Return false to prevent default in older browsers
-      return false;
-    },
-    [onWheel]
+    [viewPort, size, onShiftClick]
   );
 
   return (
     <div
-      ref={interactionRef}
       style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        cursor: isShiftPressed 
-          ? "crosshair" 
-          : isDragging 
-            ? "grabbing" 
-            : isAltPressed && onDrag
-              ? "grab" 
-              : "default",
+        ...size,
+        cursor: isShiftPressed ? "copy" : "default",
+        zIndex: 999,
       }}
-      onClick={handleClick}
-      onMouseDown={handleMouseDown}
-      onWheel={handleWheelEvent}
+      onClick={onClick}
     />
   );
 }
