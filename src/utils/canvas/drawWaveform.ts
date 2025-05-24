@@ -33,7 +33,6 @@ function drawWaveformChannel({
   const { width, height } = context.canvas;
   context.clearRect(0, 0, width, height);
 
-  // Calculate total duration based on sample rate (assuming 44.1kHz if not provided)
   const totalDuration = channelData.length / 48000;
 
   // Calculate sample indices for the viewport
