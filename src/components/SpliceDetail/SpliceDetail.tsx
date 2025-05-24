@@ -1,13 +1,11 @@
-import { useCallback, type ReactElement } from "react";
-import { BsTrash, BsPlayCircle, BsStopCircle, BsZoomIn } from "react-icons/bs";
+import { type ReactElement } from "react";
 import { RiScissorsCutLine } from "react-icons/ri";
-import { useAudioPlayer } from "../../utils/hooks/useAudioPlayer";
 import styles from "./SpliceDetail.module.css";
 import type { ReelWithAudioBuffer, Splice } from "../../types/types";
 import { usePathParams } from "../../utils/hooks/usePathParams";
 import { WaveformView } from "../WaveformView/layers/WaveformView";
 import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
-import { SpliceNavigation } from "../SpliceNavigation/SpliceNavigation";
+import { SpliceActions } from "../SpliceActions/SpliceActions";
 
 type Props = {
   splice: Splice;
@@ -21,22 +19,7 @@ export function SpliceDetail({
   reel,
 }: Props): ReactElement {
   const { spliceId } = usePathParams();
-  const audioPlayerProps = useAudioPlayer();
-
-  const isPlaying = audioPlayerProps?.playingSound?.splice === splice;
-
   const waveformViewProps = useWaveformView({ reel });
-
-  const handlePlayToggle = useCallback(() => {
-    if (!audioPlayerProps) {
-      return;
-    }
-    if (isPlaying) {
-      audioPlayerProps.playingSound?.stop();
-    } else {
-      audioPlayerProps.playSound({ audioBuffer: reel.audioBuffer, splice });
-    }
-  }, [audioPlayerProps, isPlaying, reel.audioBuffer, splice]);
 
   return (
     <div className={styles.spliceDetail}>
@@ -47,7 +30,7 @@ export function SpliceDetail({
           <span className={styles.spliceCount}>of {totalAmountOfSplices}</span>
         </h3>
         <div className={styles.navigationContainer}>
-          <SpliceNavigation reel={reel} activeSplice={splice} />
+          <SpliceActions reel={reel} activeSplice={splice} />
         </div>
       </div>
 
@@ -66,39 +49,7 @@ export function SpliceDetail({
         </div>
       </div>
 
-      <div className={styles.spliceActions}>
-        <button
-          className={`${styles.actionButton} ${styles.playButton}`}
-          onClick={handlePlayToggle}
-          type="button"
-          title={isPlaying ? "Stop playback" : "Play splice"}
-        >
-          {isPlaying ? (
-            <>
-              <BsStopCircle /> Stop
-            </>
-          ) : (
-            <>
-              <BsPlayCircle /> Play
-            </>
-          )}
-        </button>
 
-        <button
-          className={`${styles.actionButton} ${styles.zoomButton}`}
-          type="button"
-          title="Zoom to splice"
-        >
-          <BsZoomIn /> Zoom to Splice
-        </button>
-
-        <button
-          className={`${styles.actionButton} ${styles.deleteButton}`}
-          type="button"
-        >
-          <BsTrash /> Delete
-        </button>
-      </div>
 
       <WaveformView
         splices={[]}
