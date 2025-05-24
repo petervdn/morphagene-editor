@@ -26,7 +26,7 @@ export function SpliceNavigation({ reel, activeSplice }: Props) {
         }`}
         title="Go to previous splice"
       >
-        <MdSkipPrevious /> Previous Splice
+        <MdSkipPrevious /> Prev
       </Link>
 
       <Link
@@ -36,7 +36,7 @@ export function SpliceNavigation({ reel, activeSplice }: Props) {
         }`}
         title="Go to next splice"
       >
-        <MdSkipNext /> Next Splice
+        Next <MdSkipNext />
       </Link>
     </div>
   );

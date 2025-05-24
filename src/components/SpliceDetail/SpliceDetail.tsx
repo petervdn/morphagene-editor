@@ -7,6 +7,7 @@ import type { ReelWithAudioBuffer, Splice } from "../../types/types";
 import { usePathParams } from "../../utils/hooks/usePathParams";
 import { WaveformView } from "../WaveformView/layers/WaveformView";
 import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
+import { SpliceNavigation } from "../SpliceNavigation/SpliceNavigation";
 
 type Props = {
   splice: Splice;
@@ -44,6 +45,9 @@ export function SpliceDetail({
           <RiScissorsCutLine /> Splice {spliceId}{" "}
           <small>of {totalAmountOfSplices}</small>
         </h3>
+        <div className={styles.navigationContainer}>
+          <SpliceNavigation reel={reel} activeSplice={splice} />
+        </div>
       </div>
 
       <div className={styles.spliceInfo}>

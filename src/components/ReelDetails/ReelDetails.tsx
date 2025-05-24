@@ -5,7 +5,7 @@ import type { ReelWithAudioBuffer } from "../../types/types";
 import { SpliceDetail } from "../SpliceDetail/SpliceDetail";
 import { useSplices } from "../../utils/hooks/useSplices";
 import { WaveformView } from "../WaveformView/layers/WaveformView";
-import { SpliceNavigation } from "../SpliceNavigation/SpliceNavigation";
+
 import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
 
 type Props = {
@@ -74,17 +74,13 @@ export function ReelDetails({ reel }: Props): ReactElement {
       />
 
       {activeSplice && (
-        <>
-          <SpliceNavigation reel={reel} activeSplice={activeSplice} />
-
-          <div className={styles.spliceDetailContainer}>
-            <SpliceDetail
-              splice={activeSplice}
-              reel={reel}
-              totalAmountOfSplices={splices?.length}
-            />
-          </div>
-        </>
+        <div className={styles.spliceDetailContainer}>
+          <SpliceDetail
+            splice={activeSplice}
+            reel={reel}
+            totalAmountOfSplices={splices?.length}
+          />
+        </div>
       )}
     </>
   );
