@@ -42,8 +42,9 @@ export function SpliceDetail({
     <div className={styles.spliceDetail}>
       <div className={styles.spliceHeader}>
         <h3 className={styles.spliceTitle}>
-          <RiScissorsCutLine /> Splice {spliceId}{" "}
-          <small>of {totalAmountOfSplices}</small>
+          <span className={styles.iconWrapper}><RiScissorsCutLine /></span>
+          <span className={styles.titleText}>Splice {spliceId}{" "}</span>
+          <span className={styles.spliceCount}>of {totalAmountOfSplices}</span>
         </h3>
         <div className={styles.navigationContainer}>
           <SpliceNavigation reel={reel} activeSplice={splice} />

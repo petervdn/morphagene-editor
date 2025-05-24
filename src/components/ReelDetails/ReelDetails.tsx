@@ -31,7 +31,8 @@ export function ReelDetails({ reel }: Props): ReactElement {
       <div className={styles.reelHeader}>
         <div className={styles.reelTitleContainer}>
           <h2 className={styles.reelTitle}>
-            <PiFilmReel /> {reel.name}
+            <span className={styles.iconWrapper}><PiFilmReel /></span>
+            <span className={styles.titleText}>{reel.name}</span>
           </h2>
           <div className={styles.reelMetadata}>
             <span>{reel.fileName}</span>

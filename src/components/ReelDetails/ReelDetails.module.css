@@ -22,11 +22,22 @@
 
 .reelTitle {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 0.5rem;
   font-size: 1.5rem;
   color: #333;
   margin: 0;
+}
+
+.iconWrapper {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  top: 5px; /* Fine-tuned to position the icon perfectly */
+}
+
+.titleText {
+  /* Main title text */
 }
 
 .reelMetadata {
