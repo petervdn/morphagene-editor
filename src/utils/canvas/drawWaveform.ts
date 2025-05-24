@@ -33,8 +33,23 @@ function drawWaveformChannel({
   const { width, height } = context.canvas;
   context.clearRect(0, 0, width, height);
 
-  const pixelsPerSample = width / channelData.length;
-  const samplesPerPixel = 1 / pixelsPerSample;
+  // Calculate total duration based on sample rate (assuming 44.1kHz if not provided)
+  const totalDuration = channelData.length / 48000;
+
+  // Calculate what portion of the audio data to display
+  const viewPortDuration = viewPort.end - viewPort.start;
+  const viewPortRatio = viewPortDuration / totalDuration;
+
+  // Calculate sample indices for the viewport
+  const startSampleIndex = Math.floor(
+    (viewPort.start / totalDuration) * channelData.length
+  );
+  const endSampleIndex = Math.floor(
+    (viewPort.end / totalDuration) * channelData.length
+  );
+
+  // Calculate samples per pixel based on viewport
+  const samplesPerPixel = (endSampleIndex - startSampleIndex) / width;
   const halfY = height / 2;
 
   context.strokeStyle = "#777";
@@ -42,15 +57,22 @@ function drawWaveformChannel({
   context.beginPath();
 
   for (let x = 0; x < width; x++) {
-    const startSample = Math.floor(x * samplesPerPixel);
-    const endSample = Math.floor((x + 1) * samplesPerPixel);
+    // Calculate sample indices for this pixel within the viewport
+    const pixelStartSample = Math.floor(startSampleIndex + x * samplesPerPixel);
+    const pixelEndSample = Math.floor(
+      startSampleIndex + (x + 1) * samplesPerPixel
+    );
+
+    // Ensure we stay within bounds of the channel data
+    const safeStartSample = Math.max(0, pixelStartSample);
+    const safeEndSample = Math.min(channelData.length, pixelEndSample);
 
     const scaledRms =
       getRmsForRange({
         values: channelData,
         range: {
-          start: startSample,
-          end: Math.min(endSample, channelData.length),
+          start: safeStartSample,
+          end: safeEndSample,
         },
       }) * halfY;
 

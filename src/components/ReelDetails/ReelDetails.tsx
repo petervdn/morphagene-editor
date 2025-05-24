@@ -7,6 +7,7 @@ import { useActiveSplice } from "../../utils/hooks/useActiveSplice";
 import { useSplices } from "../../utils/hooks/useSplices";
 import { WaveformView } from "../WaveformView/WaveformView";
 import { SpliceNavigation } from "../SpliceNavigation/SpliceNavigation";
+import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
 
 type Props = {
   reel: ReelWithAudioBuffer;
@@ -17,54 +18,12 @@ type Props = {
 };
 
 export function ReelDetails({ reel }: Props): ReactElement {
-  // const location = useLocation();
-  // // Create a ref to hold the zoomToRange function from WaveformView
-  // const internalZoomToRangeRef = useRef<
-  //   | ((
-  //       start: number,
-  //       end: number,
-  //       options?: {
-  //         duration?: number;
-  //         easing?: string;
-  //       }
-  //     ) => void)
-  //   | null
-  // >(null);
-
-  // // Function to zoom to a specific splice range
-  // const handleZoomToSplice = useCallback((start: number, end: number) => {
-  //   if (internalZoomToRangeRef.current) {
-  //     internalZoomToRangeRef.current(start, end, {
-  //       duration: 700, // 700ms animation
-  //       easing: "easeOutCubic", // only ease-out, no ease-in
-  //     });
-  //   }
-  // }, []);
-  // const updateReelCuePoints = useFolderContentStore(
-  //   (state) => state.updateReelCuePoints
-  // );
-
-  // const handleReelUpdated = useCallback(
-  //   (reelId: string, cuePoints: Array<CuePoint>) => {
-  //     updateReelCuePoints(reelId, cuePoints);
-  //   },
-  //   [updateReelCuePoints]
-  // );
-  // const {
-  //   splices,
-  //   hasUnsavedChanges,
-  //   onSpliceDelete,
-  //   addMarker,
-  //   saveChanges,
-  //   resetChanges,
-  // } = useSplices({
-  //   reel,
-  //   audioBuffer,
-  //   onReelUpdated: handleReelUpdated,
-  // });
-
   const splice = useActiveSplice({ reel });
   const { splices } = useSplices({ reel });
+
+  const waveformViewProps = useWaveformView({
+    reel,
+  });
 
   return (
     <>
@@ -106,17 +65,7 @@ export function ReelDetails({ reel }: Props): ReactElement {
           </div>
         )} */}
       </div>
-      <WaveformView
-        reel={reel}
-        splices={splices}
-        // onAddMarker={addMarker}
-        // zoomToRangeRef={zoomToRangeRef || internalZoomToRangeRef}
-        // onZoomLevelChange={(setZoomLevel) => {
-        //   if (setZoomLevelRef) {
-        //     setZoomLevelRef.current = setZoomLevel;
-        //   }
-        // }}
-      />
+      <WaveformView splices={splices} {...waveformViewProps} />
 
       {splice && (
         <>

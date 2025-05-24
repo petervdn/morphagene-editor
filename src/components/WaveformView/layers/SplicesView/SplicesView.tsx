@@ -29,6 +29,7 @@ export function SplicesView({
       {splices.map((splice, index) => (
         <SplicesViewItem
           reel={reel}
+          key={reel.id}
           spliceIndex={index}
           splice={splice}
           size={size}

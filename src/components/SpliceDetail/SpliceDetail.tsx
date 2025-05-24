@@ -1,49 +1,31 @@
 import { useCallback, type ReactElement } from "react";
-import { Link } from "react-router-dom";
 import { BsTrash, BsPlayCircle, BsStopCircle, BsZoomIn } from "react-icons/bs";
-import { MdSkipPrevious, MdSkipNext } from "react-icons/md";
 import { RiScissorsCutLine } from "react-icons/ri";
 import { useAudioPlayer } from "../../utils/hooks/useAudioPlayer";
 import styles from "./SpliceDetail.module.css";
 import type { ReelWithAudioBuffer, Splice } from "../../types/types";
-import { useSpliceNavigation } from "../../utils/hooks/useSpliceNavigation";
 import { usePathParams } from "../../utils/hooks/usePathParams";
-import { SpliceNavigation } from "../SpliceNavigation/SpliceNavigation";
+import { WaveformView } from "../WaveformView/WaveformView";
+import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
 
 type Props = {
   splice: Splice;
   totalAmountOfSplices: number;
   reel: ReelWithAudioBuffer;
-  // audioBuffer: AudioBuffer;
-  // onDeleteSplice: (index: number) => void;
-  // onZoomToSplice: (start: number, end: number) => void;
 };
 
 export function SpliceDetail({
   splice,
   totalAmountOfSplices,
-  // audioBuffer,
   reel,
-}: // onDeleteSplice,
-// onZoomToSplice,
-Props): ReactElement {
+}: Props): ReactElement {
   const { spliceId } = usePathParams();
-  // const navigate = useNavigate();
   const audioPlayerProps = useAudioPlayer();
 
-  // const {
-  //   isFirstSplice,
-  //   isLastSplice,
-  //   splice,
-  //   spliceDuration,
-  //   spliceIndex,
-  //   spliceId,
-  // } = useSplice(splices);
-
-  // Check if the splice is currently playing
   const isPlaying = audioPlayerProps?.playingSound?.splice === splice;
 
-  // Handle play/stop
+  const waveformViewProps = useWaveformView({ reel });
+
   const handlePlayToggle = useCallback(() => {
     if (!audioPlayerProps) {
       return;
@@ -54,38 +36,6 @@ Props): ReactElement {
       audioPlayerProps.playSound({ audioBuffer: reel.audioBuffer, splice });
     }
   }, [audioPlayerProps, isPlaying, reel.audioBuffer, splice]);
-
-  // Handle delete
-  // const handleDelete = useCallback(() => {
-  //   if (spliceIndex === undefined || spliceId === undefined) {
-  //     return;
-  //   }
-
-  //   if (onDeleteSplice && !isFirstSplice) {
-  //     onDeleteSplice(spliceIndex);
-
-  //     // Navigate to the previous splice if available, otherwise to the next one
-  //     // if (spliceIndex > 0) {
-  //     //   navigate(getSplicePath(reelId, spliceId), { replace: true });
-  //     // } else if (splices.length > 1) {
-  //     //   navigate(getSplicePath(reelId, 0), { replace: true });
-  //     // }
-  //     navigate(getSplicePath(reel.id, "1"), { replace: true });
-  //   }
-  // }, [spliceIndex, spliceId, onDeleteSplice, isFirstSplice, navigate, reel.id]);
-
-  // Handle zoom
-  // const handleZoom = useCallback(() => {
-  //   if (onZoomToSplice && splice) {
-  //     onZoomToSplice(splice.start, splice.end);
-  //   }
-  // }, [onZoomToSplice, splice]);
-
-  // Navigation is now handled directly by Link components
-
-  // if (!splice || typeof spliceIndex !== "number") {
-  //   return <div>Splice not found</div>;
-  // }
 
   return (
     <div className={styles.spliceDetail}>
@@ -131,7 +81,6 @@ Props): ReactElement {
 
         <button
           className={`${styles.actionButton} ${styles.zoomButton}`}
-          //onClick={handleZoom}
           type="button"
           title="Zoom to splice"
         >
@@ -140,14 +89,13 @@ Props): ReactElement {
 
         <button
           className={`${styles.actionButton} ${styles.deleteButton}`}
-          // onClick={handleDelete}
-          // disabled={isFirstSplice}
           type="button"
-          // title={isFirstSplice ? "Cannot delete first splice" : "Delete splice"}
         >
           <BsTrash /> Delete
         </button>
       </div>
+
+      <WaveformView splices={[]} {...waveformViewProps} viewPort={splice} />
     </div>
   );
 }
