@@ -54,9 +54,6 @@ export function InteractionLayer({
     (event: MouseEvent<HTMLDivElement>) => {
       if (!event.shiftKey) return;
 
-      event.preventDefault();
-      event.stopPropagation();
-
       // Calculate the time based on the click position
       const rect = event.currentTarget.getBoundingClientRect();
       const x = event.clientX - rect.left;
@@ -71,6 +68,13 @@ export function InteractionLayer({
     [viewPort, size, onShiftClick]
   );
 
+  const onMouseDown = useCallback((event: MouseEvent<HTMLDivElement>) => {
+    if (event.shiftKey) {
+      // Prevent text selection when shift is pressed
+      event.preventDefault();
+    }
+  }, []);
+
   return (
     <div
       style={{
@@ -79,6 +83,7 @@ export function InteractionLayer({
         zIndex: 999,
       }}
       onClick={onClick}
+      onMouseDown={onMouseDown}
     />
   );
 }
