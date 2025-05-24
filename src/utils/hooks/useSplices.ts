@@ -12,40 +12,33 @@ type UseSplicesResult = {
   splices: Array<Splice>;
   addSplice(time: number): void;
   activeSplice: Splice;
+  hasUnsavedChanges: boolean;
 };
 
 export function useSplices({ reel }: UseSplicesProps): UseSplicesResult {
   const index = useParamsSpliceIndex();
 
-  const { cuePointTimes, setCuePointTimes } = useCuePointTimes({ reel });
+  const { cuePointTimes, setCuePointTimes, hasUnsavedChanges } =
+    useCuePointTimes({ reel });
 
   const addSplice = useCallback(
     (time: number) => {
-      setCuePointTimes((current) => [...current, time]);
+      setCuePointTimes((current) =>
+        [...current, time].toSorted((a, b) => a - b)
+      );
     },
     [setCuePointTimes]
   );
 
   const splices = useMemo(() => {
-    return createSplicesFromCuePointTimes(cuePointTimes);
+    return cuePointTimes.length > 1
+      ? createSplicesFromCuePointTimes(cuePointTimes)
+      : [];
   }, [cuePointTimes]);
 
   const activeSplice = useMemo(() => {
     return splices[index];
   }, [index, splices]);
-
-  // // Check if current markers are different from original cue points
-  // const hasUnsavedChanges = useMemo(() => {
-  //   if (markers.length !== originalCuePoints.length) {
-  //     return true;
-  //   }
-
-  //   // Compare each marker with original cue point
-  //   return markers.some((marker, index) => {
-  //     const originalTime = originalCuePoints[index]?.timeInSeconds;
-  //     return marker.time !== originalTime;
-  //   });
-  // }, [markers, originalCuePoints]);
 
   // // Function to save changes to the file
   // const saveChanges = useCallback(async () => {
@@ -156,5 +149,6 @@ export function useSplices({ reel }: UseSplicesProps): UseSplicesResult {
     splices,
     addSplice,
     activeSplice,
+    hasUnsavedChanges,
   };
 }

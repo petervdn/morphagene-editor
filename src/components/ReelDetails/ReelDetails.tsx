@@ -5,15 +5,19 @@ import type { ReelWithAudioBuffer } from "../../types/types";
 import { SpliceDetail } from "../SpliceDetail/SpliceDetail";
 import { useSplices } from "../../utils/hooks/useSplices";
 import { WaveformView } from "../WaveformView/layers/WaveformView";
-
 import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
+import { BiSolidErrorCircle } from "react-icons/bi";
+import { MdRestartAlt } from "react-icons/md";
+import { FiSave } from "react-icons/fi";
 
 type Props = {
   reel: ReelWithAudioBuffer;
 };
 
 export function ReelDetails({ reel }: Props): ReactElement {
-  const { splices, addSplice, activeSplice } = useSplices({ reel });
+  const { splices, addSplice, activeSplice, hasUnsavedChanges } = useSplices({
+    reel,
+  });
 
   const waveformViewProps = useWaveformView({
     reel,
@@ -44,7 +48,7 @@ export function ReelDetails({ reel }: Props): ReactElement {
             <span>{reel.wavHeaderData.duration.toFixed(2)} seconds</span>
           </div>
         </div>
-        {/* {hasUnsavedChanges && (
+        {hasUnsavedChanges && (
           <div className={styles.saveContainer}>
             <div className={styles.unsavedIndicator}>
               <BiSolidErrorCircle className={styles.warningIcon} />
@@ -53,21 +57,21 @@ export function ReelDetails({ reel }: Props): ReactElement {
             <div className={styles.buttonGroup}>
               <button
                 className={styles.resetButton}
-                onClick={resetChanges}
+                //onClick={resetChanges}
                 title="Reset to original state"
               >
-                <MdRestartAlt /> Reset
+                <MdRestartAlt /> Revert
               </button>
               <button
                 className={styles.saveButton}
-                onClick={saveChanges}
+                // onClick={saveChanges}
                 title="Save changes"
               >
                 <FiSave /> Save
               </button>
             </div>
           </div>
-        )} */}
+        )}
       </div>
       <WaveformView
         splices={splices}

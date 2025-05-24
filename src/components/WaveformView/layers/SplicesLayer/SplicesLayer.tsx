@@ -32,7 +32,7 @@ export function SplicesView({
       {splices.map((splice, index) => (
         <SplicesViewItem
           reel={reel}
-          key={`${splice.start}-${splice}`}
+          key={`${splice.start}-${splice.end}`}
           spliceIndex={index}
           splice={splice}
           size={size}
