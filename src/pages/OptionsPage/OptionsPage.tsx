@@ -1,17 +1,14 @@
 import { type ReactElement } from "react";
 import { Breadcrumbs } from "../../components/Breadcrumbs/Breadcrumbs";
 import styles from "./OptionsPage.module.css";
-import {
-  useFolderContent,
-  useFolderContentStore,
-} from "../../stores/folderContentStore";
+import { useFolderContent } from "../../stores/folderContentStore";
 import { OptionsEditor } from "../../components/OptionsEditor/OptionsEditor";
 
 export function OptionsPage(): ReactElement {
   const folderContent = useFolderContent();
-  const updateOptionsContent = useFolderContentStore(
-    (state) => state.folderContent?.options
-  );
+  // const updateOptionsContent = useFolderContentStore(
+  //   (state) => state.folderContent?.options
+  // );
   const optionsFile = folderContent?.options;
 
   return (
@@ -40,7 +37,7 @@ export function OptionsPage(): ReactElement {
         <div className={styles.optionsEditorContainer}>
           <OptionsEditor
             content={optionsFile.content}
-            onSave={updateOptionsContent}
+            // onSave={updateOptionsContent}
           />
         </div>
       )}

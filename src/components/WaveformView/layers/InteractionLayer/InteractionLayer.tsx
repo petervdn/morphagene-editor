@@ -1,7 +1,6 @@
 import {
   useCallback,
   useState,
-  useRef,
   type MouseEvent,
   type ReactElement,
   useEffect,

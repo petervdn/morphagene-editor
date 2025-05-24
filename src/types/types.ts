@@ -55,9 +55,4 @@ export type WavHeaderData = {
   cuePoints: Array<CuePoint>;
 };
 
-// todo add explanation
-export type Marker = {
-  time: number;
-};
-
 export type Splice = Range;

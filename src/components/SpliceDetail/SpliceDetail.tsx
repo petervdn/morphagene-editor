@@ -25,8 +25,10 @@ export function SpliceDetail({
     <div className={styles.spliceDetail}>
       <div className={styles.spliceHeader}>
         <h3 className={styles.spliceTitle}>
-          <span className={styles.iconWrapper}><RiScissorsCutLine /></span>
-          <span className={styles.titleText}>Splice {spliceId}{" "}</span>
+          <span className={styles.iconWrapper}>
+            <RiScissorsCutLine />
+          </span>
+          <span className={styles.titleText}>Splice {spliceId} </span>
           <span className={styles.spliceCount}>of {totalAmountOfSplices}</span>
         </h3>
         <div className={styles.navigationContainer}>
@@ -49,13 +51,11 @@ export function SpliceDetail({
         </div>
       </div>
 
-
-
       <WaveformView
         splices={[]}
         {...waveformViewProps}
         viewPort={splice}
-        height={150}
+        height={200}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import type { Marker, WavHeaderData } from "../../types/types";
+import type { WavHeaderData } from "../../types/types";
 
 /**
  * Creates a WAV file with updated cue points from an AudioBuffer
@@ -9,22 +9,22 @@ import type { Marker, WavHeaderData } from "../../types/types";
  */
 export async function createWavWithCuePoints(
   audioBuffer: AudioBuffer,
-  markers: Array<Marker>,
+  cuePointTimes: Array<number>,
   originalHeaderData: WavHeaderData
 ): Promise<Blob> {
   // Convert markers to cue points format
-  const cuePoints = markers.map((marker, index) => ({
+  const cuePoints = cuePointTimes.map((time, index) => ({
     id: index + 1, // Cue point IDs typically start at 1
-    position: Math.round(marker.time * audioBuffer.sampleRate),
+    position: Math.round(time * audioBuffer.sampleRate),
     dataChunkId: originalHeaderData.cuePoints[0]?.dataChunkId || "data", // Preserve original dataChunkId or use "data"
     chunkStart: originalHeaderData.cuePoints[0]?.chunkStart || 0,
     blockStart: originalHeaderData.cuePoints[0]?.blockStart || 0,
-    sampleOffset: Math.round(marker.time * audioBuffer.sampleRate),
-    timeInSeconds: marker.time,
+    sampleOffset: Math.round(time * audioBuffer.sampleRate),
+    timeInSeconds: time,
   }));
 
   // Calculate the size of the cue chunk
-  const cueChunkSize = 4 + (cuePoints.length * 24); // 4 bytes for numCuePoints + 24 bytes per cue point
+  const cueChunkSize = 4 + cuePoints.length * 24; // 4 bytes for numCuePoints + 24 bytes per cue point
 
   // Get the audio data and preserve original format
   const numChannels = originalHeaderData.numChannels;
@@ -66,8 +66,9 @@ export async function createWavWithCuePoints(
 
   // Write the audio data based on the format
   let offset = 44;
-  
-  if (audioFormat === 3) { // IEEE Float (32-bit)
+
+  if (audioFormat === 3) {
+    // IEEE Float (32-bit)
     for (let i = 0; i < numSamples; i++) {
       for (let channel = 0; channel < numChannels; channel++) {
         const sample = audioBuffer.getChannelData(channel)[i];
@@ -75,31 +76,35 @@ export async function createWavWithCuePoints(
         offset += bytesPerSample;
       }
     }
-  } else { // PCM format (default to 16-bit if not IEEE Float)
+  } else {
+    // PCM format (default to 16-bit if not IEEE Float)
     for (let i = 0; i < numSamples; i++) {
       for (let channel = 0; channel < numChannels; channel++) {
-        const sample = Math.max(-1, Math.min(1, audioBuffer.getChannelData(channel)[i]));
-        
+        const sample = Math.max(
+          -1,
+          Math.min(1, audioBuffer.getChannelData(channel)[i])
+        );
+
         if (bitsPerSample === 32) {
           // 32-bit PCM (rare, but possible)
-          const value = Math.round(sample * 0x7FFFFFFF);
+          const value = Math.round(sample * 0x7fffffff);
           view.setInt32(offset, value, true);
         } else if (bitsPerSample === 24) {
           // 24-bit PCM
-          const value = Math.round(sample * 0x7FFFFF);
-          view.setUint8(offset, value & 0xFF);
-          view.setUint8(offset + 1, (value >> 8) & 0xFF);
-          view.setUint8(offset + 2, (value >> 16) & 0xFF);
+          const value = Math.round(sample * 0x7fffff);
+          view.setUint8(offset, value & 0xff);
+          view.setUint8(offset + 1, (value >> 8) & 0xff);
+          view.setUint8(offset + 2, (value >> 16) & 0xff);
         } else if (bitsPerSample === 8) {
           // 8-bit PCM (unsigned)
           const value = Math.round((sample + 1) * 127.5);
           view.setUint8(offset, value);
         } else {
           // Default to 16-bit PCM
-          const value = Math.round(sample * 0x7FFF);
+          const value = Math.round(sample * 0x7fff);
           view.setInt16(offset, value, true);
         }
-        
+
         offset += bytesPerSample;
       }
     }
@@ -147,11 +152,15 @@ function writeString(view: DataView, offset: number, string: string): void {
 export async function saveWavWithCuePoints(
   file: File,
   audioBuffer: AudioBuffer,
-  markers: Array<Marker>,
+  markers: Array<number>,
   originalHeaderData: WavHeaderData
 ): Promise<File> {
-  const wavBlob = await createWavWithCuePoints(audioBuffer, markers, originalHeaderData);
-  
+  const wavBlob = await createWavWithCuePoints(
+    audioBuffer,
+    markers,
+    originalHeaderData
+  );
+
   // Create a new file with the same name
   return new File([wavBlob], file.name, {
     type: "audio/wav",
@@ -169,21 +178,26 @@ export async function saveWavWithCuePoints(
 export async function downloadWavWithCuePoints(
   file: File,
   audioBuffer: AudioBuffer,
-  markers: Array<Marker>,
+  markers: Array<number>,
   originalHeaderData: WavHeaderData
 ): Promise<void> {
-  const newFile = await saveWavWithCuePoints(file, audioBuffer, markers, originalHeaderData);
-  
+  const newFile = await saveWavWithCuePoints(
+    file,
+    audioBuffer,
+    markers,
+    originalHeaderData
+  );
+
   // Create a download link
   const url = URL.createObjectURL(newFile);
   const a = document.createElement("a");
   a.href = url;
   a.download = newFile.name;
-  
+
   // Trigger the download
   document.body.appendChild(a);
   a.click();
-  
+
   // Clean up
   setTimeout(() => {
     document.body.removeChild(a);
@@ -201,7 +215,7 @@ export async function downloadWavWithCuePoints(
 export async function saveWavToFileSystem(
   fileHandle: FileSystemFileHandle,
   audioBuffer: AudioBuffer,
-  markers: Array<Marker>,
+  markers: Array<number>,
   originalHeaderData: WavHeaderData
 ): Promise<void> {
   const newFile = await saveWavWithCuePoints(
@@ -210,7 +224,7 @@ export async function saveWavToFileSystem(
     markers,
     originalHeaderData
   );
-  
+
   // Write the file to the file system
   const writable = await fileHandle.createWritable();
   await writable.write(newFile);

@@ -31,7 +31,9 @@ export function ReelDetails({ reel }: Props): ReactElement {
       <div className={styles.reelHeader}>
         <div className={styles.reelTitleContainer}>
           <h2 className={styles.reelTitle}>
-            <span className={styles.iconWrapper}><PiFilmReel /></span>
+            <span className={styles.iconWrapper}>
+              <PiFilmReel />
+            </span>
             <span className={styles.titleText}>{reel.name}</span>
           </h2>
           <div className={styles.reelMetadata}>
@@ -71,7 +73,7 @@ export function ReelDetails({ reel }: Props): ReactElement {
         splices={splices}
         {...waveformViewProps}
         onShiftClick={onWaveformViewShiftClick}
-        height={300}
+        height={200}
       />
 
       {activeSplice && (

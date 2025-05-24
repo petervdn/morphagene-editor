@@ -1,85 +1,38 @@
-import { useCallback, useMemo, useState } from "react";
-import type { CuePoint, Marker, Reel, Splice } from "../../types/types";
-import { createSplicesFromMarkers } from "../splices/createSplicesFromMarkers";
+import { useCallback, useMemo } from "react";
+import type { Reel, Splice } from "../../types/types";
 import { useParamsSpliceIndex } from "./useParamsSpliceIndex";
+import { useCuePointTimes } from "./useCuePointTimes";
+import { createSplicesFromCuePointTimes } from "../splices/createSplicesFromCuePointTimes";
 
 type UseSplicesProps = {
   reel: Reel;
 };
 
 type UseSplicesResult = {
-  markers: Array<Marker>;
   splices: Array<Splice>;
   addSplice(time: number): void;
   activeSplice: Splice;
 };
 
-function createMarkersFromCuePoints(cuePoints: Array<CuePoint>): Array<Marker> {
-  return cuePoints.map(({ timeInSeconds }) => ({
-    time: timeInSeconds,
-  }));
-}
-
 export function useSplices({ reel }: UseSplicesProps): UseSplicesResult {
   const index = useParamsSpliceIndex();
-  const cuePoints = reel?.wavHeaderData?.cuePoints || [];
 
-  const [markers, setMarkers] = useState<Array<Marker>>(() =>
-    createMarkersFromCuePoints(cuePoints)
+  const { cuePointTimes, setCuePointTimes } = useCuePointTimes({ reel });
+
+  const addSplice = useCallback(
+    (time: number) => {
+      setCuePointTimes((current) => [...current, time]);
+    },
+    [setCuePointTimes]
   );
 
-  const orderedMarkers = useMemo(() => {
-    return markers.toSorted((a, b) => a.time - b.time);
-  }, [markers]);
-
-  const addSplice = useCallback((time: number) => {
-    // will actually add a marker
-    setMarkers((current) => [...current, { time }]);
-  }, []);
-
   const splices = useMemo(() => {
-    return createSplicesFromMarkers(orderedMarkers);
-  }, [orderedMarkers]);
+    return createSplicesFromCuePointTimes(cuePointTimes);
+  }, [cuePointTimes]);
 
   const activeSplice = useMemo(() => {
     return splices[index];
   }, [index, splices]);
-
-  // const onSpliceClick = useCallback(
-  //   (index: number) => {
-  //     async function play() {
-  //       if (!audioPlayer) {
-  //         return;
-  //       }
-
-  //       const splice = splices?.at(index);
-  //       if (!splice || !audioBuffer) {
-  //         return;
-  //       }
-  //       audioPlayer.playSound({ audioBuffer, splice });
-  //     }
-  //     play();
-  //   },
-  //   [audioBuffer, audioPlayer, splices]
-  // );
-
-  // const onSpliceDelete = useCallback(
-  //   (index: number) => {
-  //     // first splice cannot be deleted
-  //     if (index === 0) {
-  //       return;
-  //     }
-
-  //     // when deleting splice at index N, we need to remove marker at index N-1,
-  //     // because each splice is defined by the current marker and the previous marker
-  //     const markerIndexToRemove = index - 1;
-
-  //     const newMarkers = [...markers];
-  //     newMarkers.splice(markerIndexToRemove, 1);
-  //     setMarkers(newMarkers);
-  //   },
-  //   [markers, setMarkers]
-  // );
 
   // // Check if current markers are different from original cue points
   // const hasUnsavedChanges = useMemo(() => {
@@ -200,15 +153,8 @@ export function useSplices({ reel }: UseSplicesProps): UseSplicesResult {
   // }
 
   return {
-    markers: orderedMarkers,
     splices,
     addSplice,
     activeSplice,
-    // hasUnsavedChanges,
-    // onSpliceClick,
-    // onSpliceDelete,
-    // addMarker,
-    // saveChanges,
-    // resetChanges,
   };
 }

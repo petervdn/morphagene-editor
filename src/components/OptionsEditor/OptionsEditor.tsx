@@ -10,7 +10,7 @@ import { FiSave, FiAlertCircle, FiCheckCircle } from "react-icons/fi";
 
 interface OptionsEditorProps {
   content: string;
-  onSave: (content: string) => Promise<boolean>;
+  onSave?: (content: string) => Promise<boolean>;
 }
 
 type SaveStatus = "idle" | "saving" | "success" | "error";
@@ -35,30 +35,6 @@ export function OptionsEditor({
     }
   }, [content]);
 
-  // Handle option value changes
-  const handleOptionChange = useCallback(
-    async (code: string, value: string | number) => {
-      if (!optionsData) return;
-
-      // Update the option in the state
-      const updatedOptions = optionsData.options.map((option) =>
-        option.code === code ? { ...option, value } : option
-      );
-
-      const updatedData = {
-        ...optionsData,
-        options: updatedOptions,
-      };
-
-      setOptionsData(updatedData);
-
-      // Serialize and save the updated options
-      const serializedContent = serializeOptionsData(updatedData);
-      await saveChanges(serializedContent);
-    },
-    [optionsData]
-  );
-
   // Save changes to the file
   const saveChanges = useCallback(
     async (contentToSave: string) => {
@@ -66,7 +42,7 @@ export function OptionsEditor({
       setSaveMessage("Saving changes...");
 
       try {
-        const success = await onSave(contentToSave);
+        const success = await onSave?.(contentToSave);
 
         if (success) {
           setSaveStatus("success");
@@ -89,6 +65,30 @@ export function OptionsEditor({
       }
     },
     [onSave]
+  );
+
+  // Handle option value changes
+  const handleOptionChange = useCallback(
+    async (code: string, value: string | number) => {
+      if (!optionsData) return;
+
+      // Update the option in the state
+      const updatedOptions = optionsData.options.map((option) =>
+        option.code === code ? { ...option, value } : option
+      );
+
+      const updatedData = {
+        ...optionsData,
+        options: updatedOptions,
+      };
+
+      setOptionsData(updatedData);
+
+      // Serialize and save the updated options
+      const serializedContent = serializeOptionsData(updatedData);
+      await saveChanges(serializedContent);
+    },
+    [optionsData, saveChanges]
   );
 
   if (!optionsData) {
