@@ -1,10 +1,10 @@
 import { useRef, type ReactElement } from "react";
 import styles from "./WaveformView.module.css";
-import type { Range, ReelWithAudioBuffer, Splice } from "../../types/types";
-import { useElementSize } from "../../utils/hooks/useElementSize";
-import { WaveformCanvas } from "./layers/WaveformCanvas";
-import { SplicesView } from "./layers/SplicesView/SplicesView";
-import { PlayheadCanvas } from "./layers/PlayheadCanvas";
+import type { Range, ReelWithAudioBuffer, Splice } from "../../../types/types";
+import { useElementSize } from "../../../utils/hooks/useElementSize";
+import { WaveformCanvas } from "./WaveformLayer/WaveformLayer";
+import { SplicesView } from "./SplicesLayer/SplicesLayer";
+import { PlayheadLayer } from "./PlayheadLayer/PlayheadLayer";
 
 interface WaveformViewProps {
   splices: Splice[];
@@ -32,8 +32,13 @@ export function WaveformView({
                 size={wrapperSize}
               />
             </div>
+
             <div className={styles.layer}>
-              <PlayheadCanvas viewPort={viewPort} size={wrapperSize} />
+              <PlayheadLayer
+                viewPort={viewPort}
+                size={wrapperSize}
+                reel={reel}
+              />
             </div>
 
             <div className={styles.layer}>
@@ -44,7 +49,6 @@ export function WaveformView({
                 viewPort={viewPort}
               />
             </div>
-
             {/* <InteractionLayer
               viewPort={viewPort}
               size={wrapperSize}

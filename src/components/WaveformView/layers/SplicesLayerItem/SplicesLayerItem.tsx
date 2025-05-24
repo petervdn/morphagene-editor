@@ -6,7 +6,7 @@ import type {
   Splice,
 } from "../../../../types/types";
 import { getXPositionForTime } from "../../../../utils/getXPositionForTime";
-import styles from "./SplicesViewItem.module.css";
+import styles from "./SplicesLayerItem.module.css";
 import { Link } from "react-router-dom";
 import { getSplicePath } from "../../../../routes/utils/getSplicePath";
 import { getSpliceIdByIndex } from "../../../../utils/splices/getSpliceId";

@@ -5,7 +5,7 @@ import type { ReelWithAudioBuffer } from "../../types/types";
 import { SpliceDetail } from "../SpliceDetail/SpliceDetail";
 import { useActiveSplice } from "../../utils/hooks/useActiveSplice";
 import { useSplices } from "../../utils/hooks/useSplices";
-import { WaveformView } from "../WaveformView/WaveformView";
+import { WaveformView } from "../WaveformView/layers/WaveformView";
 import { SpliceNavigation } from "../SpliceNavigation/SpliceNavigation";
 import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
 

@@ -36,10 +36,6 @@ function drawWaveformChannel({
   // Calculate total duration based on sample rate (assuming 44.1kHz if not provided)
   const totalDuration = channelData.length / 48000;
 
-  // Calculate what portion of the audio data to display
-  const viewPortDuration = viewPort.end - viewPort.start;
-  const viewPortRatio = viewPortDuration / totalDuration;
-
   // Calculate sample indices for the viewport
   const startSampleIndex = Math.floor(
     (viewPort.start / totalDuration) * channelData.length

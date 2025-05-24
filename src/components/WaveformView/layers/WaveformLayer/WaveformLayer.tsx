@@ -1,8 +1,8 @@
 import { useEffect, useCallback, type ReactElement, useRef } from "react";
-import type { Range } from "../../../types/types";
-import type { Size } from "../../../types/types";
-import { SizedCanvas } from "../../SizedCanvas/SizedCanvas";
-import { drawWaveformChannels } from "../../../utils/canvas/drawWaveform";
+import type { Range } from "../../../../types/types";
+import type { Size } from "../../../../types/types";
+import { SizedCanvas } from "../../../SizedCanvas/SizedCanvas";
+import { drawWaveformChannels } from "../../../../utils/canvas/drawWaveform";
 
 type Props = {
   audioBuffer: AudioBuffer;

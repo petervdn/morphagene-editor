@@ -5,7 +5,7 @@ import { useAudioPlayer } from "../../utils/hooks/useAudioPlayer";
 import styles from "./SpliceDetail.module.css";
 import type { ReelWithAudioBuffer, Splice } from "../../types/types";
 import { usePathParams } from "../../utils/hooks/usePathParams";
-import { WaveformView } from "../WaveformView/WaveformView";
+import { WaveformView } from "../WaveformView/layers/WaveformView";
 import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
 
 type Props = {

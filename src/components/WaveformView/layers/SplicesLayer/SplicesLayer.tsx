@@ -5,8 +5,8 @@ import type {
   Size,
   Splice,
 } from "../../../../types/types";
-import styles from "./SplicesView.module.css";
-import { SplicesViewItem } from "./SplicesViewItem";
+import styles from "./SplicesLayer.module.css";
+import { SplicesViewItem } from "../SplicesLayerItem/SplicesLayerItem";
 
 type Props = {
   size: Size;

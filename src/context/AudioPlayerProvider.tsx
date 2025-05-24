@@ -9,6 +9,7 @@ type PlaySoundProps = { audioBuffer: AudioBuffer; splice: Splice };
 export type AudioPlayerProps = {
   playingSound: PlayingSound | null;
   playSound: (props: PlaySoundProps) => void;
+  audioContext: AudioContext | null;
 };
 
 export function AudioPlayerProvider({ children }: PropsWithChildren) {
@@ -42,8 +43,8 @@ export function AudioPlayerProvider({ children }: PropsWithChildren) {
   );
 
   const contextValue: AudioPlayerProps = useMemo(() => {
-    return { playSound, playingSound };
-  }, [playSound, playingSound]);
+    return { playSound, playingSound, audioContext };
+  }, [playSound, playingSound, audioContext]);
 
   return (
     <audioPlayerContext.Provider value={contextValue}>
