@@ -21,6 +21,10 @@
   font-size: 1.1rem;
 }
 
+.revertIcon {
+  font-size: 1.2rem;
+}
+
 .saveButton, .resetButton {
   display: flex;
   align-items: center;

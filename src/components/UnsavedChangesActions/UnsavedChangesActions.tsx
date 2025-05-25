@@ -1,34 +1,26 @@
-import { useCallback, type ReactElement } from "react";
+import { type ReactElement } from "react";
 import { MdRestartAlt } from "react-icons/md";
 import { FiSave } from "react-icons/fi";
 import styles from "./UnsavedChangesActions.module.css";
-import type { ReelWithAudioBuffer } from "../../types/types";
-import { reloadReelWavHeaderData } from "../../utils/reels/reloadReelWavHeaderData";
 
 type UnsavedChangesActionsProps = {
-  reel: ReelWithAudioBuffer;
+  onRevertClick?: () => void;
+  onSaveClick?: () => void;
 };
 
 export function UnsavedChangesActions({
-  reel,
+  onRevertClick,
+  onSaveClick,
 }: UnsavedChangesActionsProps): ReactElement {
-  const onRevertClick = useCallback(() => {
-    reloadReelWavHeaderData(reel);
-  }, [reel]);
-
-  const onSaveClick = useCallback(() => {
-    console.log("save");
-  }, []);
-
   return (
     <div className={styles.saveContainer}>
       <div className={styles.buttonGroup}>
         <button
           className={styles.resetButton}
           onClick={onRevertClick}
-          title="Reset to original state"
+          title="Revert to original state"
         >
-          <MdRestartAlt /> Revert
+          <MdRestartAlt className={styles.revertIcon} /> Revert
         </button>
         <button
           className={styles.saveButton}

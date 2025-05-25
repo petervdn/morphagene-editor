@@ -149,24 +149,24 @@ function writeString(view: DataView, offset: number, string: string): void {
  * @param originalHeaderData The original WAV header data to preserve other metadata
  * @returns The new File object
  */
-export async function saveWavWithCuePoints(
-  file: File,
-  audioBuffer: AudioBuffer,
-  markers: Array<number>,
-  originalHeaderData: WavHeaderData
-): Promise<File> {
-  const wavBlob = await createWavWithCuePoints(
-    audioBuffer,
-    markers,
-    originalHeaderData
-  );
+// export async function saveWavWithCuePoints(
+//   file: File,
+//   audioBuffer: AudioBuffer,
+//   markers: Array<number>,
+//   originalHeaderData: WavHeaderData
+// ): Promise<File> {
+//   const wavBlob = await createWavWithCuePoints(
+//     audioBuffer,
+//     markers,
+//     originalHeaderData
+//   );
 
-  // Create a new file with the same name
-  return new File([wavBlob], file.name, {
-    type: "audio/wav",
-    lastModified: Date.now(),
-  });
-}
+//   // Create a new file with the same name
+//   return new File([wavBlob], file.name, {
+//     type: "audio/wav",
+//     lastModified: Date.now(),
+//   });
+// }
 
 /**
  * Saves a WAV file with updated cue points and triggers a download
@@ -175,58 +175,58 @@ export async function saveWavWithCuePoints(
  * @param markers The array of markers to save as cue points
  * @param originalHeaderData The original WAV header data to preserve other metadata
  */
-export async function downloadWavWithCuePoints(
-  file: File,
-  audioBuffer: AudioBuffer,
-  markers: Array<number>,
-  originalHeaderData: WavHeaderData
-): Promise<void> {
-  const newFile = await saveWavWithCuePoints(
-    file,
-    audioBuffer,
-    markers,
-    originalHeaderData
-  );
+// export async function downloadWavWithCuePoints(
+//   file: File,
+//   audioBuffer: AudioBuffer,
+//   markers: Array<number>,
+//   originalHeaderData: WavHeaderData
+// ): Promise<void> {
+//   const newFile = await saveWavWithCuePoints(
+//     file,
+//     audioBuffer,
+//     markers,
+//     originalHeaderData
+//   );
 
-  // Create a download link
-  const url = URL.createObjectURL(newFile);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = newFile.name;
+//   // Create a download link
+//   const url = URL.createObjectURL(newFile);
+//   const a = document.createElement("a");
+//   a.href = url;
+//   a.download = newFile.name;
 
-  // Trigger the download
-  document.body.appendChild(a);
-  a.click();
+//   // Trigger the download
+//   document.body.appendChild(a);
+//   a.click();
 
-  // Clean up
-  setTimeout(() => {
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }, 0);
-}
+//   // Clean up
+//   setTimeout(() => {
+//     document.body.removeChild(a);
+//     URL.revokeObjectURL(url);
+//   }, 0);
+// }
 
-/**
- * Saves a WAV file with updated cue points to the file system
- * @param fileHandle The FileSystemFileHandle to write to
- * @param audioBuffer The AudioBuffer containing the audio data
- * @param markers The array of markers to save as cue points
- * @param originalHeaderData The original WAV header data to preserve other metadata
- */
-export async function saveWavToFileSystem(
-  fileHandle: FileSystemFileHandle,
-  audioBuffer: AudioBuffer,
-  markers: Array<number>,
-  originalHeaderData: WavHeaderData
-): Promise<void> {
-  const newFile = await saveWavWithCuePoints(
-    await fileHandle.getFile(),
-    audioBuffer,
-    markers,
-    originalHeaderData
-  );
+// /**
+//  * Saves a WAV file with updated cue points to the file system
+//  * @param fileHandle The FileSystemFileHandle to write to
+//  * @param audioBuffer The AudioBuffer containing the audio data
+//  * @param markers The array of markers to save as cue points
+//  * @param originalHeaderData The original WAV header data to preserve other metadata
+//  */
+// export async function saveWavToFileSystem(
+//   fileHandle: FileSystemFileHandle,
+//   audioBuffer: AudioBuffer,
+//   markers: Array<number>,
+//   originalHeaderData: WavHeaderData
+// ): Promise<void> {
+//   const newFile = await saveWavWithCuePoints(
+//     await fileHandle.getFile(),
+//     audioBuffer,
+//     markers,
+//     originalHeaderData
+//   );
 
-  // Write the file to the file system
-  const writable = await fileHandle.createWritable();
-  await writable.write(newFile);
-  await writable.close();
-}
+//   // Write the file to the file system
+//   const writable = await fileHandle.createWritable();
+//   await writable.write(newFile);
+//   await writable.close();
+// }

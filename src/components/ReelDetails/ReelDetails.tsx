@@ -11,6 +11,8 @@ import { useHasUnsavedCuePointsChanges } from "../../hooks/useHasUnsavedCuePoint
 import { useSyncCuePointsToStore } from "../../hooks/useSyncCuePointsToStore";
 import { useSplices } from "../../hooks/useSplices";
 import { addSplice } from "../../stores/cuePointTimes/utils/addSplice";
+import { reloadReelWavHeaderData } from "../../utils/reels/reloadReelWavHeaderData";
+import { useSaveSplices } from "../../hooks/useSaveSplices";
 
 type Props = {
   reel: ReelWithAudioBuffer;
@@ -20,6 +22,7 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
   const splices = useSplices();
   const activeSplice = useActiveSplice();
   const hasUnsavedChanges = useHasUnsavedCuePointsChanges();
+  const saveSplices = useSaveSplices({ reel });
   const waveformViewProps = useWaveformView({
     reel,
   });
@@ -27,6 +30,14 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
   const onWaveformViewShiftClick = useCallback((time: number) => {
     addSplice(time);
   }, []);
+
+  const onRevertClick = useCallback(() => {
+    reloadReelWavHeaderData(reel);
+  }, [reel]);
+
+  const onSaveClick = useCallback(() => {
+    saveSplices();
+  }, [saveSplices]);
 
   useSyncCuePointsToStore({ reel });
 
@@ -54,11 +65,16 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
           </h2>
           <div className={styles.reelMetadata}>
             {metaData.map((entry) => (
-              <span>{entry}</span>
+              <span key={entry}>{entry}</span>
             ))}
           </div>
         </div>
-        {hasUnsavedChanges && <UnsavedChangesActions reel={reel} />}
+        {hasUnsavedChanges && (
+          <UnsavedChangesActions
+            onRevertClick={onRevertClick}
+            onSaveClick={onSaveClick}
+          />
+        )}
       </div>
       <WaveformView
         splices={splices}

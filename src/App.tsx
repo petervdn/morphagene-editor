@@ -23,6 +23,8 @@ import { router } from "./routes/router";
 - delete all splices
 - handle when splice doesnt exit (when you looking at it and remove it)
 - keyboard navigation
+- splice waveview up into two units? (or keep one wave view?)
+- drag splices
 */
 
 function App() {
