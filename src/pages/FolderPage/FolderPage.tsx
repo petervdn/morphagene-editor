@@ -10,7 +10,6 @@ import { OptionsListItem } from "../../components/OptionsListItem/OptionsListIte
 import { getFolderContent } from "../../utils/folder/getFolderContent";
 import { FolderActions } from "../../components/FolderActions/FolderActions";
 import { useSelectFileAndCreateReel } from "../../hooks/useSelectFileAndCreateReel";
-import { useAudioContext } from "../../hooks/useAudioContext";
 import { refreshFolder } from "../../hooks/refreshFolder";
 
 export function FolderPage(): ReactElement {
