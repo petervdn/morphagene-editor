@@ -8,6 +8,19 @@ import { router } from "./routes/router";
 /*
 - add mm linting
 - unify ids/index for both reels and splices
+- add file
+- remove file
+- remove splice
+- auto slice with divisions
+- auto slice on transients
+- save changes
+- options
+- better home page
+- view wave as L/R/stereo
+- fix issue with 1 splice
+- fix issue with navigator not knowing about user added splices
+- cut parts of audio
+- mm ts config (noUncheckedIndexedAccess)
 */
 
 function App() {

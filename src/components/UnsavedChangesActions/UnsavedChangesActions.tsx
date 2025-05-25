@@ -22,10 +22,6 @@ export function UnsavedChangesActions({
 
   return (
     <div className={styles.saveContainer}>
-      {/* <div className={styles.unsavedIndicator}>
-        <BiSolidErrorCircle className={styles.warningIcon} />
-        <span>Unsaved changes</span>
-      </div> */}
       <div className={styles.buttonGroup}>
         <button
           className={styles.resetButton}

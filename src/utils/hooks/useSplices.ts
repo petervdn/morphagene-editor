@@ -30,11 +30,10 @@ export function useSplices({ reel }: UseSplicesProps): UseSplicesResult {
     [setCuePointTimes]
   );
 
-  const splices = useMemo(() => {
-    return cuePointTimes.length > 1
-      ? createSplicesFromCuePointTimes(cuePointTimes)
-      : [];
-  }, [cuePointTimes]);
+  const splices = useMemo(
+    () => createSplicesFromCuePointTimes(cuePointTimes),
+    [cuePointTimes]
+  );
 
   const activeSplice = useMemo(() => {
     return splices[index];
