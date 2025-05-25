@@ -1,13 +1,10 @@
-import type { WaveFile } from "wavefile";
-
 export type Reel = {
   id: string;
   name: string;
   fileName: string;
   fileHandle: FileSystemFileHandle;
-  // wavHeaderData: WavHeaderData;
+  wavHeaderData: WavHeaderData;
   audioBuffer: AudioBuffer | null;
-  waveFile: WaveFile;
 };
 
 export type ReelWithAudioBuffer = Omit<Reel, "audioBuffer"> & {

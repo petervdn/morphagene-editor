@@ -4,20 +4,17 @@ import styles from "./ReelsListItem.module.css";
 import { PiFilmReel } from "react-icons/pi";
 import type { Reel } from "../../types/types";
 import { getReelPath } from "../../routes/utils/getReelPath";
-import { getWaveFileMetaData } from "../../utils/audio/getWaveFileMetaData";
 
 type Props = {
   reel: Reel;
 };
 
 export function ReelListItem({
-  reel: { fileName, id, name, waveFile },
+  reel: { fileName, id, name, wavHeaderData },
 }: Props): ReactElement {
-  const amountOfSplicesLabel = `${waveFile.listCuePoints().length} splice${
-    waveFile.listCuePoints().length === 1 ? "" : "s"
+  const amountOfSplicesLabel = `${wavHeaderData.cuePoints.length} splice${
+    wavHeaderData.cuePoints.length === 1 ? "" : "s"
   }`;
-
-  const waveFileMetaData = getWaveFileMetaData(waveFile);
 
   return (
     <li className={styles.reelListItem}>
@@ -28,7 +25,7 @@ export function ReelListItem({
         </span>
         <span className={styles.reelMeta}>
           <>
-            {fileName} • {waveFileMetaData.duration.toFixed(1)}s •{" "}
+            {fileName} • {wavHeaderData.duration.toFixed(1)}s •{" "}
             {amountOfSplicesLabel}
           </>
         </span>

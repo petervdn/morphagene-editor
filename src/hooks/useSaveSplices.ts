@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import type { ReelWithAudioBuffer } from "../types/types";
 import { useCuePointTimesStore } from "../stores/cuePointTimes/cuePointTimesStore";
 import { writeWavFile } from "../utils/audio/writeWavFile";
-import { reloadWaveFile } from "../utils/reels/reloadReelWavHeaderData";
+import { reloadReelWavHeaderData } from "../utils/reels/reloadReelWavHeaderData";
 
 // a bit weird that we have to pass the reel but get the cuePointTimes from elsewhere
 export function useSaveSplices({ reel }: { reel: ReelWithAudioBuffer }) {
@@ -20,6 +20,6 @@ export function useSaveSplices({ reel }: { reel: ReelWithAudioBuffer }) {
     });
 
     // reloading will make sure ui is up to date again
-    reloadWaveFile(reel);
+    reloadReelWavHeaderData(reel);
   }, [cuePointTimes, reel]);
 }

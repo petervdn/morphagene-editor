@@ -1,7 +1,7 @@
 import type { FolderContent } from "../../stores/folderContentStore";
 import type { MorphageneOptions, Reel } from "../../types/types";
+import { parseWavFileHeader } from "../audio/parseWavFileHeader";
 import { reelFileNames } from "../../constants/reelFileNames";
-import { createWaveFileFromFile } from "../reels/reloadReelWavHeaderData";
 
 // todo: prevent gaps?
 export async function getFolderContent(
@@ -18,16 +18,15 @@ export async function getFolderContent(
         // reel files (wav)
         const id = (index + 1).toString();
         const file = await entry.getFile();
-        const waveFile = await createWaveFileFromFile(file);
+        const wavHeaderData = await parseWavFileHeader(file);
 
         reels.push({
           id,
           fileName: file.name,
           fileHandle: entry,
           name: `Reel #${id}`,
-          // wavHeaderData,
+          wavHeaderData,
           audioBuffer: null,
-          waveFile,
         });
       } else if (entry.name === "options.txt") {
         // options.txt file

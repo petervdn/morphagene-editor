@@ -8,9 +8,12 @@ import { router } from "./routes/router";
 /*
 - add mm linting
 - unify ids/index for both reels and splices
+- add file
 - remove file
+- remove splice
 - auto slice with divisions
 - auto slice on transients
+- save changes
 - options
 - zoom/pan
 - better home page
@@ -22,16 +25,13 @@ import { router } from "./routes/router";
 - handle when splice doesnt exit (when you looking at it and remove it)
 - keyboard navigation
 - splice waveview up into two units? (or keep one wave view?)
-- drag splice edges
+- drag splices
 - show marker under mouse when hovering over wave
 - some kind of way to only cut in wave corssing
 - indicate disk action
 - max splices
 - throw error on 0 splices
-- handle audiocontext not running at 48khz? not sure if this matters
-- check what morphagene does with gaps in filenames
-- show warinnig if a file is not 48khz or 32bit? )probably include is there are no cuepoints)
-- use wav read/write lib
+- handle audiocontext not running at 48khz
 */
 
 function App() {

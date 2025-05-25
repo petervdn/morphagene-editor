@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import type { Reel } from "../types/types";
-import { setCuePointsFromWaveFile } from "../stores/cuePointTimes/utils/setCuePointsFromWaveFile";
+import { setCuePointsFromWavHeaderData } from "../stores/cuePointTimes/utils/setCuePointsFromWavHeaderData";
 import { clearCuePointTimes } from "../stores/cuePointTimes/utils/clearCuePointTimes";
 
 type Props = {
@@ -9,10 +9,10 @@ type Props = {
 
 export function useSyncCuePointsToStore({ reel }: Props): void {
   useEffect(() => {
-    setCuePointsFromWaveFile(reel.waveFile);
+    setCuePointsFromWavHeaderData(reel.wavHeaderData);
 
     return () => {
       clearCuePointTimes();
     };
-  }, [reel.waveFile]);
+  }, [reel.wavHeaderData]);
 }

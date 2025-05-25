@@ -11,9 +11,8 @@ import { useHasUnsavedCuePointsChanges } from "../../hooks/useHasUnsavedCuePoint
 import { useSyncCuePointsToStore } from "../../hooks/useSyncCuePointsToStore";
 import { useSplices } from "../../hooks/useSplices";
 import { addSplice } from "../../stores/cuePointTimes/utils/addSplice";
+import { reloadReelWavHeaderData } from "../../utils/reels/reloadReelWavHeaderData";
 import { useSaveSplices } from "../../hooks/useSaveSplices";
-import { getWaveFileMetaData } from "../../utils/audio/getWaveFileMetaData";
-import { reloadWaveFile } from "../../utils/reels/reloadReelWavHeaderData";
 
 type Props = {
   reel: ReelWithAudioBuffer;
@@ -33,7 +32,7 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
   }, []);
 
   const onRevertClick = useCallback(() => {
-    reloadWaveFile(reel);
+    reloadReelWavHeaderData(reel);
   }, [reel]);
 
   const onSaveClick = useCallback(() => {
@@ -42,17 +41,17 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
 
   useSyncCuePointsToStore({ reel });
 
-  const reelInfo = useMemo(() => {
-    const waveFileMetaData = getWaveFileMetaData(reel.waveFile);
+  const metaData = useMemo(() => {
     return [
       reel.fileName,
-      `${reel.audioBuffer.duration.toFixed(2)} seconds`,
-      `${(reel.waveFile.toBuffer().length / 1024 / 1024).toFixed(2)} MB`,
-      `${waveFileMetaData.sampleRate} Hz`,
-      `${waveFileMetaData.numChannels} channels`,
-      `${waveFileMetaData.bitsPerSample} bit`,
+      `${reel.wavHeaderData.duration.toFixed(2)} seconds`,
+      `${(reel.wavHeaderData.fileSize / 1024 / 1024).toFixed(2)} MB`,
+      `${reel.wavHeaderData.sampleRate} Hz`,
+      `${reel.wavHeaderData.numChannels} channels`,
+      `${reel.wavHeaderData.bitsPerSample} bit`,
+      `${reel.wavHeaderData.format}`,
     ];
-  }, [reel.audioBuffer.duration, reel.fileName, reel.waveFile]);
+  }, [reel.fileName, reel.wavHeaderData]);
 
   return splices ? (
     <>
@@ -65,7 +64,7 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
             <span className={styles.titleText}>{reel.name}</span>
           </h2>
           <div className={styles.reelMetadata}>
-            {reelInfo.map((entry) => (
+            {metaData.map((entry) => (
               <span key={entry}>{entry}</span>
             ))}
           </div>
