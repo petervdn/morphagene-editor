@@ -10,7 +10,7 @@ import styles from "./SplicesLayerItem.module.css";
 import { Link } from "react-router-dom";
 import { getSplicePath } from "../../../../routes/utils/getSplicePath";
 import { getSpliceIdByIndex } from "../../../../utils/splices/getSpliceId";
-import { usePathParams } from "../../../../utils/hooks/usePathParams";
+import { usePathParams } from "../../../../hooks/usePathParams";
 
 type Props = {
   splice: Splice;

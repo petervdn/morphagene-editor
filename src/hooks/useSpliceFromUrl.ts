@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import type { Splice } from "../../types/types";
+import type { Splice } from "../types/types";
 
 export function useSplice(splices: Array<Splice>): {
   isFirstSplice: boolean;

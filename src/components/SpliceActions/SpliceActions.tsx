@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { useCallback } from "react";
 import type { ReelWithAudioBuffer, Splice } from "../../types/types";
-import { useSpliceNavigation } from "../../utils/hooks/useSpliceNavigation";
 import styles from "./SpliceActions.module.css";
 import { MdSkipNext, MdSkipPrevious } from "react-icons/md";
 import { BsTrash, BsPlayCircle, BsStopCircle } from "react-icons/bs";
-import { useAudioPlayer } from "../../utils/hooks/useAudioPlayer";
+import { useSpliceNavigation } from "../../hooks/useSpliceNavigation";
+import { useAudioPlayer } from "../../hooks/useAudioPlayer";
 
 type SpliceActionsProps = {
   reel: ReelWithAudioBuffer;

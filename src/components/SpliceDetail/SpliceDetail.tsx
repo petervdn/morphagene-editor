@@ -2,10 +2,10 @@ import { type ReactElement } from "react";
 import { RiScissorsCutLine } from "react-icons/ri";
 import styles from "./SpliceDetail.module.css";
 import type { ReelWithAudioBuffer, Splice } from "../../types/types";
-import { usePathParams } from "../../utils/hooks/usePathParams";
 import { WaveformView } from "../WaveformView/layers/WaveformView";
 import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
 import { SpliceActions } from "../SpliceActions/SpliceActions";
+import { usePathParams } from "../../hooks/usePathParams";
 
 type Props = {
   splice: Splice;

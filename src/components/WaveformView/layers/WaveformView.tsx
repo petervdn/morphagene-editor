@@ -1,11 +1,11 @@
 import { useRef, type ReactElement } from "react";
 import styles from "./WaveformView.module.css";
 import type { Range, ReelWithAudioBuffer, Splice } from "../../../types/types";
-import { useElementSize } from "../../../utils/hooks/useElementSize";
 import { WaveformCanvas } from "./WaveformLayer/WaveformLayer";
 import { SplicesView } from "./SplicesLayer/SplicesLayer";
 import { PlayheadLayer } from "./PlayheadLayer/PlayheadLayer";
 import { InteractionLayer } from "./InteractionLayer/InteractionLayer";
+import { useElementSize } from "../../../hooks/useElementSize";
 
 interface WaveformViewProps {
   splices: Array<Splice>;

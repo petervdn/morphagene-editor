@@ -3,7 +3,6 @@ import { PiFilmReel } from "react-icons/pi";
 import styles from "./ReelDetails.module.css";
 import type { ReelWithAudioBuffer } from "../../types/types";
 import { SpliceDetail } from "../SpliceDetail/SpliceDetail";
-import { useSplices } from "../../utils/hooks/useSplices";
 import { WaveformView } from "../WaveformView/layers/WaveformView";
 import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
 import { UnsavedChangesActions } from "../UnsavedChangesActions/UnsavedChangesActions";
@@ -11,6 +10,7 @@ import { addCuePointTime } from "../../stores/cuePointTimesStore";
 import { useActiveSplice } from "../../stores/useActiveSplice";
 import { useHasUnsavedCuePointsChanges } from "../../hooks/useHasUnsavedCuePointsChanges";
 import { useSyncCuePointsToStore } from "../../hooks/useSyncCuePointsToStore";
+import { useSplices } from "../../hooks/useSplices";
 
 type Props = {
   reel: ReelWithAudioBuffer;

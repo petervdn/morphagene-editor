@@ -1,5 +1,5 @@
-import type { Reel, Splice } from "../../types/types";
-import { getSplicePath } from "../../routes/utils/getSplicePath";
+import { getSplicePath } from "../routes/utils/getSplicePath";
+import type { Reel, Splice } from "../types/types";
 import { useParamsSpliceIndex } from "./useParamsSpliceIndex";
 import { useSplices } from "./useSplices";
 

@@ -1,5 +1,5 @@
 import { useEffect, useState, type RefObject } from "react";
-import type { Size } from "../../types/types";
+import type { Size } from "../types/types";
 
 type Props = {
   elementRef: RefObject<HTMLElement | null>;

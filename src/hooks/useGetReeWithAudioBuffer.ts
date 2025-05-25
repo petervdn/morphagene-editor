@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { setAudioBufferForReel } from "../../stores/folderContentStore";
-import type { ReelWithAudioBuffer } from "../../types/types";
-import { decodeAudioFile } from "../audio/decodeAudioFile";
 import { useAudioContext } from "./useAudioContext";
 import { useGetReelById } from "./useGetReelById";
-import { reelIsReelWithAudioBuffer } from "../reels/reelIsReelWithAudioBuffer";
+import type { ReelWithAudioBuffer } from "../types/types";
+import { decodeAudioFile } from "../utils/audio/decodeAudioFile";
+import { setAudioBufferForReel } from "../stores/folderContentStore";
+import { reelIsReelWithAudioBuffer } from "../utils/reels/reelIsReelWithAudioBuffer";
 
 /**
  * Will get the reel with the given id from the store, checks if

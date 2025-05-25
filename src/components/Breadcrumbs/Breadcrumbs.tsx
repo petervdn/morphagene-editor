@@ -2,7 +2,7 @@ import { type ReactElement } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import styles from "./Breadcrumbs.module.css";
 import { routes } from "../../routes/routes";
-import { useGetReelById } from "../../utils/hooks/useGetReelById";
+import { useGetReelById } from "../../hooks/useGetReelById";
 
 export function Breadcrumbs(): ReactElement | null {
   const location = useLocation();

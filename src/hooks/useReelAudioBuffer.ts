@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import type { Reel } from "../../types/types";
 import { useAudioContext } from "./useAudioContext";
-import { decodeAudioFile } from "../audio/decodeAudioFile";
+import { decodeAudioFile } from "../utils/audio/decodeAudioFile";
+import type { Reel } from "../types/types";
 
 export function useReelAudioBuffer(reel: Reel): AudioBuffer | null {
   const audioContext = useAudioContext();

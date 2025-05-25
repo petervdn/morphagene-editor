@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState, type PropsWithChildren } from "react";
 import { audioPlayerContext } from "../utils/audio/audioPlayerContext";
-import { useAudioContext } from "../utils/hooks/useAudioContext";
 import { playSplice, type PlayingSound } from "../utils/audio/playSplice";
 import type { Splice } from "../types/types";
+import { useAudioContext } from "../hooks/useAudioContext";
 
 type PlaySoundProps = { audioBuffer: AudioBuffer; splice: Splice };
 

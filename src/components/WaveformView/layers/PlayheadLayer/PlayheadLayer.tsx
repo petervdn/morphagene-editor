@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactElement } from "react";
 import type { Range, ReelWithAudioBuffer, Size } from "../../../../types/types";
 import styles from "./PlayheadLayer.module.css";
 import { getXPositionForTime } from "../../../../utils/getXPositionForTime";
-import { useAudioPlayer } from "../../../../utils/hooks/useAudioPlayer";
+import { useAudioPlayer } from "../../../../hooks/useAudioPlayer";
 
 type Props = {
   size: Size;
