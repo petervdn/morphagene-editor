@@ -1,9 +1,16 @@
-import { setWavHeaderDataForReel } from "../../stores/folderContentStore";
+import { WaveFile } from "wavefile";
+import { setWaveFileForReel } from "../../stores/folderContentStore";
 import type { Reel } from "../../types/types";
-import { parseWavFileHeader } from "../audio/parseWavFileHeader";
 
-export async function reloadReelWavHeaderData(reel: Reel): Promise<void> {
+export async function reloadWaveFile(reel: Reel): Promise<void> {
   const file = await reel.fileHandle.getFile();
-  const wavHeaderData = await parseWavFileHeader(file);
-  setWavHeaderDataForReel({ reelId: reel.id, wavHeaderData });
+  const waveFile = await createWaveFileFromFile(file);
+  setWaveFileForReel({ reelId: reel.id, waveFile });
+}
+
+export async function createWaveFileFromFile(file: File): Promise<WaveFile> {
+  const waveFile = new WaveFile();
+  const arrayBuffer = await file.arrayBuffer();
+  waveFile.fromBuffer(new Uint8Array(arrayBuffer));
+  return waveFile;
 }

@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import type { Reel, MorphageneOptions, WavHeaderData } from "../types/types";
+import type { Reel, MorphageneOptions } from "../types/types";
+import type { WaveFile } from "wavefile";
 
 export type FolderContent = {
   directoryHandle: FileSystemDirectoryHandle; // move outside of this obj
@@ -41,11 +42,11 @@ export function setAudioBufferForReel({
   }));
 }
 
-export function setWavHeaderDataForReel({
-  wavHeaderData,
+export function setWaveFileForReel({
+  waveFile,
   reelId,
 }: {
-  wavHeaderData: WavHeaderData;
+  waveFile: WaveFile;
   reelId: string;
 }) {
   useFolderContentStore.setState((state) => ({
@@ -53,7 +54,7 @@ export function setWavHeaderDataForReel({
       ? {
           ...state.folderContent,
           reels: state.folderContent.reels.map((reel) => {
-            return reel.id !== reelId ? reel : { ...reel, wavHeaderData };
+            return reel.id !== reelId ? reel : { ...reel, waveFile };
           }),
         }
       : null,
