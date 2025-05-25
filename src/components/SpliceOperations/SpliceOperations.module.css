@@ -1,0 +1,11 @@
+.container {
+  padding: 16px;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  margin-bottom: 16px;
+}
+
+.container h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+}

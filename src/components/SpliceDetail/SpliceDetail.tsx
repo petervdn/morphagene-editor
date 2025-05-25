@@ -7,6 +7,9 @@ import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
 import { SpliceActions } from "../SpliceActions/SpliceActions";
 import { usePathParams } from "../../hooks/usePathParams";
 import { deleteSplice } from "../../stores/cuePointTimes/utils/deleteSplice";
+import { SpliceOperations } from "../SpliceOperations/SpliceOperations";
+import { useCuePointTimesStore } from "../../stores/cuePointTimes/cuePointTimesStore";
+import { useShallow } from "zustand/shallow";
 
 type Props = {
   splice: Splice;
@@ -25,6 +28,10 @@ export function SpliceDetail({
   const onDeleteClick = useCallback(() => {
     deleteSplice(splice);
   }, [splice]);
+
+  const autoSliceCuePointTimes = useCuePointTimesStore(
+    useShallow((state) => state.autoSliceCuePointTimes)
+  );
 
   return (
     <div className={styles.spliceDetail}>
@@ -65,7 +72,9 @@ export function SpliceDetail({
         {...waveformViewProps}
         viewPort={splice}
         height={100}
+        autoSliceTimes={autoSliceCuePointTimes ?? undefined}
       />
+      <SpliceOperations splice={splice} />
     </div>
   );
 }

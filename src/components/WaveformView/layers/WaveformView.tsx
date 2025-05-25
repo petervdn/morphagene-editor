@@ -6,6 +6,7 @@ import { SplicesView } from "./SplicesLayer/SplicesLayer";
 import { PlayheadLayer } from "./PlayheadLayer/PlayheadLayer";
 import { InteractionLayer } from "./InteractionLayer/InteractionLayer";
 import { useElementSize } from "../../../hooks/useElementSize";
+import { AutoSlicesLayer } from "./AutoSlicesLayer/AutoSlicesLayer";
 
 interface WaveformViewProps {
   splices: Array<Splice>;
@@ -13,6 +14,7 @@ interface WaveformViewProps {
   viewPort: Range;
   onShiftClick?(time: number): void;
   height: number;
+  autoSliceTimes?: Array<number>;
 }
 
 export function WaveformView({
@@ -21,6 +23,7 @@ export function WaveformView({
   splices,
   onShiftClick,
   height,
+  autoSliceTimes,
 }: WaveformViewProps): ReactElement {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const wrapperSize = useElementSize({ elementRef: wrapperRef });
@@ -65,6 +68,21 @@ export function WaveformView({
                 viewPort={viewPort}
               />
             </div>
+
+            {autoSliceTimes && (
+              <div
+                className={styles.layer}
+                id="splices"
+                style={{ pointerEvents: "none" }}
+              >
+                <AutoSlicesLayer
+                  reel={reel}
+                  size={wrapperSize}
+                  times={autoSliceTimes}
+                  viewPort={viewPort}
+                />
+              </div>
+            )}
           </>
         )}
       </div>
