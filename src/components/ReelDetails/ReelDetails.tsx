@@ -1,4 +1,4 @@
-import { useCallback, type ReactElement } from "react";
+import { useCallback, useMemo, type ReactElement } from "react";
 import { PiFilmReel } from "react-icons/pi";
 import styles from "./ReelDetails.module.css";
 import type { ReelWithAudioBuffer } from "../../types/types";
@@ -31,6 +31,20 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
 
   useSyncCuePointsToStore({ reel });
 
+  console.log(reel.wavHeaderData);
+
+  const metaData = useMemo(() => {
+    return [
+      reel.fileName,
+      `${reel.wavHeaderData.duration.toFixed(2)} seconds`,
+      `${(reel.wavHeaderData.fileSize / 1024 / 1024).toFixed(2)} MB`,
+      `${reel.wavHeaderData.sampleRate} Hz`,
+      `${reel.wavHeaderData.numChannels} channels`,
+      `${reel.wavHeaderData.bitsPerSample} bit`,
+      `${reel.wavHeaderData.format}`,
+    ];
+  }, [reel.fileName, reel.wavHeaderData]);
+
   return splices ? (
     <>
       <div className={styles.reelHeader}>
@@ -42,11 +56,9 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
             <span className={styles.titleText}>{reel.name}</span>
           </h2>
           <div className={styles.reelMetadata}>
-            <span>{reel.fileName}</span>
-            <span>
-              {(reel.wavHeaderData.fileSize / 1024 / 1024).toFixed(2)} MB
-            </span>
-            <span>{reel.wavHeaderData.duration.toFixed(2)} seconds</span>
+            {metaData.map((entry) => (
+              <span>{entry}</span>
+            ))}
           </div>
         </div>
         {hasUnsavedChanges && <UnsavedChangesActions reel={reel} />}
