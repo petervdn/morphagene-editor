@@ -1,4 +1,4 @@
-import { useCallback, useEffect, type ReactElement } from "react";
+import { useCallback, type ReactElement } from "react";
 import { PiFilmReel } from "react-icons/pi";
 import styles from "./ReelDetails.module.css";
 import type { ReelWithAudioBuffer } from "../../types/types";
@@ -7,12 +7,10 @@ import { useSplices } from "../../utils/hooks/useSplices";
 import { WaveformView } from "../WaveformView/layers/WaveformView";
 import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
 import { UnsavedChangesActions } from "../UnsavedChangesActions/UnsavedChangesActions";
-import {
-  addCuePointTime,
-  setCuePointsFromWavHeaderData,
-} from "../../stores/cuePointTimesStore";
+import { addCuePointTime } from "../../stores/cuePointTimesStore";
 import { useActiveSplice } from "../../stores/useActiveSplice";
 import { useHasUnsavedCuePointsChanges } from "../../hooks/useHasUnsavedCuePointsChanges";
+import { useSyncCuePointsToStore } from "../../hooks/useSyncCuePointsToStore";
 
 type Props = {
   reel: ReelWithAudioBuffer;
@@ -31,9 +29,7 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
     addCuePointTime(time);
   }, []);
 
-  useEffect(() => {
-    setCuePointsFromWavHeaderData(reel.wavHeaderData);
-  }, [reel.wavHeaderData]);
+  useSyncCuePointsToStore({ reel });
 
   return splices ? (
     <>

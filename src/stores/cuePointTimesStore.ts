@@ -39,3 +39,10 @@ export function addCuePointTime(time: number): void {
   );
   useCuePointTimesStore.setState({ cuePointTimes: newCuePointTimes });
 }
+
+export const clearCuePointTimes = () => {
+  useCuePointTimesStore.setState({
+    cuePointTimes: null,
+    originalCuePointTimes: null,
+  });
+};
