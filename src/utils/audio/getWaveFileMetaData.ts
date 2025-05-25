@@ -7,7 +7,6 @@ export function getWaveFileMetaData(waveFile: WaveFile) {
     sampleRate: fmt.sampleRate,
     numChannels: fmt.numChannels,
     bitsPerSample: fmt.bitsPerSample,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     chunkSize: (waveFile.data as any).chunkSize,
   };
 
