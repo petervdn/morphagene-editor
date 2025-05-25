@@ -35,7 +35,7 @@ export function Footer(): ReactElement {
           </a>
         </div>
         <div className={styles.footerCopyright}>
-          This site is just a personal hobby project and not officially related
+          This site is a personal hobby project and in no way officially related
           to Make Noise or the Morphagene module. Make sure to always make a
           backup of your card and reels before granting this site read and write
           access.

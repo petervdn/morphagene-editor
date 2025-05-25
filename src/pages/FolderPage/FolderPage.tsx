@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import { useCallback, type ReactElement } from "react";
 import { Breadcrumbs } from "../../components/Breadcrumbs/Breadcrumbs";
 import styles from "./FolderPage.module.css";
 import {
@@ -9,9 +9,13 @@ import { ReelsList } from "../../components/ReelsList/ReelsList";
 import { OptionsListItem } from "../../components/OptionsListItem/OptionsListItem";
 import { getFolderContent } from "../../utils/folder/getFolderContent";
 import { FolderActions } from "../../components/FolderActions/FolderActions";
+import { useSelectFileAndCreateReel } from "../../hooks/useSelectFileAndCreateReel";
+import { useAudioContext } from "../../hooks/useAudioContext";
+import { refreshFolder } from "../../hooks/refreshFolder";
 
 export function FolderPage(): ReactElement {
   const folderContent = useFolderContent();
+  const selectFileAndCreateReel = useSelectFileAndCreateReel();
 
   const onFolderSelectClick = async () => {
     try {
@@ -25,14 +29,16 @@ export function FolderPage(): ReactElement {
 
   const onRefreshFolderClick = async () => {
     if (folderContent) {
-      try {
-        // Reload the current folder contents using the existing directoryHandle
-        setFolderContent(await getFolderContent(folderContent.directoryHandle));
-      } catch (error) {
-        console.error("Error refreshing folder contents:", error);
-      }
+      refreshFolder(folderContent);
     }
   };
+
+  const onCreateReelClick = useCallback(async () => {
+    if (!folderContent) {
+      return;
+    }
+    await selectFileAndCreateReel(folderContent);
+  }, [folderContent, selectFileAndCreateReel]);
 
   return (
     <div className={styles.folderPage}>
@@ -58,7 +64,7 @@ export function FolderPage(): ReactElement {
             <FolderActions
               onRefreshFolderClick={onRefreshFolderClick}
               onFolderSelectClick={onFolderSelectClick}
-              onCreateReelClick={() => {}}
+              onCreateReelClick={onCreateReelClick}
             />
           </div>
 

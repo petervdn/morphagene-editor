@@ -1,24 +1,21 @@
-import type { WavHeaderData } from "../../types/types";
-
 /**
- * Creates a WAV file with updated cue points from an AudioBuffer
+ * Creates a WAV file with cue points from an AudioBuffer
  * @param audioBuffer The AudioBuffer containing the audio data
- * @param markers The array of markers to save as cue points
- * @param originalHeaderData The original WAV header data to preserve other metadata
- * @returns A Blob containing the WAV file with updated cue points
+ * @param cuePointTimes The array of time points (in seconds) to save as cue points
+ * @param audioFormat The audio format (1 for PCM, 3 for IEEE Float)
+ * @returns A Blob containing the WAV file with cue points
  */
-export async function createWavWithCuePoints(
+export async function createWavBlobWithCuePoints(
   audioBuffer: AudioBuffer,
-  cuePointTimes: Array<number>,
-  originalHeaderData: WavHeaderData
+  cuePointTimes: Array<number>
 ): Promise<Blob> {
-  // Convert markers to cue points format
+  // Convert time points to cue points format
   const cuePoints = cuePointTimes.map((time, index) => ({
     id: index + 1, // Cue point IDs typically start at 1
     position: Math.round(time * audioBuffer.sampleRate),
-    dataChunkId: originalHeaderData.cuePoints[0]?.dataChunkId || "data", // Preserve original dataChunkId or use "data"
-    chunkStart: originalHeaderData.cuePoints[0]?.chunkStart || 0,
-    blockStart: originalHeaderData.cuePoints[0]?.blockStart || 0,
+    dataChunkId: "data", // Standard data chunk ID
+    chunkStart: 0,
+    blockStart: 0,
     sampleOffset: Math.round(time * audioBuffer.sampleRate),
     timeInSeconds: time,
   }));
@@ -26,15 +23,16 @@ export async function createWavWithCuePoints(
   // Calculate the size of the cue chunk
   const cueChunkSize = 4 + cuePoints.length * 24; // 4 bytes for numCuePoints + 24 bytes per cue point
 
-  // Get the audio data and preserve original format
-  const numChannels = originalHeaderData.numChannels;
-  const sampleRate = originalHeaderData.sampleRate;
+  // Get the audio data properties directly from AudioBuffer
+  const numChannels = audioBuffer.numberOfChannels;
+  const sampleRate = audioBuffer.sampleRate;
   const numSamples = audioBuffer.length;
-  const bitsPerSample = originalHeaderData.bitsPerSample;
+
+  // Set bit depth based on audio format
+  const bitsPerSample = 32; // IEEE Float (3) uses 32 bits
   const bytesPerSample = bitsPerSample / 8;
   const blockAlign = numChannels * bytesPerSample;
   const byteRate = sampleRate * blockAlign;
-  const audioFormat = originalHeaderData.audioFormat; // Preserve original format (1 for PCM, 3 for IEEE Float)
   const dataSize = numSamples * blockAlign;
 
   // Calculate the total file size
@@ -53,7 +51,7 @@ export async function createWavWithCuePoints(
   // fmt sub-chunk
   writeString(view, 12, "fmt ");
   view.setUint32(16, 16, true); // Sub-chunk size (16 for PCM and IEEE Float)
-  view.setUint16(20, audioFormat, true); // Audio format (1 for PCM, 3 for IEEE Float)
+  view.setUint16(20, 3, true); // Audio format (1 for PCM, 3 for IEEE Float)
   view.setUint16(22, numChannels, true); // Number of channels
   view.setUint32(24, sampleRate, true); // Sample rate
   view.setUint32(28, byteRate, true); // Byte rate
@@ -67,46 +65,12 @@ export async function createWavWithCuePoints(
   // Write the audio data based on the format
   let offset = 44;
 
-  if (audioFormat === 3) {
-    // IEEE Float (32-bit)
-    for (let i = 0; i < numSamples; i++) {
-      for (let channel = 0; channel < numChannels; channel++) {
-        const sample = audioBuffer.getChannelData(channel)[i];
-        view.setFloat32(offset, sample, true);
-        offset += bytesPerSample;
-      }
-    }
-  } else {
-    // PCM format (default to 16-bit if not IEEE Float)
-    for (let i = 0; i < numSamples; i++) {
-      for (let channel = 0; channel < numChannels; channel++) {
-        const sample = Math.max(
-          -1,
-          Math.min(1, audioBuffer.getChannelData(channel)[i])
-        );
-
-        if (bitsPerSample === 32) {
-          // 32-bit PCM (rare, but possible)
-          const value = Math.round(sample * 0x7fffffff);
-          view.setInt32(offset, value, true);
-        } else if (bitsPerSample === 24) {
-          // 24-bit PCM
-          const value = Math.round(sample * 0x7fffff);
-          view.setUint8(offset, value & 0xff);
-          view.setUint8(offset + 1, (value >> 8) & 0xff);
-          view.setUint8(offset + 2, (value >> 16) & 0xff);
-        } else if (bitsPerSample === 8) {
-          // 8-bit PCM (unsigned)
-          const value = Math.round((sample + 1) * 127.5);
-          view.setUint8(offset, value);
-        } else {
-          // Default to 16-bit PCM
-          const value = Math.round(sample * 0x7fff);
-          view.setInt16(offset, value, true);
-        }
-
-        offset += bytesPerSample;
-      }
+  // IEEE Float (32-bit)
+  for (let i = 0; i < numSamples; i++) {
+    for (let channel = 0; channel < numChannels; channel++) {
+      const sample = audioBuffer.getChannelData(channel)[i];
+      view.setFloat32(offset, sample, true);
+      offset += bytesPerSample;
     }
   }
 
