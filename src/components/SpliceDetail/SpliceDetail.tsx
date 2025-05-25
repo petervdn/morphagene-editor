@@ -1,4 +1,4 @@
-import { type ReactElement } from "react";
+import { useCallback, type ReactElement } from "react";
 import { RiScissorsCutLine } from "react-icons/ri";
 import styles from "./SpliceDetail.module.css";
 import type { ReelWithAudioBuffer, Splice } from "../../types/types";
@@ -6,6 +6,7 @@ import { WaveformView } from "../WaveformView/layers/WaveformView";
 import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
 import { SpliceActions } from "../SpliceActions/SpliceActions";
 import { usePathParams } from "../../hooks/usePathParams";
+import { deleteSplice } from "../../stores/cuePointTimes/utils/deleteSplice";
 
 type Props = {
   splice: Splice;
@@ -21,6 +22,10 @@ export function SpliceDetail({
   const { spliceId } = usePathParams();
   const waveformViewProps = useWaveformView({ reel });
 
+  const onDeleteClick = useCallback(() => {
+    deleteSplice(splice);
+  }, [splice]);
+
   return (
     <div className={styles.spliceDetail}>
       <div className={styles.spliceHeader}>
@@ -32,7 +37,11 @@ export function SpliceDetail({
           <span className={styles.spliceCount}>of {totalAmountOfSplices}</span>
         </h3>
         <div className={styles.navigationContainer}>
-          <SpliceActions reel={reel} activeSplice={splice} />
+          <SpliceActions
+            reel={reel}
+            activeSplice={splice}
+            onDeleteClick={onDeleteClick}
+          />
         </div>
       </div>
 
@@ -55,7 +64,7 @@ export function SpliceDetail({
         splices={[]}
         {...waveformViewProps}
         viewPort={splice}
-        height={200}
+        height={100}
       />
     </div>
   );

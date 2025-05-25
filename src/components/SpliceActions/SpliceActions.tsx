@@ -6,6 +6,7 @@ import { MdSkipNext, MdSkipPrevious } from "react-icons/md";
 import { BsTrash, BsPlayCircle, BsStopCircle } from "react-icons/bs";
 import { useSpliceNavigation } from "../../hooks/useSpliceNavigation";
 import { useAudioPlayer } from "../../hooks/useAudioPlayer";
+import { useCanDeleteSplice } from "../../hooks/useCanDeleteSplice";
 
 type SpliceActionsProps = {
   reel: ReelWithAudioBuffer;
@@ -28,6 +29,7 @@ export function SpliceActions({
 
   const audioPlayerProps = useAudioPlayer();
   const isPlaying = audioPlayerProps?.playingSound?.splice === activeSplice;
+  const canDeleteSplice = useCanDeleteSplice(activeSplice);
 
   const handlePlayToggle = useCallback(() => {
     if (!audioPlayerProps) {
@@ -61,7 +63,7 @@ export function SpliceActions({
             ) : (
               <>
                 <BsPlayCircle />
-                Play 
+                Play
               </>
             )}
           </button>
@@ -71,6 +73,7 @@ export function SpliceActions({
             onClick={onDeleteClick}
             type="button"
             title="Delete splice"
+            disabled={!canDeleteSplice}
           >
             <BsTrash />
             Delete

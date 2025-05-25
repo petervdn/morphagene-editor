@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useCuePointTimesStore } from "../stores/cuePointTimesStore";
+import { useCuePointTimesStore } from "../stores/cuePointTimes/cuePointTimesStore";
 import type { Splice } from "../types/types";
 import { createSplicesFromCuePointTimes } from "../utils/splices/createSplicesFromCuePointTimes";
 

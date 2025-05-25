@@ -1,4 +1,4 @@
-import { useCuePointTimesStore } from "../stores/cuePointTimesStore";
+import { useCuePointTimesStore } from "../stores/cuePointTimes/cuePointTimesStore";
 
 export function useHasUnsavedCuePointsChanges(): boolean {
   const cuePointTimes = useCuePointTimesStore((state) => state.cuePointTimes);

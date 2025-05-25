@@ -19,6 +19,10 @@ import { router } from "./routes/router";
 - view wave as L/R/stereo
 - cut parts of audio
 - mm ts config (noUncheckedIndexedAccess)
+- use mantine?
+- delete all splices
+- handle when splice doesnt exit (when you looking at it and remove it)
+- keyboard navigation
 */
 
 function App() {

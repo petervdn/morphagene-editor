@@ -68,19 +68,16 @@ export function WaveformView({
           </>
         )}
       </div>
-      {/* <div className={styles.controlsArea}>
-        <div className={styles.zoomControls}>
+      <div className={styles.controlsArea}>
+        {/* <div className={styles.zoomControls}>
           <ZoomSlider
             zoomLevel={zoomLevel}
             maxZoom={maxZoom}
             onChange={setZoomLevel}
           />
-        </div>
-        <div className={styles.helpText}>
-          Shift+Click to add marker • Scroll to zoom • Alt+Drag to pan • ↑ to
-          zoom out • ↓ to zoom to splice
-        </div>
-      </div> */}
+        </div> */}
+        <div className={styles.helpText}>Shift+Click to create splice</div>
+      </div>
     </div>
   );
 }

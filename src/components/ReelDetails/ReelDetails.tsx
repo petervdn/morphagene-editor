@@ -6,11 +6,11 @@ import { SpliceDetail } from "../SpliceDetail/SpliceDetail";
 import { WaveformView } from "../WaveformView/layers/WaveformView";
 import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
 import { UnsavedChangesActions } from "../UnsavedChangesActions/UnsavedChangesActions";
-import { addCuePointTime } from "../../stores/cuePointTimesStore";
 import { useActiveSplice } from "../../stores/useActiveSplice";
 import { useHasUnsavedCuePointsChanges } from "../../hooks/useHasUnsavedCuePointsChanges";
 import { useSyncCuePointsToStore } from "../../hooks/useSyncCuePointsToStore";
 import { useSplices } from "../../hooks/useSplices";
+import { addSplice } from "../../stores/cuePointTimes/utils/addSplice";
 
 type Props = {
   reel: ReelWithAudioBuffer;
@@ -20,18 +20,15 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
   const splices = useSplices();
   const activeSplice = useActiveSplice();
   const hasUnsavedChanges = useHasUnsavedCuePointsChanges();
-
   const waveformViewProps = useWaveformView({
     reel,
   });
 
   const onWaveformViewShiftClick = useCallback((time: number) => {
-    addCuePointTime(time);
+    addSplice(time);
   }, []);
 
   useSyncCuePointsToStore({ reel });
-
-  console.log(reel.wavHeaderData);
 
   const metaData = useMemo(() => {
     return [
@@ -67,7 +64,7 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
         splices={splices}
         {...waveformViewProps}
         onShiftClick={onWaveformViewShiftClick}
-        height={200}
+        height={300}
       />
 
       {activeSplice && (
