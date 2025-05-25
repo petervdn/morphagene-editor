@@ -1,5 +1,5 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
-import styles from './ValueSlider.module.css';
+import React, { useState, useEffect, type ChangeEvent } from "react";
+import styles from "./ValueSlider.module.css";
 
 interface ValueSliderProps {
   min?: number;
@@ -14,7 +14,7 @@ export const ValueSlider: React.FC<ValueSliderProps> = ({
   max,
   value,
   onChange,
-  label
+  label,
 }) => {
   const [displayValue, setDisplayValue] = useState(value);
 
@@ -30,13 +30,13 @@ export const ValueSlider: React.FC<ValueSliderProps> = ({
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     let newValue = parseInt(e.target.value, 10);
-    
+
     // Handle empty input
     if (isNaN(newValue)) {
       setDisplayValue(0);
       return;
     }
-    
+
     // Clamp value between min and max
     newValue = Math.max(min, Math.min(max, newValue));
     setDisplayValue(newValue);
