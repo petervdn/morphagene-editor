@@ -1,4 +1,4 @@
-import { createWavBlobWithCuePoints } from "./createWavBlobWithCuePoints";
+import { createWaveFile } from "./createWaveFile";
 
 export async function writeWavFile({
   audioBuffer,
@@ -9,9 +9,10 @@ export async function writeWavFile({
   audioBuffer: AudioBuffer;
   cuePointTimes: Array<number>;
 }): Promise<void> {
-  const wavBlob = await createWavBlobWithCuePoints(audioBuffer, cuePointTimes);
-
   const writable = await fileHandle.createWritable();
-  await writable.write(wavBlob);
+  const waveFile = createWaveFile(audioBuffer, cuePointTimes);
+  const wavBlob = waveFile.toBuffer();
+
+  await writable.write({ type: "write", data: wavBlob });
   await writable.close();
 }
