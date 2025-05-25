@@ -78,7 +78,7 @@ export function InteractionLayer({
     <div
       style={{
         ...size,
-        cursor: isShiftPressed ? "copy" : "default",
+        cursor: isShiftPressed && onShiftClick ? "copy" : "default",
         zIndex: 999,
       }}
       onClick={onClick}
