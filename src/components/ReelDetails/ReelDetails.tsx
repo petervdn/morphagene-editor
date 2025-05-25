@@ -82,6 +82,7 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
         onShiftClick={onWaveformViewShiftClick}
         height={300}
       />
+      <div className={styles.helpText}>Shift+Click to create splice</div>
 
       {activeSplice && (
         <div className={styles.spliceDetailContainer}>

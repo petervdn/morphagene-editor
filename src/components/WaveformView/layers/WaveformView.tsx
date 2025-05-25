@@ -68,16 +68,6 @@ export function WaveformView({
           </>
         )}
       </div>
-      <div className={styles.controlsArea}>
-        {/* <div className={styles.zoomControls}>
-          <ZoomSlider
-            zoomLevel={zoomLevel}
-            maxZoom={maxZoom}
-            onChange={setZoomLevel}
-          />
-        </div> */}
-        <div className={styles.helpText}>Shift+Click to create splice</div>
-      </div>
     </div>
   );
 }

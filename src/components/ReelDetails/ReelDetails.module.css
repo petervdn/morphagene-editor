@@ -78,6 +78,17 @@
   box-sizing: border-box;
 }
 
+/* Help text styling */
+.helpText {
+  font-size: 0.75rem;
+  color: #adb5bd;
+  text-align: right;
+  font-style: italic;
+  margin-top: -4px;
+  margin-bottom: 8px;
+  padding: 0 4px;
+}
+
 /* Responsive layout for smaller screens */
 @media (max-width: 768px) {
   .reelContentLayout {

@@ -15,6 +15,7 @@ import { router } from "./routes/router";
 - auto slice on transients
 - save changes
 - options
+- zoom/pan
 - better home page
 - view wave as L/R/stereo
 - cut parts of audio
@@ -25,6 +26,9 @@ import { router } from "./routes/router";
 - keyboard navigation
 - splice waveview up into two units? (or keep one wave view?)
 - drag splices
+- show marker under mouse when hovering over wave
+- some kind of way to only cut in wave corssing
+- indicate disk action
 */
 
 function App() {

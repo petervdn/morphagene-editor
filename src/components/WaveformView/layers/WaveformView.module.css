@@ -1,12 +1,10 @@
 .waveformContainer {
   position: relative;
   width: 100%;
-  margin-bottom: 1.5rem;
 }
 
 .wrapper {
   width: 100%;
-
   background-color: #f8f9fa;
   position: relative;
   overflow: hidden;
@@ -17,26 +15,6 @@
   display: block;
   width: 100%;
   height: 100%;
-}
-
-.controlsArea {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 4px;
-}
-
-.zoomControls {
-  display: flex;
-  align-items: center;
-}
-
-.helpText {
-  font-size: 0.75rem;
-  color: #adb5bd;
-  text-align: right;
-  font-style: italic;
-  flex: 1;
 }
 
 .layer {
