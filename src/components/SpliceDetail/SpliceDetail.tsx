@@ -74,7 +74,7 @@ export function SpliceDetail({
         height={100}
         autoSliceTimes={autoSliceCuePointTimes ?? undefined}
       />
-      <SpliceOperations splice={splice} />
+      <SpliceOperations splice={splice} reel={reel} />
     </div>
   );
 }
