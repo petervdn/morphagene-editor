@@ -1,4 +1,4 @@
-import { useCallback, type ReactElement } from "react";
+import { useCallback, useEffect, type ReactElement } from "react";
 import { PiFilmReel } from "react-icons/pi";
 import styles from "./ReelDetails.module.css";
 import type { ReelWithAudioBuffer } from "../../types/types";
@@ -7,28 +7,35 @@ import { useSplices } from "../../utils/hooks/useSplices";
 import { WaveformView } from "../WaveformView/layers/WaveformView";
 import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
 import { UnsavedChangesActions } from "../UnsavedChangesActions/UnsavedChangesActions";
+import {
+  addCuePointTime,
+  setCuePointsFromWavHeaderData,
+} from "../../stores/cuePointTimesStore";
+import { useActiveSplice } from "../../stores/useActiveSplice";
+import { useHasUnsavedCuePointsChanges } from "../../hooks/useHasUnsavedCuePointsChanges";
 
 type Props = {
   reel: ReelWithAudioBuffer;
 };
 
-export function ReelDetails({ reel }: Props): ReactElement {
-  const { splices, addSplice, activeSplice, hasUnsavedChanges } = useSplices({
-    reel,
-  });
+export function ReelDetails({ reel }: Props): ReactElement | null {
+  const splices = useSplices();
+  const activeSplice = useActiveSplice();
+  const hasUnsavedChanges = useHasUnsavedCuePointsChanges();
 
   const waveformViewProps = useWaveformView({
     reel,
   });
 
-  const onWaveformViewShiftClick = useCallback(
-    (time: number) => {
-      addSplice(time);
-    },
-    [addSplice]
-  );
+  const onWaveformViewShiftClick = useCallback((time: number) => {
+    addCuePointTime(time);
+  }, []);
 
-  return (
+  useEffect(() => {
+    setCuePointsFromWavHeaderData(reel.wavHeaderData);
+  }, [reel.wavHeaderData]);
+
+  return splices ? (
     <>
       <div className={styles.reelHeader}>
         <div className={styles.reelTitleContainer}>
@@ -65,5 +72,5 @@ export function ReelDetails({ reel }: Props): ReactElement {
         </div>
       )}
     </>
-  );
+  ) : null;
 }

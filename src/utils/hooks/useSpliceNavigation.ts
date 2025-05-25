@@ -1,7 +1,7 @@
-import { useSplices } from "./useSplices";
 import type { Reel, Splice } from "../../types/types";
 import { getSplicePath } from "../../routes/utils/getSplicePath";
 import { useParamsSpliceIndex } from "./useParamsSpliceIndex";
+import { useSplices } from "./useSplices";
 
 export type UseSpliceNavigationResult = {
   hasPreviousSplice: boolean;
@@ -16,11 +16,11 @@ export function useSpliceNavigation({
   reel: Reel;
   activeSplice: Splice;
 }): UseSpliceNavigationResult {
-  const { splices } = useSplices({ reel });
+  const splices = useSplices();
   const activeSpliceIndex = useParamsSpliceIndex();
 
   const nextSplicePath =
-    activeSpliceIndex > -1 && activeSpliceIndex < splices.length - 1
+    splices && activeSpliceIndex > -1 && activeSpliceIndex < splices.length - 1
       ? getSplicePath({
           reelId: reel.id,
           spliceId: String(activeSpliceIndex + 2),
