@@ -29,6 +29,7 @@ import { router } from "./routes/router";
 - show marker under mouse when hovering over wave
 - some kind of way to only cut in wave corssing
 - indicate disk action
+- max splices
 */
 
 function App() {

@@ -58,6 +58,7 @@ export function FolderPage(): ReactElement {
             <FolderActions
               onRefreshFolderClick={onRefreshFolderClick}
               onFolderSelectClick={onFolderSelectClick}
+              onCreateReelClick={() => {}}
             />
           </div>
 
