@@ -5,7 +5,9 @@ export function AudioContextProvider({ children }: PropsWithChildren) {
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
 
   useEffect(() => {
-    const context = new (window.AudioContext || window.webkitAudioContext)();
+    const context = new (window.AudioContext || window.webkitAudioContext)({
+      sampleRate: 48000,
+    });
 
     setAudioContext(context);
   }, []);

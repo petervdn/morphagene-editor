@@ -12,6 +12,10 @@ type Props = {
 export function ReelListItem({
   reel: { fileName, id, name, wavHeaderData },
 }: Props): ReactElement {
+  const amountOfSplicesLabel = `${wavHeaderData.cuePoints.length} splice${
+    wavHeaderData.cuePoints.length === 1 ? "" : "s"
+  }`;
+
   return (
     <li className={styles.reelListItem}>
       <Link to={getReelPath(id)} className={styles.link}>
@@ -22,7 +26,7 @@ export function ReelListItem({
         <span className={styles.reelMeta}>
           <>
             {fileName} • {wavHeaderData.duration.toFixed(1)}s •{" "}
-            {wavHeaderData.cuePoints.length} splices
+            {amountOfSplicesLabel}
           </>
         </span>
       </Link>

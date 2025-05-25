@@ -30,6 +30,8 @@ import { router } from "./routes/router";
 - some kind of way to only cut in wave corssing
 - indicate disk action
 - max splices
+- throw error on 0 splices
+- handle audiocontext not running at 48khz
 */
 
 function App() {
