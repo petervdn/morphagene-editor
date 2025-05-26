@@ -4,24 +4,46 @@ import {
   type MouseEvent,
   type ReactElement,
   useEffect,
+  useRef,
 } from "react";
 import type { Range, Size } from "../../../../types/types";
+import { useWheelEvent } from "./useWheelEvent";
 
 type Props = {
   viewPort: Range;
   size: Size;
   onShiftClick?: (timeInSeconds: number) => void;
   onDrag?: (deltaX: number, containerWidth: number) => void;
+  onZoom?: (params: { amount: number; atTime: number }) => void;
 };
 
 export function InteractionLayer({
   viewPort,
   size,
   onShiftClick,
+  onZoom,
 }: Props): ReactElement {
+  const elementRef = useRef<HTMLDivElement>(null);
   const [isShiftPressed, setIsShiftPressed] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_isAltPressed, setIsAltPressed] = useState(false);
+
+  const viewPortDuration = viewPort.end - viewPort.start;
+
+  const onWheel = useCallback(
+    (event: globalThis.WheelEvent) => {
+      const rect = elementRef.current?.getBoundingClientRect();
+      if (rect) {
+        const x = event.clientX - rect.left;
+        const atTime = viewPort.start + (x / rect.width) * viewPortDuration;
+
+        onZoom?.({ amount: event.deltaY, atTime });
+      }
+    },
+    [onZoom, viewPort.start, viewPortDuration]
+  );
+
+  useWheelEvent({ elementRef, onWheel });
 
   useEffect(() => {
     function onKeyDown({ key }: KeyboardEvent) {
@@ -79,8 +101,8 @@ export function InteractionLayer({
       style={{
         ...size,
         cursor: isShiftPressed && onShiftClick ? "copy" : "default",
-        zIndex: 999,
       }}
+      ref={elementRef}
       onClick={onClick}
       onMouseDown={onMouseDown}
     />

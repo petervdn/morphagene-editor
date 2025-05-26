@@ -15,6 +15,7 @@ interface WaveformViewProps {
   onShiftClick?(time: number): void;
   height: number;
   autoSliceTimes?: Array<number>;
+  onZoom?: (params: { amount: number; atTime: number }) => void;
 }
 
 export function WaveformView({
@@ -24,6 +25,7 @@ export function WaveformView({
   onShiftClick,
   height,
   autoSliceTimes,
+  onZoom,
 }: WaveformViewProps): ReactElement {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const wrapperSize = useElementSize({ elementRef: wrapperRef });
@@ -54,6 +56,7 @@ export function WaveformView({
                 viewPort={viewPort}
                 size={wrapperSize}
                 onShiftClick={onShiftClick}
+                onZoom={onZoom}
               />
             </div>
             <div
