@@ -48,7 +48,7 @@ export function SpliceOperations({ splice, reel }: Props): ReactElement {
       <ValueSlider
         min={1}
         max={100}
-        value={division}
+        value={sensitivity}
         onChange={onSensitivitySliderChange}
         label="Sensitivity"
       />

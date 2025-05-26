@@ -12,6 +12,14 @@ export function autoSliceByTransient({
   splice,
   audioBuffer,
 }: Props): void {
+  // If sensitivity is very low, return no slices
+  if (sensitivity <= 1) {
+    useCuePointTimesStore.setState({
+      autoSliceCuePointTimes: [],
+    });
+    return;
+  }
+
   const times: Array<number> = [];
   const sampleRate = audioBuffer.sampleRate;
   const leftChannel = audioBuffer.getChannelData(0);
@@ -20,51 +28,71 @@ export function autoSliceByTransient({
   const startSample = Math.floor(splice.start * sampleRate);
   const endSample = Math.floor(splice.end * sampleRate);
   
-  // Calculate window size for analysis based on sensitivity
-  // Lower sensitivity = larger window (less sensitive to small changes)
-  const windowSize = Math.floor(sampleRate * (0.05 - (sensitivity - 1) / 2000)); // 5ms to 50ms window
+  // Fixed analysis window size (better for transient detection)
+  const windowSize = Math.floor(sampleRate * 0.01); // 10ms window
+  const hopSize = Math.floor(windowSize / 2); // 50% overlap for better resolution
   
-  // Minimum distance between transients in samples
-  const minDistance = Math.floor(sampleRate * 0.05); // 50ms minimum between transients
+  // Normalize sensitivity to get fewer results at low values
+  // and more results as sensitivity increases
+  const normalizedSensitivity = Math.pow(sensitivity / 100, 2) * 100;
   
-  // Threshold for detecting transients - adjust based on sensitivity
-  const threshold = 1.5 - (sensitivity / 100);
+  // Calculate minimum distance between transients based on sensitivity
+  // Higher sensitivity = smaller minimum distance
+  const minDistance = Math.floor(sampleRate * (0.2 - ((normalizedSensitivity - 1) / 100) * 0.18)); // 20ms to 200ms
   
-  // Extract RMS energy values from the audio
+  // Apply a more aggressive threshold function that produces fewer results at low sensitivity
+  const baseThreshold = 3.0; // Higher base threshold means fewer detections overall
+  const thresholdReduction = (normalizedSensitivity / 100) * 2.5; // How much threshold is reduced at max sensitivity
+  const threshold = baseThreshold - thresholdReduction;
+  
+  // Extract energy values and calculate their derivatives (rate of change)
   const energyValues: number[] = [];
-  for (let i = startSample; i < endSample - windowSize; i += windowSize) {
+  const energyDerivatives: number[] = [];
+  
+  // Calculate energy values
+  for (let i = startSample; i < endSample - windowSize; i += hopSize) {
     let sum = 0;
     for (let j = 0; j < windowSize; j++) {
       const sample = leftChannel[i + j] || 0;
-      sum += sample * sample; // Square the sample for RMS calculation
+      sum += sample * sample; // Square the sample for energy calculation
     }
-    const rms = Math.sqrt(sum / windowSize);
-    energyValues.push(rms);
+    const energy = Math.sqrt(sum / windowSize);
+    energyValues.push(energy);
   }
   
-  // Find transients (peaks in energy)
+  // Calculate energy derivatives (how quickly energy changes)
+  for (let i = 1; i < energyValues.length; i++) {
+    energyDerivatives.push(energyValues[i] - energyValues[i - 1]);
+  }
+  
+  // Find peaks in the energy derivative (sudden increases in energy)
   let lastTransientIndex = -1;
-  for (let i = 1; i < energyValues.length - 1; i++) {
-    // Look for sudden increases in energy
-    const prevEnergy = energyValues[i - 1];
-    const currentEnergy = energyValues[i];
-    const nextEnergy = energyValues[i + 1];
+  for (let i = 1; i < energyDerivatives.length - 1; i++) {
+    const prevDeriv = energyDerivatives[i - 1];
+    const currentDeriv = energyDerivatives[i];
+    const nextDeriv = energyDerivatives[i + 1];
     
-    // Calculate energy ratio - higher ratio means sharper transient
-    const ratio = currentEnergy / (prevEnergy + 0.0001); // Avoid division by zero
-    
-    // Check if this is a peak (transient)
-    if (ratio > threshold && currentEnergy > nextEnergy) {
-      const sampleIndex = startSample + (i * windowSize);
+    // Check if this is a positive peak in the derivative (sharp increase followed by decrease)
+    if (currentDeriv > prevDeriv && currentDeriv > nextDeriv && currentDeriv > 0) {
+      // Compare to threshold scaled by local energy to adapt to different volume levels
+      const localEnergy = energyValues[i];
+      const adaptiveThreshold = threshold * (localEnergy > 0.1 ? 1 : 2); // Higher threshold for quiet sections
       
-      // Ensure minimum distance between transients
-      if (lastTransientIndex === -1 || (sampleIndex - lastTransientIndex) >= minDistance) {
-        const timeInSeconds = sampleIndex / sampleRate;
+      // Normalize the derivative by local energy to handle varying volume levels
+      const normalizedDerivative = currentDeriv / (localEnergy + 0.001);
+      
+      if (normalizedDerivative > adaptiveThreshold) {
+        const sampleIndex = startSample + (i * hopSize);
         
-        // Only add if within the splice range
-        if (timeInSeconds > splice.start && timeInSeconds < splice.end) {
-          times.push(timeInSeconds);
-          lastTransientIndex = sampleIndex;
+        // Ensure minimum distance between transients
+        if (lastTransientIndex === -1 || (sampleIndex - lastTransientIndex) >= minDistance) {
+          const timeInSeconds = sampleIndex / sampleRate;
+          
+          // Only add if within the splice range
+          if (timeInSeconds > splice.start && timeInSeconds < splice.end) {
+            times.push(timeInSeconds);
+            lastTransientIndex = sampleIndex;
+          }
         }
       }
     }
