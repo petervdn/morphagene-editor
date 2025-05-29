@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import { useMemo, type ComponentType, type ReactElement } from "react";
 import type { Range, Size } from "../../../../types/types";
 import { getXPositionForTime } from "../../../../utils/waveview/getXPositionForTime";
 
@@ -11,6 +11,13 @@ type TimedLine = {
   lineStyle?: LineStyle;
 };
 
+export type TimedLinesItemRendererProps = {
+  time: number;
+  index: number;
+  width: number | undefined;
+  height: number;
+};
+
 type Props = {
   size: Size;
   timedLines: Array<TimedLine>;
@@ -18,6 +25,8 @@ type Props = {
   defaultColor?: string;
   defaultLineWidth?: number;
   defaultLineStyle?: LineStyle;
+  itemRenderer?: ComponentType<TimedLinesItemRendererProps>;
+  maxTime?: number;
 };
 
 export function TimedLines({
@@ -27,7 +36,13 @@ export function TimedLines({
   defaultColor = "black",
   defaultLineWidth = 1,
   defaultLineStyle = "solid",
+  itemRenderer: ItemRenderer,
+  maxTime,
 }: Props): ReactElement {
+  const orderedTimedLines = useMemo(() => {
+    return timedLines.toSorted((a, b) => a.time - b.time);
+  }, [timedLines]);
+
   return (
     <div
       style={{
@@ -35,12 +50,22 @@ export function TimedLines({
         pointerEvents: "none",
       }}
     >
-      {timedLines.map(({ time, color, lineWidth }) => {
+      {orderedTimedLines.map(({ time, color, lineWidth }, index) => {
         const left = getXPositionForTime({
           time,
           viewPort,
           viewWidth: size.width,
         });
+        const nextTime = orderedTimedLines.at(index + 1)?.time ?? maxTime;
+        const right = nextTime
+          ? getXPositionForTime({
+              time: nextTime,
+              viewPort,
+              viewWidth: size.width,
+            })
+          : undefined;
+
+        const width = right !== undefined ? right - left : undefined;
 
         return (
           <div
@@ -48,14 +73,23 @@ export function TimedLines({
             style={{
               left,
               top: 0,
+              width: right ? `${right - left}px` : undefined,
               position: "absolute",
-
               height: size.height,
               borderLeft: `${
                 lineWidth ?? defaultLineWidth
               }px ${defaultLineStyle} ${color ?? defaultColor}`,
             }}
-          />
+          >
+            {ItemRenderer && (
+              <ItemRenderer
+                time={time}
+                index={index}
+                width={width}
+                height={size.height}
+              />
+            )}
+          </div>
         );
       })}
     </div>

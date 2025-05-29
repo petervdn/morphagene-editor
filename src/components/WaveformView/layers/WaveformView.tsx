@@ -2,7 +2,6 @@ import { useRef, type ReactElement } from "react";
 import styles from "./WaveformView.module.css";
 import type { Range, ReelWithAudioBuffer, Splice } from "../../../types/types";
 import { WaveformCanvas } from "./WaveformLayer/WaveformLayer";
-import { SplicesView } from "./SplicesLayer/SplicesLayer";
 import { PlayheadLayer } from "./PlayheadLayer/PlayheadLayer";
 import {
   InteractionLayer,
@@ -11,7 +10,7 @@ import {
 } from "./InteractionLayer/InteractionLayer";
 import { useElementSize } from "../../../hooks/useElementSize";
 import { AutoSlicesLayer } from "./AutoSlicesLayer/AutoSlicesLayer";
-import { TimedLines } from "./TimedLinesLayer/TimedLinesLayer";
+import { SplicesLayer } from "./SplicesLayer/SplicesLayer";
 
 interface WaveformViewProps {
   splices: Array<Splice>;
@@ -42,7 +41,7 @@ export function WaveformView({
       <div className={styles.wrapper} ref={wrapperRef} style={{ height }}>
         {wrapperSize && (
           <>
-            <div className={styles.layer} id="waveform">
+            <div className={styles.layer} id="waveform-layer">
               <WaveformCanvas
                 audioBuffer={reel.audioBuffer}
                 viewPort={viewPort}
@@ -50,7 +49,7 @@ export function WaveformView({
               />
             </div>
 
-            <div className={styles.layer} id="playhead">
+            <div className={styles.layer} id="playhead-layer">
               <PlayheadLayer
                 viewPort={viewPort}
                 size={wrapperSize}
@@ -58,7 +57,7 @@ export function WaveformView({
               />
             </div>
 
-            <div className={styles.layer} id="interaction">
+            <div className={styles.layer} id="interaction-layer">
               <InteractionLayer
                 viewPort={viewPort}
                 size={wrapperSize}
@@ -67,40 +66,30 @@ export function WaveformView({
                 onZoomWave={onZoomWave}
               />
             </div>
-            {/* <div className={styles.layer} style={{ pointerEvents: "none" }}>
-              <TimedLines
-                size={wrapperSize}
-                viewPort={viewPort}
-                timedLines={splices.map((splice) => ({ time: splice.start }))}
-              />
-            </div> */}
             <div
               className={styles.layer}
-              id="splices"
               style={{ pointerEvents: "none" }}
+              id="splices-layer"
             >
-              <SplicesView
-                reel={reel}
+              <SplicesLayer
                 size={wrapperSize}
                 splices={splices}
                 viewPort={viewPort}
               />
             </div>
 
-            {autoSliceTimes && (
-              <div
-                className={styles.layer}
-                id="splices"
-                style={{ pointerEvents: "none" }}
-              >
-                <AutoSlicesLayer
-                  reel={reel}
-                  size={wrapperSize}
-                  times={autoSliceTimes}
-                  viewPort={viewPort}
-                />
-              </div>
-            )}
+            <div
+              className={styles.layer}
+              style={{ pointerEvents: "none" }}
+              id="auto-slices-layer"
+            >
+              <AutoSlicesLayer
+                reel={reel}
+                size={wrapperSize}
+                autoSliceTimes={autoSliceTimes}
+                viewPort={viewPort}
+              />
+            </div>
           </>
         )}
       </div>

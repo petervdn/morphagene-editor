@@ -4,23 +4,27 @@ import { TimedLines } from "../TimedLinesLayer/TimedLinesLayer";
 
 type Props = {
   size: Size;
-  times: Array<number>;
+  autoSliceTimes: Array<number> | null | undefined;
   viewPort: Range;
   reel: ReelWithAudioBuffer;
 };
 
 export function AutoSlicesLayer({
   size,
-  times,
+  autoSliceTimes,
   viewPort,
-}: Props): ReactElement {
+}: Props): ReactElement | null {
   const timedLines = useMemo(
     () =>
-      times.map((time) => ({
+      autoSliceTimes?.map((time) => ({
         time,
-      })),
-    [times]
+      })) ?? null,
+    [autoSliceTimes]
   );
 
-  return <TimedLines size={size} viewPort={viewPort} timedLines={timedLines} />;
+  return (
+    timedLines && (
+      <TimedLines size={size} viewPort={viewPort} timedLines={timedLines} />
+    )
+  );
 }

@@ -1,6 +1,7 @@
 import { useMemo, type ReactElement } from "react";
 import type { Range, Size, Splice } from "../../../../types/types";
 import { TimedLines } from "../TimedLinesLayer/TimedLinesLayer";
+import { SplicesLayerLabel } from "./SplicesLayerLabel";
 
 type Props = {
   size: Size;
@@ -8,7 +9,7 @@ type Props = {
   viewPort: Range;
 };
 
-export function SplicesView({ size, splices, viewPort }: Props): ReactElement {
+export function SplicesLayer({ size, splices, viewPort }: Props): ReactElement {
   const timedLines = useMemo(() => {
     return splices.map(({ start }) => ({
       time: start,
@@ -21,6 +22,8 @@ export function SplicesView({ size, splices, viewPort }: Props): ReactElement {
       size={size}
       timedLines={timedLines}
       defaultLineStyle="dashed"
+      defaultColor="rgba(0,0,0,0.2)"
+      itemRenderer={SplicesLayerLabel}
     />
   );
 }
