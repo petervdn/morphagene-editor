@@ -1,4 +1,4 @@
-import type { Range } from "../types/types";
+import type { Range } from "../../types/types";
 
 export function getXPositionForTime({
   time,

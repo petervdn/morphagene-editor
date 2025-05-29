@@ -1,15 +1,14 @@
 import { useRef, type ReactElement } from "react";
 import styles from "./WaveformView.module.css";
-import type {
-  Position,
-  Range,
-  ReelWithAudioBuffer,
-  Splice,
-} from "../../../types/types";
+import type { Range, ReelWithAudioBuffer, Splice } from "../../../types/types";
 import { WaveformCanvas } from "./WaveformLayer/WaveformLayer";
 import { SplicesView } from "./SplicesLayer/SplicesLayer";
 import { PlayheadLayer } from "./PlayheadLayer/PlayheadLayer";
-import { InteractionLayer } from "./InteractionLayer/InteractionLayer";
+import {
+  InteractionLayer,
+  type DragWaveHandler,
+  type ZoomWaveHandler,
+} from "./InteractionLayer/InteractionLayer";
 import { useElementSize } from "../../../hooks/useElementSize";
 import { AutoSlicesLayer } from "./AutoSlicesLayer/AutoSlicesLayer";
 
@@ -20,8 +19,8 @@ interface WaveformViewProps {
   height: number;
   autoSliceTimes?: Array<number>;
   onShiftClick?(time: number): void;
-  onZoom?: (params: { amount: number; atTime: number }) => void;
-  onDrag?: (delta: Position) => void;
+  onZoomWave?: ZoomWaveHandler;
+  onDragWave?: DragWaveHandler;
 }
 
 export function WaveformView({
@@ -31,8 +30,8 @@ export function WaveformView({
   height,
   autoSliceTimes,
   onShiftClick,
-  onZoom,
-  onDrag,
+  onZoomWave,
+  onDragWave,
 }: WaveformViewProps): ReactElement {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const wrapperSize = useElementSize({ elementRef: wrapperRef });
@@ -63,8 +62,8 @@ export function WaveformView({
                 viewPort={viewPort}
                 size={wrapperSize}
                 onShiftClick={onShiftClick}
-                onDrag={onDrag}
-                onZoom={onZoom}
+                onDragWave={onDragWave}
+                onZoomWave={onZoomWave}
               />
             </div>
             <div

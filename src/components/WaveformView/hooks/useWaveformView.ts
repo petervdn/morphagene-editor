@@ -1,5 +1,10 @@
-import { useCallback, useState } from "react";
-import type { Range, ReelWithAudioBuffer } from "../../../types/types";
+import { useCallback, useRef, useState } from "react";
+import { type Range, type ReelWithAudioBuffer } from "../../../types/types";
+import type {
+  DragWaveHandler,
+  ZoomWaveHandler,
+} from "../layers/InteractionLayer/InteractionLayer";
+import { constrainViewPort } from "../../../utils/waveview/constrainViewPort";
 
 type UseWaveformViewProps = {
   reel: ReelWithAudioBuffer;
@@ -11,7 +16,8 @@ export type UseWaveformViewResult = {
   viewPort: Range;
   reel: ReelWithAudioBuffer;
   setViewPort: (viewPort: Range) => void;
-  onZoom: (params: { amount: number; atTime: number }) => void;
+  onZoomWave: ZoomWaveHandler;
+  onDragWave: DragWaveHandler;
 };
 
 export function useWaveformView({
@@ -21,18 +27,19 @@ export function useWaveformView({
     start: 0,
     end: reel.audioBuffer.duration,
   });
+  const startDragViewPortRef = useRef<Range | null>(null);
+  const viewPortDuration = viewPort.end - viewPort.start;
+  const audioDuration = reel.audioBuffer.duration;
 
-  const duration = viewPort.end - viewPort.start;
-
-  const onZoom = useCallback(
+  const onZoomWave: ZoomWaveHandler = useCallback(
     ({ amount, atTime }: { amount: number; atTime: number }) => {
       const zoomFactor = Math.pow(zoomSpeed, amount / 100);
 
-      const relativePos = (atTime - viewPort.start) / duration;
+      const relativePos = (atTime - viewPort.start) / viewPortDuration;
 
       const newDuration = Math.max(
         0.05,
-        Math.min(reel.audioBuffer.duration, duration * zoomFactor)
+        Math.min(reel.audioBuffer.duration, viewPortDuration * zoomFactor)
       );
       const newStart = Math.max(0, atTime - relativePos * newDuration);
       const newEnd = Math.min(
@@ -42,13 +49,35 @@ export function useWaveformView({
 
       setViewPort({ start: newStart, end: newEnd });
     },
-    [duration, reel.audioBuffer.duration, viewPort.start]
+    [viewPortDuration, reel.audioBuffer.duration, viewPort.start]
+  );
+
+  const onDragWave: DragWaveHandler = useCallback(
+    ({ isFirst, isLast, timeDelta }) => {
+      if (isFirst) {
+        startDragViewPortRef.current = { ...viewPort };
+      } else if (isLast) {
+        startDragViewPortRef.current = null;
+      } else if (startDragViewPortRef.current) {
+        setViewPort(
+          constrainViewPort(
+            {
+              start: startDragViewPortRef.current.start - timeDelta,
+              end: startDragViewPortRef.current.end - timeDelta,
+            },
+            audioDuration
+          )
+        );
+      }
+    },
+    [audioDuration, viewPort]
   );
 
   return {
     viewPort,
     setViewPort,
     reel,
-    onZoom,
+    onZoomWave,
+    onDragWave,
   };
 }

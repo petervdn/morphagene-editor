@@ -13,51 +13,53 @@ import {
   type Vector2,
 } from "../../../../types/types";
 import { useWheelEvent } from "./useWheelEvent";
+import { getTimeForMouseEvent } from "../../../../utils/waveview/getTimeForMouseEvent";
+
+export type DragWaveHandler = (params: {
+  pixelDelta: Vector2;
+  timeDelta: number;
+  isFirst: boolean;
+  isLast: boolean;
+}) => void;
+
+export type ZoomWaveHandler = (params: {
+  amount: number;
+  atTime: number;
+}) => void;
 
 type Props = {
   viewPort: Range;
   size: Size;
   onShiftClick?: (timeInSeconds: number) => void;
-  onDrag?: (delta: Vector2) => void;
-  onZoom?: (params: { amount: number; atTime: number }) => void;
+  onDragWave?: DragWaveHandler;
+  onZoomWave?: ZoomWaveHandler;
 };
-
-function getTimeForMouseEvent(
-  event: {
-    clientX: number;
-  },
-  element: HTMLElement,
-  viewPort: Range
-): number {
-  const rect = element.getBoundingClientRect();
-
-  const x = event.clientX - rect.left;
-  return viewPort.start + (x / rect.width) * (viewPort.end - viewPort.start);
-}
 
 export function InteractionLayer({
   viewPort,
   size,
   onShiftClick,
-  onZoom,
-  onDrag,
+  onZoomWave,
+  onDragWave,
 }: Props): ReactElement {
   const elementRef = useRef<HTMLDivElement>(null);
   const [isShiftPressed, setIsShiftPressed] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_isAltPressed, setIsAltPressed] = useState(false);
   const mouseDownPositionRef = useRef<Position | null>(null);
+  const viewPortDuration = viewPort.end - viewPort.start;
+  const timePerPixel = viewPortDuration / size.width;
 
   const onWheel = useCallback(
     (event: globalThis.WheelEvent) => {
       if (elementRef.current) {
-        onZoom?.({
+        onZoomWave?.({
           amount: event.deltaY,
           atTime: getTimeForMouseEvent(event, elementRef.current, viewPort),
         });
       }
     },
-    [onZoom, viewPort]
+    [onZoomWave, viewPort]
   );
 
   useWheelEvent({ elementRef, onWheel });
@@ -103,7 +105,23 @@ export function InteractionLayer({
 
   const onMouseDown = useCallback(
     (event: MouseEvent<HTMLDivElement>) => {
-      function onMouseUp() {
+      function onMouseUp(event: globalThis.MouseEvent) {
+        if (!mouseDownPositionRef.current) {
+          return;
+        }
+        const x = event.clientX - mouseDownPositionRef.current.x;
+        const y = event.clientY - mouseDownPositionRef.current.y;
+
+        onDragWave?.({
+          pixelDelta: {
+            x,
+            y,
+          },
+          timeDelta: x * timePerPixel,
+          isFirst: false,
+          isLast: true,
+        });
+
         mouseDownPositionRef.current = null;
       }
 
@@ -112,9 +130,17 @@ export function InteractionLayer({
           return;
         }
 
-        onDrag?.({
-          x: event.clientX - mouseDownPositionRef.current.x,
-          y: event.clientY - mouseDownPositionRef.current.y,
+        const x = event.clientX - mouseDownPositionRef.current.x;
+        const y = event.clientY - mouseDownPositionRef.current.y;
+
+        onDragWave?.({
+          pixelDelta: {
+            x,
+            y,
+          },
+          timeDelta: x * timePerPixel,
+          isFirst: false,
+          isLast: false,
         });
       }
 
@@ -122,6 +148,13 @@ export function InteractionLayer({
         // Prevent text selection when shift is pressed
         event.preventDefault();
       }
+
+      onDragWave?.({
+        pixelDelta: { x: 0, y: 0 },
+        timeDelta: 0,
+        isFirst: true,
+        isLast: false,
+      });
 
       mouseDownPositionRef.current = { x: event.clientX, y: event.clientY };
       window.addEventListener("mouseup", onMouseUp);
@@ -132,7 +165,7 @@ export function InteractionLayer({
         window.removeEventListener("mousemove", onMouseMove);
       };
     },
-    [onDrag]
+    [onDragWave, timePerPixel]
   );
 
   return (

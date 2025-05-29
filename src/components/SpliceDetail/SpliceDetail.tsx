@@ -2,14 +2,10 @@ import { useCallback, type ReactElement } from "react";
 import { RiScissorsCutLine } from "react-icons/ri";
 import styles from "./SpliceDetail.module.css";
 import type { ReelWithAudioBuffer, Splice } from "../../types/types";
-import { WaveformView } from "../WaveformView/layers/WaveformView";
-import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
 import { SpliceActions } from "../SpliceActions/SpliceActions";
 import { usePathParams } from "../../hooks/usePathParams";
 import { deleteSplice } from "../../stores/cuePointTimes/utils/deleteSplice";
 import { SpliceOperations } from "../SpliceOperations/SpliceOperations";
-import { useCuePointTimesStore } from "../../stores/cuePointTimes/cuePointTimesStore";
-import { useShallow } from "zustand/shallow";
 
 type Props = {
   splice: Splice;
@@ -23,15 +19,10 @@ export function SpliceDetail({
   reel,
 }: Props): ReactElement {
   const { spliceId } = usePathParams();
-  const waveformViewProps = useWaveformView({ reel });
 
   const onDeleteClick = useCallback(() => {
     deleteSplice(splice);
   }, [splice]);
-
-  const autoSliceCuePointTimes = useCuePointTimesStore(
-    useShallow((state) => state.autoSliceCuePointTimes)
-  );
 
   return (
     <div className={styles.spliceDetail}>

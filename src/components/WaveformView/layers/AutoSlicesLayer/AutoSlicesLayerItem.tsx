@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import type { Range, ReelWithAudioBuffer, Size } from "../../../../types/types";
-import { getXPositionForTime } from "../../../../utils/getXPositionForTime";
+import { getXPositionForTime } from "../../../../utils/waveview/getXPositionForTime";
 import styles from "./AutoSlicesLayerItem.module.css";
 
 type Props = {

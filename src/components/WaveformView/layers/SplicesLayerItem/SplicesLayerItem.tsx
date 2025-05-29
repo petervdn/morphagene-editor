@@ -5,7 +5,7 @@ import type {
   Size,
   Splice,
 } from "../../../../types/types";
-import { getXPositionForTime } from "../../../../utils/getXPositionForTime";
+import { getXPositionForTime } from "../../../../utils/waveview/getXPositionForTime";
 import styles from "./SplicesLayerItem.module.css";
 import { Link } from "react-router-dom";
 import { getSplicePath } from "../../../../routes/utils/getSplicePath";
