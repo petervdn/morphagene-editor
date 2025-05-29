@@ -1,7 +1,7 @@
 import { useCallback, useMemo, type ReactElement } from "react";
 import { PiFilmReel } from "react-icons/pi";
 import styles from "./ReelDetails.module.css";
-import type { ReelWithAudioBuffer } from "../../types/types";
+import type { ReelWithAudioBuffer, Vector2 } from "../../types/types";
 import { SpliceDetail } from "../SpliceDetail/SpliceDetail";
 import { WaveformView } from "../WaveformView/layers/WaveformView";
 import { useWaveformView } from "../WaveformView/hooks/useWaveformView";
@@ -13,6 +13,8 @@ import { useSplices } from "../../hooks/useSplices";
 import { addSplice } from "../../stores/cuePointTimes/utils/addSplice";
 import { reloadReelWavHeaderData } from "../../utils/reels/reloadReelWavHeaderData";
 import { useSaveSplices } from "../../hooks/useSaveSplices";
+import { useCuePointTimesStore } from "../../stores/cuePointTimes/cuePointTimesStore";
+import { useShallow } from "zustand/shallow";
 
 type Props = {
   reel: ReelWithAudioBuffer;
@@ -41,6 +43,10 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
 
   useSyncCuePointsToStore({ reel });
 
+  const autoSliceCuePointTimes = useCuePointTimesStore(
+    useShallow((state) => state.autoSliceCuePointTimes)
+  );
+
   const metaData = useMemo(() => {
     return [
       reel.fileName,
@@ -52,6 +58,10 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
       `${reel.wavHeaderData.format}`,
     ];
   }, [reel.fileName, reel.wavHeaderData]);
+
+  const onDrag = useCallback((delta: Vector2) => {
+    console.log(delta);
+  }, []);
 
   return splices ? (
     <>
@@ -80,7 +90,9 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
         splices={splices}
         {...waveformViewProps}
         onShiftClick={onWaveformViewShiftClick}
+        onDrag={onDrag}
         height={300}
+        autoSliceTimes={autoSliceCuePointTimes ?? undefined}
       />
       <div className={styles.helpText}>Shift+Click to create splice</div>
 

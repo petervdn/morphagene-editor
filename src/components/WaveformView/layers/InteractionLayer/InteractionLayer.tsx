@@ -6,41 +6,58 @@ import {
   useEffect,
   useRef,
 } from "react";
-import type { Range, Size } from "../../../../types/types";
+import {
+  type Position,
+  type Range,
+  type Size,
+  type Vector2,
+} from "../../../../types/types";
 import { useWheelEvent } from "./useWheelEvent";
 
 type Props = {
   viewPort: Range;
   size: Size;
   onShiftClick?: (timeInSeconds: number) => void;
-  onDrag?: (deltaX: number, containerWidth: number) => void;
+  onDrag?: (delta: Vector2) => void;
   onZoom?: (params: { amount: number; atTime: number }) => void;
 };
+
+function getTimeForMouseEvent(
+  event: {
+    clientX: number;
+  },
+  element: HTMLElement,
+  viewPort: Range
+): number {
+  const rect = element.getBoundingClientRect();
+
+  const x = event.clientX - rect.left;
+  return viewPort.start + (x / rect.width) * (viewPort.end - viewPort.start);
+}
 
 export function InteractionLayer({
   viewPort,
   size,
   onShiftClick,
   onZoom,
+  onDrag,
 }: Props): ReactElement {
   const elementRef = useRef<HTMLDivElement>(null);
   const [isShiftPressed, setIsShiftPressed] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_isAltPressed, setIsAltPressed] = useState(false);
-
-  const viewPortDuration = viewPort.end - viewPort.start;
+  const mouseDownPositionRef = useRef<Position | null>(null);
 
   const onWheel = useCallback(
     (event: globalThis.WheelEvent) => {
-      const rect = elementRef.current?.getBoundingClientRect();
-      if (rect) {
-        const x = event.clientX - rect.left;
-        const atTime = viewPort.start + (x / rect.width) * viewPortDuration;
-
-        onZoom?.({ amount: event.deltaY, atTime });
+      if (elementRef.current) {
+        onZoom?.({
+          amount: event.deltaY,
+          atTime: getTimeForMouseEvent(event, elementRef.current, viewPort),
+        });
       }
     },
-    [onZoom, viewPort.start, viewPortDuration]
+    [onZoom, viewPort]
   );
 
   useWheelEvent({ elementRef, onWheel });
@@ -75,26 +92,48 @@ export function InteractionLayer({
     (event: MouseEvent<HTMLDivElement>) => {
       if (!event.shiftKey) return;
 
-      // Calculate the time based on the click position
-      const rect = event.currentTarget.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const xRatio = x / size.width;
-
-      // Calculate the time in seconds based on the viewport
-      const timeRange = viewPort.end - viewPort.start;
-      const timeInSeconds = viewPort.start + timeRange * xRatio;
-
-      onShiftClick?.(timeInSeconds);
+      if (elementRef.current) {
+        onShiftClick?.(
+          getTimeForMouseEvent(event, elementRef.current, viewPort)
+        );
+      }
     },
-    [viewPort, size, onShiftClick]
+    [viewPort, onShiftClick]
   );
 
-  const onMouseDown = useCallback((event: MouseEvent<HTMLDivElement>) => {
-    if (event.shiftKey) {
-      // Prevent text selection when shift is pressed
-      event.preventDefault();
-    }
-  }, []);
+  const onMouseDown = useCallback(
+    (event: MouseEvent<HTMLDivElement>) => {
+      function onMouseUp() {
+        mouseDownPositionRef.current = null;
+      }
+
+      function onMouseMove(event: globalThis.MouseEvent) {
+        if (!mouseDownPositionRef.current) {
+          return;
+        }
+
+        onDrag?.({
+          x: event.clientX - mouseDownPositionRef.current.x,
+          y: event.clientY - mouseDownPositionRef.current.y,
+        });
+      }
+
+      if (event.shiftKey) {
+        // Prevent text selection when shift is pressed
+        event.preventDefault();
+      }
+
+      mouseDownPositionRef.current = { x: event.clientX, y: event.clientY };
+      window.addEventListener("mouseup", onMouseUp);
+      window.addEventListener("mousemove", onMouseMove);
+
+      return () => {
+        window.removeEventListener("mouseup", onMouseUp);
+        window.removeEventListener("mousemove", onMouseMove);
+      };
+    },
+    [onDrag]
+  );
 
   return (
     <div

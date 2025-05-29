@@ -7,6 +7,13 @@ export type Reel = {
   audioBuffer: AudioBuffer | null;
 };
 
+export type Position = {
+  x: number;
+  y: number;
+};
+
+export type Vector2 = Position;
+
 export type ReelWithAudioBuffer = Omit<Reel, "audioBuffer"> & {
   audioBuffer: AudioBuffer;
 };

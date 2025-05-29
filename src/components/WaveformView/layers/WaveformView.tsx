@@ -1,6 +1,11 @@
 import { useRef, type ReactElement } from "react";
 import styles from "./WaveformView.module.css";
-import type { Range, ReelWithAudioBuffer, Splice } from "../../../types/types";
+import type {
+  Position,
+  Range,
+  ReelWithAudioBuffer,
+  Splice,
+} from "../../../types/types";
 import { WaveformCanvas } from "./WaveformLayer/WaveformLayer";
 import { SplicesView } from "./SplicesLayer/SplicesLayer";
 import { PlayheadLayer } from "./PlayheadLayer/PlayheadLayer";
@@ -12,20 +17,22 @@ interface WaveformViewProps {
   splices: Array<Splice>;
   reel: ReelWithAudioBuffer;
   viewPort: Range;
-  onShiftClick?(time: number): void;
   height: number;
   autoSliceTimes?: Array<number>;
+  onShiftClick?(time: number): void;
   onZoom?: (params: { amount: number; atTime: number }) => void;
+  onDrag?: (delta: Position) => void;
 }
 
 export function WaveformView({
   reel,
   viewPort,
   splices,
-  onShiftClick,
   height,
   autoSliceTimes,
+  onShiftClick,
   onZoom,
+  onDrag,
 }: WaveformViewProps): ReactElement {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const wrapperSize = useElementSize({ elementRef: wrapperRef });
@@ -56,6 +63,7 @@ export function WaveformView({
                 viewPort={viewPort}
                 size={wrapperSize}
                 onShiftClick={onShiftClick}
+                onDrag={onDrag}
                 onZoom={onZoom}
               />
             </div>
