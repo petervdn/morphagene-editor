@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState, type ReactElement } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactElement } from "react";
 import type { Range, ReelWithAudioBuffer, Size } from "../../../../types/types";
-import styles from "./PlayheadLayer.module.css";
-import { getXPositionForTime } from "../../../../utils/waveview/getXPositionForTime";
 import { useAudioPlayer } from "../../../../hooks/useAudioPlayer";
+import { TimedLines } from "../TimedLinesLayer/TimedLinesLayer";
 
 type Props = {
   size: Size;
@@ -13,7 +12,7 @@ type Props = {
 export function PlayheadLayer({ size, viewPort }: Props): ReactElement {
   const audioPlayer = useAudioPlayer();
   const animationFrameRef = useRef<number | null>(null);
-  const [playheadPosition, setPlayheadPosition] = useState<number | null>(null);
+  const [playheadTime, setPlayheadTime] = useState<number | null>(null);
 
   const isPlaying = audioPlayer?.playingSound;
 
@@ -28,13 +27,7 @@ export function PlayheadLayer({ size, viewPort }: Props): ReactElement {
         audioPlayer.playingSound.contextStartTime +
         audioPlayer.playingSound.splice.start;
 
-      setPlayheadPosition(
-        getXPositionForTime({
-          time,
-          viewPort,
-          viewWidth: size.width,
-        })
-      );
+      setPlayheadTime(time);
 
       if (isPlaying) {
         animationFrameRef.current = requestAnimationFrame(animate);
@@ -44,7 +37,7 @@ export function PlayheadLayer({ size, viewPort }: Props): ReactElement {
     if (isPlaying) {
       animate();
     } else {
-      setPlayheadPosition(null);
+      setPlayheadTime(null);
     }
 
     return () => {
@@ -60,22 +53,16 @@ export function PlayheadLayer({ size, viewPort }: Props): ReactElement {
     viewPort,
   ]);
 
+  const timedLines = useMemo(() => {
+    return playheadTime ? [{ time: playheadTime }] : [];
+  }, [playheadTime]);
+
   return (
-    <div
-      className={styles.wrapper}
-      style={{ width: size.width, height: size.height }}
-    >
-      {playheadPosition !== null && (
-        <div
-          style={{
-            left: playheadPosition,
-            width: 10,
-            height: size.height,
-            borderLeft: "1px solid red",
-            position: "absolute",
-          }}
-        ></div>
-      )}
-    </div>
+    <TimedLines
+      size={size}
+      viewPort={viewPort}
+      timedLines={timedLines}
+      defaultColor="red"
+    />
   );
 }

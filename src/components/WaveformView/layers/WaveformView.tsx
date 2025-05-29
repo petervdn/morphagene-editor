@@ -11,6 +11,7 @@ import {
 } from "./InteractionLayer/InteractionLayer";
 import { useElementSize } from "../../../hooks/useElementSize";
 import { AutoSlicesLayer } from "./AutoSlicesLayer/AutoSlicesLayer";
+import { TimedLines } from "./TimedLinesLayer/TimedLinesLayer";
 
 interface WaveformViewProps {
   splices: Array<Splice>;
@@ -66,7 +67,14 @@ export function WaveformView({
                 onZoomWave={onZoomWave}
               />
             </div>
-            <div
+            <div className={styles.layer} style={{ pointerEvents: "none" }}>
+              <TimedLines
+                size={wrapperSize}
+                viewPort={viewPort}
+                timedLines={splices.map((splice) => ({ time: splice.start }))}
+              />
+            </div>
+            {/* <div
               className={styles.layer}
               id="splices"
               style={{ pointerEvents: "none" }}
@@ -77,7 +85,7 @@ export function WaveformView({
                 splices={splices}
                 viewPort={viewPort}
               />
-            </div>
+            </div> */}
 
             {autoSliceTimes && (
               <div
