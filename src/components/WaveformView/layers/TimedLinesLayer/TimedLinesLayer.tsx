@@ -2,10 +2,13 @@ import type { ReactElement } from "react";
 import type { Range, Size } from "../../../../types/types";
 import { getXPositionForTime } from "../../../../utils/waveview/getXPositionForTime";
 
+type LineStyle = "solid" | "dotted" | "dashed";
+
 type TimedLine = {
   time: number;
   color?: string;
   lineWidth?: number;
+  lineStyle?: LineStyle;
 };
 
 type Props = {
@@ -14,6 +17,7 @@ type Props = {
   viewPort: Range;
   defaultColor?: string;
   defaultLineWidth?: number;
+  defaultLineStyle?: LineStyle;
 };
 
 export function TimedLines({
@@ -22,6 +26,7 @@ export function TimedLines({
   viewPort,
   defaultColor = "black",
   defaultLineWidth = 1,
+  defaultLineStyle = "solid",
 }: Props): ReactElement {
   return (
     <div
@@ -44,9 +49,11 @@ export function TimedLines({
               left,
               top: 0,
               position: "absolute",
-              width: lineWidth ?? defaultLineWidth,
+
               height: size.height,
-              borderLeft: `1px solid ${color ?? defaultColor}`,
+              borderLeft: `${
+                lineWidth ?? defaultLineWidth
+              }px ${defaultLineStyle} ${color ?? defaultColor}`,
             }}
           />
         );

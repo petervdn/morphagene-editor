@@ -1,44 +1,26 @@
-import type { ReactElement } from "react";
-import type {
-  Range,
-  ReelWithAudioBuffer,
-  Size,
-  Splice,
-} from "../../../../types/types";
-import styles from "./SplicesLayer.module.css";
-import { SplicesViewItem } from "../SplicesLayerItem/SplicesLayerItem";
+import { useMemo, type ReactElement } from "react";
+import type { Range, Size, Splice } from "../../../../types/types";
+import { TimedLines } from "../TimedLinesLayer/TimedLinesLayer";
 
 type Props = {
   size: Size;
   splices: Array<Splice>;
   viewPort: Range;
-  reel: ReelWithAudioBuffer;
 };
 
-export function SplicesView({
-  size,
-  splices,
-  viewPort,
-  reel,
-}: Props): ReactElement {
+export function SplicesView({ size, splices, viewPort }: Props): ReactElement {
+  const timedLines = useMemo(() => {
+    return splices.map(({ start }) => ({
+      time: start,
+    }));
+  }, [splices]);
+
   return (
-    <div
-      className={styles.wrapper}
-      style={{
-        ...size,
-        pointerEvents: "none",
-      }}
-    >
-      {splices.map((splice, index) => (
-        <SplicesViewItem
-          reel={reel}
-          key={`${splice.start}-${splice.end}`}
-          spliceIndex={index}
-          splice={splice}
-          size={size}
-          viewPort={viewPort}
-        />
-      ))}
-    </div>
+    <TimedLines
+      viewPort={viewPort}
+      size={size}
+      timedLines={timedLines}
+      defaultLineStyle="dashed"
+    />
   );
 }

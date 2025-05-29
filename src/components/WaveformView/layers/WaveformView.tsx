@@ -67,14 +67,14 @@ export function WaveformView({
                 onZoomWave={onZoomWave}
               />
             </div>
-            <div className={styles.layer} style={{ pointerEvents: "none" }}>
+            {/* <div className={styles.layer} style={{ pointerEvents: "none" }}>
               <TimedLines
                 size={wrapperSize}
                 viewPort={viewPort}
                 timedLines={splices.map((splice) => ({ time: splice.start }))}
               />
-            </div>
-            {/* <div
+            </div> */}
+            <div
               className={styles.layer}
               id="splices"
               style={{ pointerEvents: "none" }}
@@ -85,7 +85,7 @@ export function WaveformView({
                 splices={splices}
                 viewPort={viewPort}
               />
-            </div> */}
+            </div>
 
             {autoSliceTimes && (
               <div
