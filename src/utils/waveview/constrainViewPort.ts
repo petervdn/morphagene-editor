@@ -7,7 +7,7 @@ export function constrainViewPort(
   if (viewPort.start < 0) {
     return {
       start: 0,
-      end: audioDuration,
+      end: viewPort.end - viewPort.start,
     };
   }
   if (viewPort.end > audioDuration) {
