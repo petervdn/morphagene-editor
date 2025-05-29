@@ -1,7 +1,6 @@
-import type { ReactElement } from "react";
+import { useMemo, type ReactElement } from "react";
 import type { Range, ReelWithAudioBuffer, Size } from "../../../../types/types";
-import styles from "./AutoSlicesLayer.module.css";
-import { AutoSlicesLayerItem } from "./AutoSlicesLayerItem";
+import { TimedLines } from "../TimedLinesLayer/TimedLinesLayer";
 
 type Props = {
   size: Size;
@@ -14,25 +13,14 @@ export function AutoSlicesLayer({
   size,
   times,
   viewPort,
-  reel,
 }: Props): ReactElement {
-  return (
-    <div
-      className={styles.wrapper}
-      style={{
-        ...size,
-        pointerEvents: "none",
-      }}
-    >
-      {times.map((time) => (
-        <AutoSlicesLayerItem
-          reel={reel}
-          key={time}
-          time={time}
-          size={size}
-          viewPort={viewPort}
-        />
-      ))}
-    </div>
+  const timedLines = useMemo(
+    () =>
+      times.map((time) => ({
+        time,
+      })),
+    [times]
   );
+
+  return <TimedLines size={size} viewPort={viewPort} timedLines={timedLines} />;
 }

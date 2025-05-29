@@ -39,6 +39,7 @@ export function TimedLines({
 
         return (
           <div
+            key={time}
             style={{
               left,
               top: 0,
