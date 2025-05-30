@@ -8,21 +8,21 @@ import { router } from "./routes/router";
 /*
 - add mm linting
 - unify ids/index for both reels and splices
-- add file
 - remove file
 - remove splice
 - auto slice with divisions
 - auto slice on transients
-- save changes
+- option change where slices go to (current splice or all)
+- multiselect splice?
 - options
-- zoom/pan
 - better home page
 - view wave as L/R/stereo
 - cut parts of audio
 - mm ts config (noUncheckedIndexedAccess)
 - use mantine?
+- create dialog
 - delete all splices
-- handle when splice doesnt exit (when you looking at it and remove it)
+- handle when splice doesnt exist (when you looking at it and remove it)
 - keyboard navigation
 - splice waveview up into two units? (or keep one wave view?)
 - drag splices
