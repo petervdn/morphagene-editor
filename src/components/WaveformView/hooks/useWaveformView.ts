@@ -1,5 +1,9 @@
-import { useCallback, useRef, useState } from "react";
-import { type Range, type ReelWithAudioBuffer } from "../../../types/types";
+import { useCallback, useMemo, useRef, useState } from "react";
+import {
+  type Range,
+  type ReelWithAudioBuffer,
+  type Splice,
+} from "../../../types/types";
 import type {
   DragWaveHandler,
   ZoomWaveHandler,
@@ -16,6 +20,8 @@ export type UseWaveformViewResult = {
   viewPort: Range;
   reel: ReelWithAudioBuffer;
   setViewPort: (viewPort: Range) => void;
+  zoomToSplice: (splice: Splice) => void;
+  zoomOutToReel: () => void;
   onZoomWave: ZoomWaveHandler;
   onDragWave: DragWaveHandler;
 };
@@ -23,10 +29,14 @@ export type UseWaveformViewResult = {
 export function useWaveformView({
   reel,
 }: UseWaveformViewProps): UseWaveformViewResult {
-  const [viewPort, setViewPort] = useState<Range>({
-    start: 0,
-    end: reel.audioBuffer.duration,
-  });
+  const zoomedOutRange = useMemo(() => {
+    return {
+      start: 0,
+      end: reel.audioBuffer.duration,
+    };
+  }, [reel.audioBuffer.duration]);
+
+  const [viewPort, setViewPort] = useState<Range>(zoomedOutRange);
   const startDragViewPortRef = useRef<Range | null>(null);
   const viewPortDuration = viewPort.end - viewPort.start;
   const audioDuration = reel.audioBuffer.duration;
@@ -73,11 +83,21 @@ export function useWaveformView({
     [audioDuration, viewPort]
   );
 
+  const zoomToSplice = useCallback((splice: Splice) => {
+    setViewPort(splice);
+  }, []);
+
+  const zoomOutToReel = useCallback(() => {
+    setViewPort(zoomedOutRange);
+  }, [zoomedOutRange]);
+
   return {
     viewPort,
     setViewPort,
     reel,
     onZoomWave,
     onDragWave,
+    zoomToSplice,
+    zoomOutToReel,
   };
 }

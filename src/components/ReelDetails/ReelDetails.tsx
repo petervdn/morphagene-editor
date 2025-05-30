@@ -30,7 +30,11 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
     reel,
   });
 
-  useKeyboardSpliceNavigation({ reel });
+  useKeyboardSpliceNavigation({
+    reel,
+    zoomOutToReel: waveformViewProps.zoomOutToReel,
+    zoomToSplice: waveformViewProps.zoomToSplice,
+  });
 
   const onWaveformViewShiftClick = useCallback((time: number) => {
     addSplice(time);
@@ -92,7 +96,10 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
         height={300}
         autoSliceTimes={autoSliceCuePointTimes ?? undefined}
       />
-      <div className={styles.helpText}>Shift+Click to create splice</div>
+      <div className={styles.helpText}>
+        scroll to zoom • drag to pan • shift+click to create splice • ←→ to
+        navigate splices • ↓↑ to zoom to/from splice
+      </div>
 
       {activeSplice && (
         <div className={styles.spliceDetailContainer}>

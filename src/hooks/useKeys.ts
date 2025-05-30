@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-type UseKeysConfig = Record<string, () => void>;
+export type UseKeysConfig = Record<string, () => void>;
 
 export function useKeys(config: UseKeysConfig) {
   useEffect(() => {
