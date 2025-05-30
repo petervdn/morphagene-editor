@@ -32,6 +32,7 @@ import { router } from "./routes/router";
 - max splices
 - throw error on 0 splices
 - handle audiocontext not running at 48khz
+- demo file
 */
 
 function App() {

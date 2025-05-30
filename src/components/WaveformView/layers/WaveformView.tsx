@@ -54,6 +54,7 @@ export function WaveformView({
                 viewPort={viewPort}
                 size={wrapperSize}
                 reel={reel}
+                audioDuration={reel.audioBuffer.duration}
               />
             </div>
 
@@ -75,6 +76,7 @@ export function WaveformView({
                 size={wrapperSize}
                 splices={splices}
                 viewPort={viewPort}
+                audioDuration={reel.audioBuffer.duration}
               />
             </div>
 
@@ -84,7 +86,7 @@ export function WaveformView({
               id="auto-slices-layer"
             >
               <AutoSlicesLayer
-                reel={reel}
+                audioDuration={reel.audioBuffer.duration}
                 size={wrapperSize}
                 autoSliceTimes={autoSliceTimes}
                 viewPort={viewPort}

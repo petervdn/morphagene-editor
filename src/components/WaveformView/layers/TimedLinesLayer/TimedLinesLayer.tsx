@@ -26,7 +26,8 @@ type Props = {
   defaultLineWidth?: number;
   defaultLineStyle?: LineStyle;
   itemRenderer?: ComponentType<TimedLinesItemRendererProps>;
-  maxTime?: number;
+  // maxTime is necessary to calculate the width of the last line
+  maxTime: number;
 };
 
 export function TimedLines({
@@ -57,15 +58,13 @@ export function TimedLines({
           viewWidth: size.width,
         });
         const nextTime = orderedTimedLines.at(index + 1)?.time ?? maxTime;
-        const right = nextTime
-          ? getXPositionForTime({
-              time: nextTime,
-              viewPort,
-              viewWidth: size.width,
-            })
-          : undefined;
+        const right = getXPositionForTime({
+          time: nextTime,
+          viewPort,
+          viewWidth: size.width,
+        });
 
-        const width = right !== undefined ? right - left : undefined;
+        const width = right - left;
 
         return (
           <div

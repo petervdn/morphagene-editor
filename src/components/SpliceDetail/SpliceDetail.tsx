@@ -58,13 +58,6 @@ export function SpliceDetail({
         </div>
       </div>
 
-      {/* <WaveformView
-        splices={[]}
-        {...waveformViewProps}
-        viewPort={splice}
-        height={300}
-        autoSliceTimes={autoSliceCuePointTimes ?? undefined}
-      /> */}
       <SpliceOperations splice={splice} reel={reel} />
     </div>
   );

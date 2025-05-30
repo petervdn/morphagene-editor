@@ -7,9 +7,15 @@ type Props = {
   size: Size;
   splices: Array<Splice>;
   viewPort: Range;
+  audioDuration: number;
 };
 
-export function SplicesLayer({ size, splices, viewPort }: Props): ReactElement {
+export function SplicesLayer({
+  size,
+  splices,
+  viewPort,
+  audioDuration,
+}: Props): ReactElement {
   const timedLines = useMemo(() => {
     return splices.map(({ start }) => ({
       time: start,
@@ -24,6 +30,7 @@ export function SplicesLayer({ size, splices, viewPort }: Props): ReactElement {
       defaultLineStyle="dashed"
       defaultColor="rgba(0,0,0,0.2)"
       itemRenderer={SplicesLayerLabel}
+      maxTime={audioDuration}
     />
   );
 }

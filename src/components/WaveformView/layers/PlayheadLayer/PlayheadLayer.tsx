@@ -7,9 +7,14 @@ type Props = {
   size: Size;
   viewPort: Range;
   reel: ReelWithAudioBuffer;
+  audioDuration: number;
 };
 
-export function PlayheadLayer({ size, viewPort }: Props): ReactElement {
+export function PlayheadLayer({
+  size,
+  viewPort,
+  audioDuration,
+}: Props): ReactElement {
   const audioPlayer = useAudioPlayer();
   const animationFrameRef = useRef<number | null>(null);
   const [playheadTime, setPlayheadTime] = useState<number | null>(null);
@@ -63,6 +68,7 @@ export function PlayheadLayer({ size, viewPort }: Props): ReactElement {
       viewPort={viewPort}
       timedLines={timedLines}
       defaultColor="red"
+      maxTime={audioDuration}
     />
   );
 }

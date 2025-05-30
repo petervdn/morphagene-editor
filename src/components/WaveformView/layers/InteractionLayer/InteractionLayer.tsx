@@ -5,6 +5,7 @@ import {
   type ReactElement,
   useEffect,
   useRef,
+  useMemo,
 } from "react";
 import {
   type Position,
@@ -49,6 +50,7 @@ export function InteractionLayer({
   const mouseDownPositionRef = useRef<Position | null>(null);
   const viewPortDuration = viewPort.end - viewPort.start;
   const timePerPixel = viewPortDuration / size.width;
+  const [isDragging, setIsDragging] = useState(false);
 
   const onWheel = useCallback(
     (event: globalThis.WheelEvent) => {
@@ -105,7 +107,10 @@ export function InteractionLayer({
 
   const onMouseDown = useCallback(
     (event: MouseEvent<HTMLDivElement>) => {
+      setIsDragging(true);
+
       function onMouseUp(event: globalThis.MouseEvent) {
+        setIsDragging(false);
         if (!mouseDownPositionRef.current) {
           return;
         }
@@ -168,11 +173,22 @@ export function InteractionLayer({
     [onDragWave, timePerPixel]
   );
 
+  const cursor = useMemo(() => {
+    if (isDragging) {
+      return "grab";
+    }
+    if (isShiftPressed && onShiftClick) {
+      return "copy";
+    }
+
+    return "default";
+  }, [isDragging, isShiftPressed, onShiftClick]);
+
   return (
     <div
       style={{
         ...size,
-        cursor: isShiftPressed && onShiftClick ? "copy" : "default",
+        cursor,
       }}
       ref={elementRef}
       onClick={onClick}
