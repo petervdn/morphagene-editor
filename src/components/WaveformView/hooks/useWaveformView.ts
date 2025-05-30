@@ -1,4 +1,11 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  type MutableRefObject,
+  type Ref,
+} from "react";
 import {
   type Range,
   type ReelWithAudioBuffer,
@@ -24,11 +31,13 @@ export type UseWaveformViewResult = {
   zoomOutToReel: () => void;
   onZoomWave: ZoomWaveHandler;
   onDragWave: DragWaveHandler;
+  getIsFocusedOnSplice(): boolean;
 };
 
 export function useWaveformView({
   reel,
 }: UseWaveformViewProps): UseWaveformViewResult {
+  const isFocusedOnSpliceRef = useRef(false);
   const zoomedOutRange = useMemo(() => {
     return {
       start: 0,
@@ -43,6 +52,8 @@ export function useWaveformView({
 
   const onZoomWave: ZoomWaveHandler = useCallback(
     ({ amount, atTime }: { amount: number; atTime: number }) => {
+      isFocusedOnSpliceRef.current = false;
+
       const zoomFactor = Math.pow(zoomSpeed, amount / 100);
 
       const relativePos = (atTime - viewPort.start) / viewPortDuration;
@@ -64,6 +75,8 @@ export function useWaveformView({
 
   const onDragWave: DragWaveHandler = useCallback(
     ({ isFirst, isLast, timeDelta }) => {
+      isFocusedOnSpliceRef.current = false;
+
       if (isFirst) {
         startDragViewPortRef.current = { ...viewPort };
       } else if (isLast) {
@@ -84,12 +97,20 @@ export function useWaveformView({
   );
 
   const zoomToSplice = useCallback((splice: Splice) => {
+    isFocusedOnSpliceRef.current = true;
+
     setViewPort(splice);
   }, []);
 
   const zoomOutToReel = useCallback(() => {
+    isFocusedOnSpliceRef.current = false;
+
     setViewPort(zoomedOutRange);
   }, [zoomedOutRange]);
+
+  const getIsFocusedOnSplice = useCallback(() => {
+    return isFocusedOnSpliceRef.current;
+  }, []);
 
   return {
     viewPort,
@@ -99,5 +120,6 @@ export function useWaveformView({
     onDragWave,
     zoomToSplice,
     zoomOutToReel,
+    getIsFocusedOnSplice,
   };
 }

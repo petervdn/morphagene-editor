@@ -1,4 +1,4 @@
-import { useCallback, useMemo, type ReactElement } from "react";
+import { useCallback, useEffect, useMemo, type ReactElement } from "react";
 import { PiFilmReel } from "react-icons/pi";
 import styles from "./ReelDetails.module.css";
 import type { ReelWithAudioBuffer } from "../../types/types";
@@ -29,6 +29,12 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
   const waveformViewProps = useWaveformView({
     reel,
   });
+
+  useEffect(() => {
+    if (waveformViewProps.getIsFocusedOnSplice() && activeSplice) {
+      waveformViewProps.zoomToSplice(activeSplice);
+    }
+  }, [activeSplice, waveformViewProps]);
 
   useKeyboardSpliceNavigation({
     reel,
