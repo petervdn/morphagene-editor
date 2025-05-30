@@ -15,6 +15,7 @@ import { reloadReelWavHeaderData } from "../../utils/reels/reloadReelWavHeaderDa
 import { useSaveSplices } from "../../hooks/useSaveSplices";
 import { useCuePointTimesStore } from "../../stores/cuePointTimes/cuePointTimesStore";
 import { useShallow } from "zustand/shallow";
+import { useKeyboardSpliceNavigation } from "../../hooks/useKeyboardSpliceNavigation";
 
 type Props = {
   reel: ReelWithAudioBuffer;
@@ -28,6 +29,8 @@ export function ReelDetails({ reel }: Props): ReactElement | null {
   const waveformViewProps = useWaveformView({
     reel,
   });
+
+  useKeyboardSpliceNavigation({ reel });
 
   const onWaveformViewShiftClick = useCallback((time: number) => {
     addSplice(time);

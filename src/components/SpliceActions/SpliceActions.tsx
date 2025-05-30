@@ -25,7 +25,7 @@ export function SpliceActions({
     hasPreviousSplice,
     nextSplicePath,
     previousSplicePath,
-  } = useSpliceNavigation({ reel, activeSplice });
+  } = useSpliceNavigation({ reel });
 
   const audioPlayerProps = useAudioPlayer();
   const isPlaying = audioPlayerProps?.playingSound?.splice === activeSplice;
